@@ -7,144 +7,202 @@
   <title>PixelUI Premium</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --primary-color: #ff0033;
-      --primary-gradient: linear-gradient(90deg, rgba(255, 0, 51, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
-      --bg-color: rgba(10, 10, 10, 0.98);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --text-primary: #ffffff;
-      --text-secondary: #a0a0a0;
-      --font-family: 'Inter', sans-serif;
+      --primary-red: #cc0000;
+      --danger-red: #8b0000;
+      --bg-dark: rgba(10, 10, 10, 0.95);
+      --glass-border: rgba(255, 255, 255, 0.05);
+      --text-main: #d1d1d1;
+      --text-dim: #888888;
+      --accent-glow: rgba(204, 0, 0, 0.3);
+      --font-main: 'Inter', sans-serif;
+      --font-title: 'Outfit', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      font-family: var(--font-family);
+      font-family: var(--font-main);
       background: transparent;
       user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
     }
 
-    /* الحاوية الرئيسية */
     #wrapper {
-      position: absolute;
-      left: 25px;
-      top: 25px;
-      width: 450px;
-      background: var(--bg-color);
-      backdrop-filter: blur(15px);
+      width: 480px;
+      background: var(--bg-dark);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.9);
+      border-radius: 14px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
       display: none;
-      /* مخفي افتراضياً */
+      flex-direction: column;
       overflow: hidden;
-      transition: opacity 0.3s ease;
-    }
-
-    /* Banner */
-    #header-img {
-      width: 100%;
-      height: 140px;
-      background: url('banner.png') no-repeat center center;
-      background-size: cover;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
     }
 
-    .banner-overlay {
+    /* Header Section */
+    #header {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    #header-img {
+      width: 100%;
+      height: 100%;
+      background: url('banner.png') no-repeat center center;
+      background-size: cover;
+      filter: brightness(0.6) contrast(1.1);
+      transition: transform 0.5s ease;
+    }
+
+    .header-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.95));
+      background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.9) 100%);
       display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding-bottom: 15px;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px 25px;
     }
 
-    .banner-title {
-      font-size: 32px;
-      font-weight: 800;
+    .active-tab-title {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      text-shadow: 0 0 15px var(--primary-color);
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    /* Tabs / SubHeader */
-    #sub-header {
+    .menu-subtitle {
+      font-size: 11px;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* Tab Navigation */
+    #tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.5);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      height: 42px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .tab {
+      padding: 14px 0;
       flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      text-align: center;
       font-size: 12px;
-      font-weight: 800;
-      color: #666;
+      font-weight: 600;
+      color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      transition: 0.2s;
       cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
     }
 
     .tab.active {
-      background: var(--primary-color);
-      color: white;
+      color: #fff;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: var(--primary-red);
+      box-shadow: 0 0 10px var(--primary-red);
     }
 
     /* Content List */
     #content {
-      border-left: 4px solid var(--primary-color);
-      max-height: 550px;
+      max-height: 480px;
       overflow-y: hidden;
-      background: rgba(0, 0, 0, 0.2);
-      position: relative;
+      padding: 10px 0;
     }
 
     #items {
-      padding: 5px 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Items */
     .item {
-      padding: 14px 20px;
-      color: #ccc;
+      padding: 12px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 15px;
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-      transition: 0.1s;
+      transition: all 0.2s ease;
+      border-left: 3px solid transparent;
+      margin: 1px 0;
     }
 
     .item.selected {
-      background: var(--primary-gradient);
-      color: white;
-      font-weight: 700;
+      background: linear-gradient(90deg, rgba(204, 0, 0, 0.1) 0%, transparent 100%);
+      border-left-color: var(--primary-red);
+    }
+
+    .item-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item.selected .item-label {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .item.danger .item-label {
+      color: #ff4d4d;
+    }
+
+    .item.danger.selected {
+      background: linear-gradient(90deg, rgba(139, 0, 0, 0.2) 0%, transparent 100%);
+      border-left-color: var(--danger-red);
     }
 
     /* Components */
     .toggle-switch {
-      width: 36px;
+      width: 34px;
       height: 18px;
-      background: #1a1a1a;
+      background: #222;
       border-radius: 20px;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .toggle-switch.active {
-      background: var(--primary-color);
-      box-shadow: 0 0 10px var(--primary-color);
+      background: var(--primary-red);
     }
 
     .toggle-switch::after {
@@ -154,115 +212,123 @@
       left: 2px;
       width: 12px;
       height: 12px;
-      background: #eee;
+      background: #aaa;
       border-radius: 50%;
-      transition: 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .toggle-switch.active::after {
-      left: 20px;
+      left: 18px;
       background: #fff;
+    }
+
+    .list-arrow {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    .list-value {
+      font-size: 13px;
+      color: var(--primary-red);
+      font-weight: 600;
+      margin: 0 8px;
     }
 
     /* Footer */
     #footer {
-      background: rgba(0, 0, 0, 0.8);
-      padding: 12px 20px;
-      font-size: 11px;
-      color: #fff;
+      padding: 15px 25px;
+      background: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
       display: flex;
       justify-content: space-between;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      align-items: center;
     }
 
-    /* Keyboard Input */
-    #keyboard-container {
-      position: absolute;
-      left: 50%;
-      top: 40%;
-      transform: translate(-50%, -50%);
-      width: 440px;
-      background: #0c0c0c;
-      border-radius: 8px;
-      display: none;
-      box-shadow: 0 20px 60px #000;
-      border-top: 3px solid var(--primary-color);
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    #key-header {
-      padding: 15px;
-      font-size: 14px;
-      font-weight: 800;
-      background: #000;
-      color: white;
-    }
-
-    #key-display {
-      background: #111;
-      margin: 15px;
-      padding: 20px;
-      font-size: 20px;
-      text-align: center;
-      font-weight: bold;
-      border: 1px solid #222;
-      border-radius: 4px;
-    }
-
-    #key-hint {
+    .footer-info {
       font-size: 10px;
-      color: #555;
-      text-align: center;
-      padding-bottom: 15px;
+      color: var(--text-dim);
       text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .page-counter {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .discord-link {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .discord-link:hover {
+      color: #7289da;
+    }
+
+    /* Progress Bar (Visual) */
+    .progress-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-red);
+      width: 0%;
+      transition: width 0.3s ease;
     }
 
     /* Notifications */
     #notif-container {
-      position: absolute;
-      right: 25px;
-      bottom: 25px;
-      width: 330px;
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      width: 320px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      z-index: 10000;
+      gap: 12px;
+      z-index: 1000;
     }
 
     .notif {
-      background: #0c0c0c;
-      border-radius: 4px;
-      display: flex;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
-      animation: slideIn 0.4s ease-out;
-    }
-
-    .notif-side {
-      width: 5px;
-    }
-
-    .notif-body {
-      padding: 12px 18px;
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-left: 4px solid var(--primary-red);
+      border-radius: 6px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     }
 
     .notif-title {
-      font-weight: 900;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
       text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
     .notif-desc {
-      font-size: 13px;
-      color: #aaa;
-      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.4;
     }
 
     @keyframes slideIn {
       from {
-        transform: translateX(100%);
+        transform: translateX(110%);
         opacity: 0;
       }
 
@@ -271,120 +337,175 @@
         opacity: 1;
       }
     }
+
+    @keyframes fadeOut {
+      to {
+        transform: translateX(110%);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 
 <body>
 
   <div id="wrapper">
-    <div id="header-img">
-      <div class="banner-overlay">
-        <div id="title" class="banner-title">PIXEL UI</div>
+    <div id="header">
+      <div id="header-img"></div>
+      <div class="header-overlay">
+        <span class="menu-subtitle">Premium Mod Menu</span>
+        <h1 id="active-tab-name" class="active-tab-title">General</h1>
       </div>
     </div>
-    <div id="sub-header">
-      <div class="tab active">PIXEL UI</div>
-    </div>
-    <div id="content">
-      <div id="items"></div>
-    </div>
-    <div id="footer">
-      <span>PixelUI Premium</span>
-      <span id="count">(0/0)</span>
-    </div>
-  </div>
 
-  <div id="keyboard-container">
-    <div id="key-header">💠 | <span id="key-title">System Input</span></div>
-    <div id="key-display"></div>
-    <div id="key-hint">ENTER: CONFIRM • BACKSPACE: DELETE • ESC: CANCEL</div>
+    <div id="tabs">
+      <!-- Tabs injected here -->
+    </div>
+
+    <div id="content">
+      <div id="items">
+        <!-- Items injected here -->
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="footer-info">
+        <span id="version">PixelUI v2.5</span>
+        <a href="#" class="discord-link" style="margin-left: 15px;">discord.gg/pixel</a>
+      </div>
+      <div class="page-counter" id="count">0 / 0</div>
+    </div>
+
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
   </div>
 
   <div id="notif-container"></div>
 
   <script>
-    const wrap = document.getElementById('wrapper'),
-      list = document.getElementById('items'),
-      keyCont = document.getElementById('keyboard-container'),
-      notifCont = document.getElementById('notif-container');
+    const wrapper = document.getElementById('wrapper');
+    const tabsCont = document.getElementById('tabs');
+    const itemsCont = document.getElementById('items');
+    const notifCont = document.getElementById('notif-container');
+    const tabTitle = document.getElementById('active-tab-name');
+    const progressBar = document.getElementById('progress-bar');
+
+    let state = {
+      visible: false,
+      tabs: [],
+      activeTabIdx: 0,
+      items: [],
+      selectedIndex: 0
+    };
 
     window.addEventListener('message', function (event) {
       let data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
       if (data.action === "showUI") {
-        wrap.style.display = data.visible ? "block" : "none";
-        if (data.elements) render(data.elements, data.index || 0);
+        state.visible = data.visible;
+        wrapper.style.display = state.visible ? 'flex' : 'none';
+        if (data.elements) renderItems(data.elements, data.index || 0);
       }
-      if (data.action === "updateElements") {
-        render(data.elements, data.index || 0);
-      }
-      if (data.action === "keydown") {
-        select(data.index);
-      }
-      if (data.action === "updateKeyboard") {
-        if (data.visible) {
-          keyCont.style.display = "block";
-          if (data.title) document.getElementById('key-title').innerText = data.title;
-          if (data.value !== undefined) document.getElementById('key-display').innerText = data.value;
-        } else {
-          keyCont.style.display = "none";
+
+      if (data.action === "updateMenu" || data.action === "updateElements") {
+        if (data.menuData) {
+          if (data.menuData.tabs) renderTabs(data.menuData.tabs, data.menuData.activeTabIdx || 0);
+          if (data.menuData.items) renderItems(data.menuData.items, data.menuData.selectedIndex || 0);
+        } else if (data.elements) {
+          renderItems(data.elements, data.index || 0);
         }
       }
-      if (data.action === "updateTabs") {
-        const subHeader = document.getElementById('sub-header');
-        subHeader.innerHTML = data.tabs.map((tab, i) => `<div class="tab ${i === data.active ? 'active' : ''}">${tab}</div>`).join('');
+
+      if (data.action === "updateSelection" || data.action === "keydown") {
+        state.selectedIndex = data.index;
+        updateSelection();
       }
+
       if (data.action === "showNotification") {
-        const div = document.createElement('div');
-        div.className = 'notif';
-        const color = data.type === 'success' ? '#0f4' : '#0af';
-        div.innerHTML = `<div class="notif-side" style="background:${color}"></div>
-                    <div class="notif-body">
-                        <div class="notif-title" style="color:${color}">${data.title}</div>
-                        <div class="notif-desc">${data.desc}</div>
-                    </div>`;
-        notifCont.appendChild(div);
-        setTimeout(() => {
-          div.style.transform = 'translateX(120%)';
-          div.style.opacity = '0';
-          div.style.transition = '0.5s';
-          setTimeout(() => div.remove(), 500);
-        }, 4000);
+        notify(data.title, data.desc, data.type);
       }
     });
 
-    function render(elements, sel) {
-      list.innerHTML = elements.map((item, i) => {
-        let label = item.label;
-        let rightContent = '';
+    function renderTabs(tabs, activeIdx) {
+      state.tabs = tabs;
+      state.activeTabIdx = activeIdx;
+      tabsCont.innerHTML = tabs.map((tab, i) =>
+        `<div class="tab ${i === activeIdx ? 'active' : ''}">${tab}</div>`
+      ).join('');
+      tabTitle.innerText = tabs[activeIdx] || "Menu";
+    }
 
-        if (item.type === "subMenu") {
-          rightContent = `<span style="color:#555">»</span>`;
-        } else {
-          if (label.includes("[ON]")) {
-            label = label.replace("[ON]", "").trim();
-            rightContent = `<div class="toggle-switch active"></div>`;
-          } else if (label.includes("[OFF]")) {
-            label = label.replace("[OFF]", "").trim();
-            rightContent = `<div class="toggle-switch"></div>`;
-          }
+    function renderItems(items, selectedIdx) {
+      state.items = items;
+      state.selectedIndex = selectedIdx;
+
+      itemsCont.innerHTML = items.map((item, i) => {
+        const isDanger = item.danger || (item.label && (item.label.toLowerCase().includes('explode') || item.label.toLowerCase().includes('troll') || item.label.toLowerCase().includes('ram')));
+
+        let right = '';
+        if (item.type === 'toggle') {
+          const isOn = item.value || (item.label && item.label.includes('[ON]'));
+          const cleanLabel = item.label ? item.label.replace('[ON]', '').replace('[OFF]', '').trim() : '';
+          item.displayLabel = cleanLabel || item.label;
+          right = `<div class="toggle-switch ${isOn ? 'active' : ''}"></div>`;
+        } else if (item.type === 'list') {
+          right = `<div class="list-arrow">&lt; <span class="list-value">${item.value}</span> &gt;</div>`;
+        } else if (item.type === 'subMenu') {
+          right = `<span style="color:rgba(255,255,255,0.1); font-size: 10px;">➔</span>`;
         }
-        return `<div class="item ${i === sel ? 'selected' : ''}"><span>${label}</span><span>${rightContent}</span></div>`;
+
+        return `
+                    <div class="item ${i === selectedIdx ? 'selected' : ''} ${isDanger ? 'danger' : ''}">
+                        <div class="item-label">
+                            ${item.displayLabel || item.label}
+                        </div>
+                        ${right}
+                    </div>
+                `;
       }).join('');
-      document.getElementById('count').innerText = `(${sel + 1}/${elements.length})`;
-      scrollSmooth(sel);
+
+      updateFooter();
     }
 
-    function select(idx) {
-      const items = list.children;
-      for (let i = 0; i < items.length; i++) items[i].classList.toggle('selected', i === idx);
-      document.getElementById('count').innerText = `(${idx + 1}/${items.length})`;
-      scrollSmooth(idx);
+    function updateSelection() {
+      const children = itemsCont.children;
+      for (let i = 0; i < children.length; i++) {
+        children[i].classList.toggle('selected', i === state.selectedIndex);
+      }
+      updateFooter();
+
+      const activeItem = children[state.selectedIndex];
+      if (activeItem) {
+        activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
     }
 
-    function scrollSmooth(idx) {
-      const item = list.children[idx];
-      if (item) item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    function updateFooter() {
+      const total = state.items.length;
+      const current = state.selectedIndex + 1;
+      document.getElementById('count').innerText = `${current} / ${total}`;
+
+      const progress = (current / total) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    function notify(title, desc, type) {
+      const div = document.createElement('div');
+      div.className = 'notif';
+      if (type === 'danger') div.style.borderLeftColor = '#8b0000';
+      else if (type === 'success') div.style.borderLeftColor = '#008b00';
+
+      div.innerHTML = `
+                <div class="notif-title">${title}</div>
+                <div class="notif-desc">${desc}</div>
+            `;
+      notifCont.appendChild(div);
+
+      setTimeout(() => {
+        div.style.animation = 'fadeOut 0.5s forwards';
+        setTimeout(() => div.remove(), 500);
+      }, 4000);
     }
   </script>
 </body>
