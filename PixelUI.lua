@@ -77,12 +77,14 @@ MachoOnKeyDown(function(key)
         
         PixelUI:Send({ action = "setVisible", visible = IsVisible })
         
-        -- Enable focus to ensure the menu is visible and interactive
-        SetNuiFocus(IsVisible, IsVisible) 
+        -- Enable keyboard focus only (no mouse)
+        SetNuiFocus(IsVisible, false) 
+        SetNuiFocusKeepInput(IsVisible) -- Optional: allows moving while menu is open if supported
         
         if IsVisible then 
+            Citizen.Wait(100) -- Small delay to ensure DUI is ready
             PixelUI:UpdateUI() 
-            print("^2[PixelUI] Menu Visible: ON^7")
+            print("^2[PixelUI] Menu Visible: ON (Keyboard Only)^7")
         else
             print("^2[PixelUI] Menu Visible: OFF^7")
         end
