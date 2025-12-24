@@ -13,7 +13,7 @@
   <style>
     :root {
       --primary: #ff0033;
-      --bg: rgba(10, 10, 10, 0.98);
+      --bg: rgba(12, 12, 12, 0.98);
       --border: rgba(255, 255, 255, 0.08);
       --text: #e0e0e0;
       --text-dim: #888;
@@ -21,43 +21,43 @@
       --font-title: 'Outfit', sans-serif;
     }
 
-    /* Aggressive Transparency Fix */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      background: transparent;
-    }
-
+    /* الشفافية المطلقة - منع الحواف السوداء */
     html,
     body {
+      margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0) !important;
       background: transparent !important;
+      background-color: rgba(0, 0, 0, 0) !important;
       overflow: hidden;
       font-family: var(--font-main);
     }
 
-    /* Main Menu Wrapper */
+    * {
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    /* المنيو الرئيسي - أنحف وأصغر */
     #wrapper {
       position: absolute;
-      left: 30px;
-      top: 30px;
-      width: 400px;
-      /* Slightly smaller */
+      left: 40px;
+      top: 40px;
+      width: 380px;
+      /* أنحف */
       background: var(--bg) !important;
       border: 1px solid var(--border);
       border-radius: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
       display: none;
       flex-direction: column;
       overflow: hidden;
     }
 
     #header {
-      height: 130px;
-      /* Thinner header */
+      height: 120px;
+      /* أنحف */
       position: relative;
       background: #000 !important;
     }
@@ -67,12 +67,12 @@
       height: 100%;
       background: url('banner.png') no-repeat center center !important;
       background-size: cover !important;
-      filter: brightness(0.7);
+      filter: brightness(0.8);
     }
 
     #tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.4) !important;
+      background: rgba(0, 0, 0, 0.5) !important;
       border-bottom: 1px solid var(--border);
     }
 
@@ -88,13 +88,13 @@
     }
 
     #content {
-      max-height: 450px;
+      max-height: 400px;
       overflow-y: hidden;
       border-left: 3px solid var(--primary);
     }
 
     .item {
-      padding: 11px 18px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -102,18 +102,18 @@
     }
 
     .item.selected {
-      background: linear-gradient(90deg, rgba(255, 0, 51, 0.12) 0%, transparent 100%) !important;
-      color: #fff !important;
+      background: linear-gradient(90deg, rgba(255, 0, 51, 0.15) 0%, transparent 100%) !important;
     }
 
     .item-label {
       font-size: 13px;
       font-weight: 500;
-      color: #bbb !important;
+      color: #ccc !important;
     }
 
     .item.selected .item-label {
       color: #fff !important;
+      font-weight: 700;
     }
 
     .toggle {
@@ -148,43 +148,42 @@
     .list-val {
       font-size: 11px;
       color: var(--primary) !important;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     #footer {
-      padding: 8px 18px;
-      background: rgba(0, 0, 0, 0.6) !important;
+      padding: 8px 20px;
+      background: rgba(0, 0, 0, 0.8) !important;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 9px;
       color: var(--text-dim) !important;
-      text-transform: uppercase;
     }
 
     .count-box {
       background: rgba(255, 255, 255, 0.05) !important;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 3px;
       color: #fff !important;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    /* Keyboard Input UI - Ultra Compact & No Black Edges */
+    /* واجهة تغيير الزر - أنحف وبدون ضباب لمنع السواد */
     #keyboard-container {
       position: absolute;
       left: 50%;
       top: 45%;
       transform: translate(-50%, -50%);
-      width: 300px;
-      /* Even smaller */
-      background: rgba(15, 15, 15, 0.98) !important;
-      backdrop-filter: blur(15px);
+      width: 280px;
+      /* أنحف */
+      background: #0f0f0f !important;
+      /* لون صلب لمنع مشاكل الشفافية */
       border-radius: 8px;
       display: none;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+      border: 1px solid var(--border);
       z-index: 9999;
       overflow: hidden;
     }
@@ -237,7 +236,7 @@
       position: fixed;
       right: 20px;
       bottom: 20px;
-      width: 280px;
+      width: 260px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -248,7 +247,7 @@
       border: 1px solid var(--border);
       border-left: 3px solid var(--primary);
       border-radius: 4px;
-      padding: 10px 14px;
+      padding: 10px 15px;
     }
 
     .notif-title {
@@ -304,7 +303,6 @@
         wrapper.style.display = data.visible ? 'flex' : 'none';
         if (data.elements) renderItems(data.elements, data.index || 0);
       }
-
       if (data.action === "updateMenu" || data.action === "updateElements") {
         if (data.menuData) {
           if (data.menuData.tabs) renderTabs(data.menuData.tabs, data.menuData.activeTabIdx || 0);
@@ -313,19 +311,16 @@
           renderItems(data.elements, data.index || 0);
         }
       }
-
       if (data.action === "keydown") {
         const children = itemsCont.children;
         for (let i = 0; i < children.length; i++) children[i].classList.toggle('selected', i === data.index);
         document.getElementById('count').innerText = `${data.index + 1}/${children.length}`;
         children[data.index]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
-
       if (data.action === "updatePosition") {
         wrapper.style.left = data.x + 'px';
         wrapper.style.top = data.y + 'px';
       }
-
       if (data.action === "updateKeyboard") {
         if (data.visible) {
           keyCont.style.display = "block";
@@ -335,7 +330,6 @@
           keyCont.style.display = "none";
         }
       }
-
       if (data.action === "showNotification") {
         const div = document.createElement('div');
         div.className = 'notif';
