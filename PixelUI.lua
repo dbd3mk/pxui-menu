@@ -3,7 +3,7 @@ local IsVisible, DUI, HoveredIndex = false, nil, 1
 local ActiveMenu, CurrentMenu, MenuStack = {}, {}, {}
 
 -- Configuration
-local BASE_URL = "https://raw.githubusercontent.com/dbd3mk/pxui-menu/main/"
+local BASE_URL = "https://dbd3mk.github.io/pxui-menu/"
 local MENU_URL = BASE_URL .. "index.html?v=" .. math.random(1, 999999)
 
 local MenuKey = 72 -- H Key
