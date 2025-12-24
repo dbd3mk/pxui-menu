@@ -11,11 +11,11 @@
   <style>
     :root {
       --primary-color: #ff0033;
-      --bg-color: rgba(15, 15, 15, 0.95);
+      --bg-color: rgba(10, 10, 10, 0.98);
       --glass-border: rgba(255, 255, 255, 0.1);
       --text-primary: #ffffff;
       --text-secondary: #a0a0a0;
-      --item-active: rgba(255, 0, 51, 0.2);
+      --item-active: rgba(255, 0, 51, 0.25);
       --font-family: 'Inter', sans-serif;
     }
 
@@ -27,31 +27,29 @@
       color: var(--text-primary);
       user-select: none;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
     }
 
+    /* الحاوية الرئيسية */
     #app {
+      position: absolute;
+      left: 25px;
+      top: 25px;
       width: 450px;
       display: none;
-      /* Hidden by default */
+      /* مخفي افتراضياً */
       flex-direction: column;
       background: var(--bg-color);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
       overflow: hidden;
-      transition: opacity 0.2s ease;
     }
 
     /* Banner */
     .banner {
       position: relative;
-      height: 130px;
+      height: 140px;
       width: 100%;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       overflow: hidden;
@@ -66,7 +64,7 @@
     .banner-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.95));
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -74,58 +72,47 @@
     }
 
     .banner-title {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px var(--primary-color);
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px var(--primary-color);
     }
 
     /* Tabs */
     .tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .tab {
       flex: 1;
-      padding: 10px 0;
+      padding: 12px 0;
       text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
     }
 
     .tab.active {
       background: var(--primary-color);
       color: white;
-      box-shadow: 0 0 15px var(--primary-color);
     }
 
     /* Content List */
     .content {
       flex: 1;
-      max-height: 500px;
-      overflow-y: auto;
-      padding: 8px;
+      max-height: 550px;
+      overflow-y: hidden;
+      /* التحكم عبر الكيبورد فقط */
+      padding: 10px 0;
       position: relative;
-    }
-
-    /* Scrollbar */
-    .content::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .content::-webkit-scrollbar-thumb {
-      background: var(--primary-color);
-      border-radius: 2px;
+      border-left: 4px solid var(--primary-color);
     }
 
     /* Items */
@@ -133,113 +120,148 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      margin: 2px 8px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #d1d5db;
-      border-left: 2px solid transparent;
-      transition: all 0.15s;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ccc;
+      transition: 0.1s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
     }
 
     .item.active {
-      background: linear-gradient(90deg, var(--item-active), transparent);
-      border-left-color: var(--primary-color);
+      background: linear-gradient(90deg, var(--item-active) 0%, rgba(0, 0, 0, 0) 100%);
       color: white;
-      padding-left: 20px;
+      font-weight: 700;
     }
 
     .item-separator {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 0;
-      opacity: 0.8;
+      padding: 12px 0;
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .sep-line {
       height: 1px;
-      background: rgba(255, 255, 255, 0.2);
-      width: 50px;
-      margin: 0 10px;
+      background: rgba(255, 255, 255, 0.1);
+      width: 40px;
+      margin: 0 12px;
     }
 
     .sep-text {
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: var(--text-secondary);
+      color: #555;
+      font-weight: 800;
     }
 
-    /* Components (Toggle, Slider, etc) */
-    .toggle {
-      width: 32px;
-      height: 16px;
-      background: #4b5563;
-      border-radius: 99px;
+    /* Components */
+    .toggle-switch {
+      width: 36px;
+      height: 18px;
+      background: #1a1a1a;
+      border-radius: 20px;
       position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .toggle.on {
+    .toggle-switch.active {
       background: var(--primary-color);
+      box-shadow: 0 0 10px var(--primary-color);
     }
 
-    .toggle-dot {
-      width: 12px;
-      height: 12px;
-      background: white;
-      border-radius: 50%;
+    .toggle-switch::after {
+      content: '';
       position: absolute;
       top: 2px;
       left: 2px;
-      transition: left 0.2s;
+      width: 12px;
+      height: 12px;
+      background: #eee;
+      border-radius: 50%;
+      transition: 0.2s;
     }
 
-    .toggle.on .toggle-dot {
-      left: 18px;
+    .toggle-switch.active::after {
+      left: 20px;
+      background: #fff;
     }
 
     .list-val {
-      font-size: 12px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 13px;
+      color: #888;
     }
 
     .list-val span {
       color: var(--primary-color);
-      font-weight: bold;
+      font-weight: 800;
+      margin: 0 5px;
     }
 
     /* Footer */
     .footer {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 20px;
       font-size: 11px;
-      color: #6b7280;
+      color: #fff;
       display: flex;
       justify-content: space-between;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-family: monospace;
     }
 
-    /* Scroll Indicator */
-    .scroll-indicator {
+    /* Notifications */
+    #notif-container {
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: #1f2937;
+      right: 25px;
+      bottom: 25px;
+      width: 330px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .scroll-bar {
-      width: 100%;
-      background: var(--primary-color);
-      position: absolute;
-      transition: top 0.1s;
+    .notif {
+      background: #0c0c0c;
+      border-radius: 4px;
+      display: flex;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      animation: slideIn 0.4s ease-out;
+    }
+
+    .notif-side {
+      width: 5px;
+    }
+
+    .notif-body {
+      padding: 12px 18px;
+    }
+
+    .notif-title {
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .notif-desc {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -247,147 +269,143 @@
 <body>
 
   <div id="app">
-    <!-- Banner -->
     <div class="banner">
-      <img id="banner-img" src="" alt="Banner">
+      <img id="banner-img" src="banner.png" alt="">
       <div class="banner-overlay">
         <div id="title" class="banner-title">PIXEL UI</div>
       </div>
     </div>
 
-    <!-- Tabs -->
     <div id="tabs-container" class="tabs"></div>
 
-    <!-- Content -->
     <div class="content">
-      <div class="scroll-indicator">
-        <div id="scroll-bar" class="scroll-bar"></div>
-      </div>
       <div id="items-container"></div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
-      <span id="footer-text">v2.0.0</span>
-      <span id="item-count">0/0</span>
+      <span id="footer-text">PixelUI Premium</span>
+      <span id="item-count">(0/0)</span>
     </div>
   </div>
+
+  <div id="notif-container"></div>
 
   <script>
     const app = document.getElementById('app');
     const tabsContainer = document.getElementById('tabs-container');
     const itemsContainer = document.getElementById('items-container');
-    const scrollBar = document.getElementById('scroll-bar');
+    const notifCont = document.getElementById('notif-container');
 
     let state = {
-      visible: false, // Set to true to test in browser
+      visible: false,
       tabs: [],
-      activeTab: "",
+      activeTabIdx: 0,
       items: [],
       selectedIndex: 0
     };
 
-    // --- Render Functions ---
+    window.addEventListener('message', function (event) {
+      // معالجة البيانات بنفس طريقة كودك القديم لضمان التوافق
+      let data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
-    function renderTabs() {
-      tabsContainer.innerHTML = '';
-      state.tabs.forEach(tab => {
-        const el = document.createElement('div');
-        el.className = `tab ${tab === state.activeTab ? 'active' : ''}`;
-        el.innerText = tab;
-        tabsContainer.appendChild(el);
-      });
-    }
-
-    function renderItems() {
-      itemsContainer.innerHTML = '';
-      state.items.forEach((item, idx) => {
-        if (item.type === 'separator') {
-          const el = document.createElement('div');
-          el.className = 'item-separator';
-          el.innerHTML = `<div class="sep-line"></div><span class="sep-text">${item.label}</span><div class="sep-line"></div>`;
-          itemsContainer.appendChild(el);
-          return;
-        }
-
-        const el = document.createElement('div');
-        el.className = `item ${idx === state.selectedIndex ? 'active' : ''}`;
-
-        let rightContent = '';
-        if (item.type === 'toggle') {
-          rightContent = `<div class="toggle ${item.value ? 'on' : ''}"><div class="toggle-dot"></div></div>`;
-        } else if (item.type === 'list') {
-          rightContent = `<div class="list-val">&lt; <span>${item.value}</span> &gt;</div>`;
-        } else if (item.type === 'slider') {
-          rightContent = `<div class="list-val">${item.value}/${item.max}</div>`;
-        }
-
-        el.innerHTML = `<span>${item.label}</span>${rightContent}`;
-        itemsContainer.appendChild(el);
-      });
-
-      // Update Scroll Indicator
-      if (state.items.length > 0) {
-        const h = 100 / state.items.length;
-        scrollBar.style.height = `${h}%`;
-        scrollBar.style.top = `${(state.selectedIndex / state.items.length) * 100}%`;
-      }
-
-      // Auto Scroll
-      const activeEl = itemsContainer.children[state.selectedIndex];
-      if (activeEl) {
-        activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-
-      // Update Footer
-      document.getElementById('item-count').innerText = `${state.selectedIndex + 1}/${state.items.length}`;
-    }
-
-    function updateVisibility() {
-      app.style.display = state.visible ? 'flex' : 'none';
-    }
-
-    // --- Event Listeners ---
-
-    window.addEventListener('message', (event) => {
-      const data = event.data;
-
-      if (data.action === "setVisible") {
+      if (data.action === "setVisible" || data.action === "showUI") {
         state.visible = data.visible;
-        updateVisibility();
+        app.style.display = state.visible ? 'flex' : 'none';
+        if (data.items) renderItems(data.items, data.index || 0);
       }
-      else if (data.action === "updateMenu") {
-        if (data.menuData.title) document.getElementById('title').innerText = data.menuData.title;
-        if (data.menuData.banner) document.getElementById('banner-img').src = data.menuData.banner;
-        if (data.menuData.footer) document.getElementById('footer-text').innerText = data.menuData.footer;
 
-        if (data.menuData.tabs) state.tabs = data.menuData.tabs;
-        if (data.menuData.activeTab) state.activeTab = data.menuData.activeTab;
-        if (data.menuData.items) state.items = data.menuData.items;
-
-        renderTabs();
-        renderItems();
+      if (data.action === "updateMenu" || data.action === "updateElements") {
+        if (data.menuData) {
+          if (data.menuData.title) document.getElementById('title').innerText = data.menuData.title;
+          if (data.menuData.banner) document.getElementById('banner-img').src = data.menuData.banner;
+          if (data.menuData.tabs) renderTabs(data.menuData.tabs, data.menuData.activeTabIdx || 0);
+          if (data.menuData.items) renderItems(data.menuData.items, data.menuData.selectedIndex || 0);
+        } else if (data.elements) {
+          renderItems(data.elements, data.index || 0);
+        }
       }
-      else if (data.action === "updateSelection") {
+
+      if (data.action === "updateSelection" || data.action === "keydown") {
         state.selectedIndex = data.index;
-        renderItems(); // Re-render to update active class and scroll
+        updateSelection();
+      }
+
+      if (data.action === "showNotification") {
+        showNotification(data.title, data.desc, data.type);
       }
     });
 
-    // Initial Render (Mock for browser testing)
-    // state.visible = true;
-    // state.tabs = ["General", "Players", "Settings"];
-    // state.activeTab = "General";
-    // state.items = [
-    //     {label: "Test Item 1", type: "button"},
-    //     {label: "God Mode", type: "toggle", value: true},
-    //     {label: "Separator", type: "separator"},
-    //     {label: "Vehicle", type: "list", value: "Adder"}
-    // ];
-    // updateVisibility();
-    // renderTabs();
-    // renderItems();
+    function renderTabs(tabs, activeIdx) {
+      tabsContainer.innerHTML = tabs.map((tab, i) =>
+        `<div class="tab ${i === activeIdx ? 'active' : ''}">${tab}</div>`
+      ).join('');
+    }
 
+    function renderItems(items, selectedIdx) {
+      state.items = items;
+      state.selectedIndex = selectedIdx;
+
+      itemsContainer.innerHTML = items.map((item, i) => {
+        if (item.type === 'separator') {
+          return `<div class="item-separator"><div class="sep-line"></div><span class="sep-text">${item.label}</span><div class="sep-line"></div></div>`;
+        }
+
+        let right = '';
+        if (item.type === 'toggle') {
+          right = `<div class="toggle-switch ${item.value ? 'active' : ''}"></div>`;
+        } else if (item.type === 'list') {
+          right = `<div class="list-val">&lt; <span>${item.value}</span> &gt;</div>`;
+        } else if (item.type === 'subMenu') {
+          right = `<span style="color:#555">»</span>`;
+        }
+
+        return `<div class="item ${i === selectedIdx ? 'active' : ''}">
+                    <span>${item.label}</span>
+                    ${right}
+                </div>`;
+      }).join('');
+
+      document.getElementById('item-count').innerText = `(${selectedIdx + 1}/${items.length})`;
+      scrollToItem(selectedIdx);
+    }
+
+    function updateSelection() {
+      const children = itemsContainer.children;
+      let itemIdx = 0;
+      for (let i = 0; i < children.length; i++) {
+        if (children[i].classList.contains('item')) {
+          children[i].classList.toggle('active', itemIdx === state.selectedIndex);
+          itemIdx++;
+        }
+      }
+      document.getElementById('item-count').innerText = `(${state.selectedIndex + 1}/${state.items.length})`;
+      scrollToItem(state.selectedIndex);
+    }
+
+    function scrollToItem(idx) {
+      const items = itemsContainer.querySelectorAll('.item');
+      if (items[idx]) {
+        items[idx].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+
+    function showNotification(title, desc, type) {
+      const div = document.createElement('div');
+      div.className = 'notif';
+      const color = type === 'success' ? '#0f4' : '#0af';
+      div.innerHTML = `<div class="notif-side" style="background:${color}"></div>
+                <div class="notif-body">
+                    <div class="notif-title" style="color:${color}">${title}</div>
+                    <div class="notif-desc">${desc}</div>
+                </div>`;
+      notifCont.appendChild(div);
+      setTimeout(() => {
+        div.style.transform = 'translateX(120%)';
+        div.style.opacity = '0';
+        div.style.transition = '0.5s';
+        setTimeout(() => div.remove(), 500);
+      }, 4000);
+    }
   </script>
 </body>
 
