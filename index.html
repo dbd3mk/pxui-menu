@@ -22,6 +22,7 @@
       --font-title: 'Outfit', sans-serif;
     }
 
+    /* إصلاح الشفافية الشامل */
     html,
     body {
       margin: 0;
@@ -163,48 +164,82 @@
       font-weight: 700;
     }
 
-    /* Keyboard Input UI */
+    /* Keyboard Input UI - Premium Redesign */
     #keyboard-container {
       position: absolute;
       left: 50%;
-      top: 40%;
+      top: 45%;
       transform: translate(-50%, -50%);
-      width: 400px;
-      background: #0c0c0c;
-      border-radius: 8px;
+      width: 420px;
+      background: rgba(10, 10, 10, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
       display: none;
-      box-shadow: 0 20px 60px #000;
-      border-top: 3px solid var(--primary);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       z-index: 9999;
       overflow: hidden;
+      animation: modalFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes modalFade {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
     }
 
     #key-header {
-      padding: 15px;
-      font-size: 14px;
+      padding: 18px 25px;
+      font-size: 13px;
       font-weight: 800;
-      background: #000;
-      color: white;
+      background: rgba(255, 255, 255, 0.02);
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #key-header::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+      border-radius: 2px;
     }
 
     #key-display {
-      background: #111;
-      margin: 15px;
-      padding: 20px;
-      font-size: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
+      margin: 25px;
+      padding: 35px;
+      font-size: 28px;
       text-align: center;
-      font-weight: bold;
-      border: 1px solid #222;
-      border-radius: 4px;
-      color: white;
+      font-family: var(--font-title);
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
     }
 
     #key-hint {
       font-size: 10px;
-      color: #555;
+      color: var(--text-dim);
       text-align: center;
-      padding-bottom: 15px;
+      padding-bottom: 20px;
       text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
     }
 
     #notif-container {
