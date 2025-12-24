@@ -21,7 +21,6 @@
       --font-title: 'Outfit', sans-serif;
     }
 
-    /* الشفافية المطلقة - منع الحواف السوداء */
     html,
     body {
       margin: 0;
@@ -39,13 +38,11 @@
       outline: none;
     }
 
-    /* المنيو الرئيسي - أنحف وأصغر */
     #wrapper {
       position: absolute;
       left: 40px;
       top: 40px;
       width: 380px;
-      /* أنحف */
       background: var(--bg) !important;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -57,7 +54,6 @@
 
     #header {
       height: 120px;
-      /* أنحف */
       position: relative;
       background: #000 !important;
     }
@@ -170,16 +166,13 @@
       font-weight: 800;
     }
 
-    /* واجهة تغيير الزر - أنحف وبدون ضباب لمنع السواد */
     #keyboard-container {
       position: absolute;
       left: 50%;
       top: 45%;
       transform: translate(-50%, -50%);
       width: 280px;
-      /* أنحف */
       background: #0f0f0f !important;
-      /* لون صلب لمنع مشاكل الشفافية */
       border-radius: 8px;
       display: none;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
@@ -232,41 +225,103 @@
       letter-spacing: 1px;
     }
 
+    /* Premium Notifications Redesign */
     #notif-container {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
-      width: 260px;
+      right: 25px;
+      bottom: 25px;
+      width: 320px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 12px;
+      z-index: 10000;
     }
 
     .notif {
-      background: rgba(15, 15, 15, 0.98) !important;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--primary);
-      border-radius: 4px;
-      padding: 10px 15px;
+      background: rgba(10, 10, 10, 0.95) !important;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      animation: notifSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .notif::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--primary);
+      box-shadow: 0 0 15px var(--primary);
+    }
+
+    .notif.success::before {
+      background: #00ff88;
+      box-shadow: 0 0 15px #00ff88;
+    }
+
+    .notif.warning::before {
+      background: #ffcc00;
+      box-shadow: 0 0 15px #ffcc00;
+    }
+
+    .notif.info::before {
+      background: #00ccff;
+      box-shadow: 0 0 15px #00ccff;
     }
 
     .notif-title {
+      font-family: var(--font-title);
       font-weight: 800;
-      font-size: 11px;
+      font-size: 13px;
       color: #fff !important;
       text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .notif-desc {
-      font-size: 10px;
+      font-size: 11px;
       color: #aaa !important;
-      margin-top: 2px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    @keyframes notifSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(50px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    .notif-fade-out {
+      animation: notifFadeOut 0.4s ease-in forwards !important;
+    }
+
+    @keyframes notifFadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(100px);
+      }
     }
   </style>
 </head>
 
 <body>
-
   <div id="wrapper">
     <div id="header">
       <div id="header-img"></div>
@@ -332,10 +387,14 @@
       }
       if (data.action === "showNotification") {
         const div = document.createElement('div');
-        div.className = 'notif';
+        div.className = `notif ${data.type || 'info'}`;
         div.innerHTML = `<div class="notif-title">${data.title}</div><div class="notif-desc">${data.desc}</div>`;
         notifCont.appendChild(div);
-        setTimeout(() => div.remove(), 4000);
+
+        setTimeout(() => {
+          div.classList.add('notif-fade-out');
+          setTimeout(() => div.remove(), 400);
+        }, 4000);
       }
     });
 

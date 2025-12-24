@@ -205,8 +205,8 @@ function PixelUI:Init()
     MachoShowDui(DUI)
     PixelUI:Build()
     CurrentMenu = ActiveMenu
-    Citizen.Wait(1000)
-    PixelUI:Notify("success", "PIXEL UI", "Advanced Scanner Ready")
+    Citizen.Wait(1500)
+    PixelUI:Notify("success", "PIXEL TEAM", "Welcome to PixelUI Premium Edition")
 end
 
 PixelUI:Init()
