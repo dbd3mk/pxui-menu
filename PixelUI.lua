@@ -25,13 +25,72 @@ function PixelUI:Send(d) if DUI then MachoSendDuiMessage(DUI, json.encode(d)) en
 function PixelUI:Notify(t, ti, d) PixelUI:Send({ action="showNotification", type=t, title=ti, desc=d }) end
 function PixelUI:UpdatePos() PixelUI:Send({ action = "updatePosition", x = MenuPosX, y = MenuPosY }) end
 
+-- Advanced Protection Scan Logic
+function PixelUI:ScanAC()
+    local function ResourceFileExists(res, file)
+        local content = LoadResourceFile(res, file)
+        return content ~= nil
+    end
+
+    local numResources = GetNumResources()
+    local acFiles = {
+        { name = "ai_module_fg-obfuscated.lua", acName = "FiveGuard" },
+    }
+    
+    local detected = {}
+    PixelUI:Notify("info", "SCANNER", "Starting Advanced Scan...")
+    
+    for i = 0, numResources - 1 do
+        local res = GetResourceByFindIndex(i)
+        if res then
+            local resLower = res:lower()
+
+            -- Check for specific files
+            for _, acFile in ipairs(acFiles) do
+                if ResourceFileExists(res, acFile.name) then
+                    table.insert(detected, {name = acFile.acName, res = res})
+                end
+            end
+
+            -- Check for resource name patterns
+            local friendly = nil
+            if resLower:sub(1, 7) == "reaperv" then friendly = "ReaperV4"
+            elseif resLower:sub(1, 4) == "fini" then friendly = "FiniAC"
+            elseif resLower:sub(1, 7) == "chubsac" then friendly = "ChubsAC"
+            elseif resLower:sub(1, 6) == "fireac" then friendly = "FireAC"
+            elseif resLower:sub(1, 7) == "drillac" then friendly = "DrillAC"
+            elseif resLower:sub(-7) == "eshield" then friendly = "WaveShield"
+            elseif resLower:sub(-10) == "likizao_ac" then friendly = "Likizao-AC"
+            elseif resLower:sub(1, 5) == "greek" then friendly = "GreekAC"
+            elseif resLower == "pac" then friendly = "PhoenixAC"
+            elseif resLower == "electronac" then friendly = "ElectronAC"
+            end
+
+            if friendly then
+                table.insert(detected, {name = friendly, res = res})
+            end
+        end
+    end
+
+    if #detected > 0 then
+        for _, ac in ipairs(detected) do
+            PixelUI:Notify("warning", "AC DETECTED", ac.name .. " found in: " .. ac.res)
+        end
+    else
+        PixelUI:Notify("success", "SCAN COMPLETE", "No known anti-cheat footprints found.")
+    end
+end
+
 function PixelUI:Build()
     local settingsMenu = {
-        { label = "Menu X Position", type = "list", value = MenuPosX, onSelect = function() end },
-        { label = "Menu Y Position", type = "list", value = MenuPosY, onSelect = function() end },
+        { label = "Menu X Position", type = "list", value = MenuPosX },
+        { label = "Menu Y Position", type = "list", value = MenuPosY },
         { label = "Change Toggle Key", type = "button", onSelect = function() 
             IsPickingKey = true
             PixelUI:Send({action="updateKeyboard", visible=true, title="Press New Key", value="???"})
+        end },
+        { label = "Run Protection Scan", type = "button", onSelect = function() 
+            PixelUI:ScanAC()
         end },
     }
 
@@ -147,7 +206,7 @@ function PixelUI:Init()
     PixelUI:Build()
     CurrentMenu = ActiveMenu
     Citizen.Wait(1000)
-    PixelUI:Notify("success", "PIXEL UI", "Settings Initialized")
+    PixelUI:Notify("success", "PIXEL UI", "Advanced Scanner Ready")
 end
 
 PixelUI:Init()
