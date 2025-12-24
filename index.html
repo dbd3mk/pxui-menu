@@ -67,34 +67,6 @@
       filter: brightness(0.7);
     }
 
-    .header-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 20%, rgba(10, 10, 10, 1) 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 15px 20px;
-    }
-
-    .header-title {
-      font-family: var(--font-title);
-      font-size: 26px;
-      font-weight: 800;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin: 0;
-    }
-
-    .header-subtitle {
-      font-size: 10px;
-      color: var(--primary);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-weight: 700;
-    }
-
     /* التبويبات */
     #tabs {
       display: flex;
@@ -259,10 +231,6 @@
   <div id="wrapper">
     <div id="header">
       <div id="header-img"></div>
-      <div class="header-overlay">
-        <span class="header-subtitle">PixelUI Premium</span>
-        <h1 id="tab-title" class="header-title">General</h1>
-      </div>
     </div>
 
     <div id="tabs"></div>
@@ -320,7 +288,6 @@
 
     function renderTabs(tabs, activeIdx) {
       tabsCont.innerHTML = tabs.map((t, i) => `<div class="tab ${i === activeIdx ? 'active' : ''}">${t}</div>`).join('');
-      document.getElementById('tab-title').innerText = tabs[activeIdx];
     }
 
     function renderItems(items, sel) {
