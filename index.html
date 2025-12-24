@@ -8,341 +8,249 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
     rel="stylesheet">
   <style>
     :root {
-      --primary-red: #cc0000;
-      --danger-red: #8b0000;
-      --bg-dark: rgba(10, 10, 10, 0.95);
-      --glass-border: rgba(255, 255, 255, 0.05);
-      --text-main: #d1d1d1;
-      --text-dim: #888888;
-      --accent-glow: rgba(204, 0, 0, 0.3);
+      --primary: #ff0033;
+      --primary-dark: #8b0000;
+      --bg: rgba(10, 10, 10, 0.96);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e0e0e0;
+      --text-dim: #888;
       --font-main: 'Inter', sans-serif;
       --font-title: 'Outfit', sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
-    }
-
+    /* إصلاح الشفافية الشامل */
     html,
     body {
       margin: 0;
       padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0) !important;
+      background: transparent !important;
       overflow: hidden;
       font-family: var(--font-main);
-      background: transparent !important;
-      user-select: none;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
+      justify-content: flex-start;
+      /* المنيو على اليسار كما في الصورة */
+      align-items: flex-start;
+      padding-left: 30px;
+      padding-top: 30px;
     }
 
     #wrapper {
-      width: 480px;
-      background: var(--bg-dark);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      width: 440px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: none;
+      /* يظهر عبر اللوا */
       flex-direction: column;
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
     }
 
-    /* Header Section */
+    /* البانر السينمائي */
     #header {
-      height: 160px;
+      height: 150px;
       position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: #000;
     }
 
     #header-img {
       width: 100%;
       height: 100%;
-      background: url('banner.png') no-repeat center center;
+      background: url('https://i.imgur.com/3QZ9j9S.png') no-repeat center center;
       background-size: cover;
-      filter: brightness(0.6) contrast(1.1);
-      transition: transform 0.5s ease;
+      filter: brightness(0.7);
     }
 
     .header-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.9) 100%);
+      background: linear-gradient(to bottom, transparent 20%, rgba(10, 10, 10, 1) 100%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 20px 25px;
+      padding: 15px 20px;
     }
 
-    .active-tab-title {
+    .header-title {
       font-family: var(--font-title);
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 800;
       color: #fff;
       text-transform: uppercase;
       letter-spacing: 2px;
       margin: 0;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    .menu-subtitle {
-      font-size: 11px;
-      color: var(--primary-red);
+    .header-subtitle {
+      font-size: 10px;
+      color: var(--primary);
       text-transform: uppercase;
-      letter-spacing: 4px;
-      font-weight: 600;
-      margin-bottom: 4px;
+      letter-spacing: 3px;
+      font-weight: 700;
     }
 
-    /* Tab Navigation */
+    /* التبويبات */
     #tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid var(--border);
     }
 
     .tab {
-      padding: 14px 0;
       flex: 1;
+      padding: 12px 0;
       text-align: center;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
+      transition: 0.2s;
     }
 
     .tab.active {
       color: #fff;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 2px solid var(--primary);
     }
 
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 20%;
-      right: 20%;
-      height: 2px;
-      background: var(--primary-red);
-      box-shadow: 0 0 10px var(--primary-red);
-    }
-
-    /* Content List */
+    /* القائمة */
     #content {
-      max-height: 480px;
+      max-height: 500px;
       overflow-y: hidden;
-      padding: 10px 0;
-    }
-
-    #items {
-      display: flex;
-      flex-direction: column;
+      border-left: 3px solid var(--primary);
     }
 
     .item {
-      padding: 12px 25px;
+      padding: 13px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.2s ease;
-      border-left: 3px solid transparent;
-      margin: 1px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      transition: 0.1s;
     }
 
     .item.selected {
-      background: linear-gradient(90deg, rgba(204, 0, 0, 0.1) 0%, transparent 100%);
-      border-left-color: var(--primary-red);
+      background: linear-gradient(90deg, rgba(255, 0, 51, 0.15) 0%, transparent 100%);
+      color: #fff;
     }
 
     .item-label {
       font-size: 14px;
-      font-weight: 400;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-weight: 500;
+      color: #bbb;
     }
 
     .item.selected .item-label {
       color: #fff;
-      font-weight: 500;
     }
 
-    .item.danger .item-label {
-      color: #ff4d4d;
-    }
-
-    .item.danger.selected {
-      background: linear-gradient(90deg, rgba(139, 0, 0, 0.2) 0%, transparent 100%);
-      border-left-color: var(--danger-red);
-    }
-
-    /* Components */
-    .toggle-switch {
+    /* الأزرار والمكونات */
+    .toggle {
       width: 34px;
       height: 18px;
       background: #222;
-      border-radius: 20px;
+      border-radius: 10px;
       position: relative;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .toggle-switch.active {
-      background: var(--primary-red);
+    .toggle.active {
+      background: var(--primary);
     }
 
-    .toggle-switch::after {
+    .toggle::after {
       content: '';
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 12px;
-      height: 12px;
-      background: #aaa;
+      width: 14px;
+      height: 14px;
+      background: #eee;
       border-radius: 50%;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: 0.2s;
     }
 
-    .toggle-switch.active::after {
+    .toggle.active::after {
       left: 18px;
       background: #fff;
     }
 
-    .list-arrow {
+    .list-val {
       font-size: 12px;
-      color: var(--text-dim);
+      color: var(--primary);
       font-weight: 700;
     }
 
-    .list-value {
-      font-size: 13px;
-      color: var(--primary-red);
-      font-weight: 600;
-      margin: 0 8px;
-    }
-
-    /* Footer */
+    /* الفوتر */
     #footer {
-      padding: 15px 25px;
-      background: rgba(0, 0, 0, 0.4);
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-
-    .footer-info {
       font-size: 10px;
       color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
-    .page-counter {
+    .count-box {
       background: rgba(255, 255, 255, 0.05);
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 3px;
       color: #fff;
+      font-weight: 700;
     }
 
-    .discord-link {
-      font-size: 10px;
-      color: var(--text-dim);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .discord-link:hover {
-      color: #7289da;
-    }
-
-    /* Progress Bar (Visual) */
-    .progress-container {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: var(--primary-red);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    /* Notifications */
+    /* الإشعارات */
     #notif-container {
       position: fixed;
-      right: 30px;
-      bottom: 30px;
-      width: 320px;
+      right: 20px;
+      bottom: 20px;
+      width: 300px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      z-index: 1000;
+      gap: 8px;
     }
 
     .notif {
-      background: rgba(15, 15, 15, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--glass-border);
-      border-left: 4px solid var(--primary-red);
-      border-radius: 6px;
-      padding: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      animation: slideIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      background: rgba(15, 15, 15, 0.98);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 4px;
+      padding: 12px 15px;
+      animation: slideIn 0.3s ease-out;
     }
 
     .notif-title {
-      font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 12px;
       color: #fff;
       text-transform: uppercase;
-      margin-bottom: 4px;
     }
 
     .notif-desc {
-      font-size: 12px;
-      color: var(--text-dim);
-      line-height: 1.4;
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 3px;
     }
 
     @keyframes slideIn {
       from {
-        transform: translateX(110%);
-        opacity: 0;
+        transform: translateX(100%);
       }
 
       to {
         transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeOut {
-      to {
-        transform: translateX(110%);
-        opacity: 0;
       }
     }
   </style>
@@ -354,58 +262,36 @@
     <div id="header">
       <div id="header-img"></div>
       <div class="header-overlay">
-        <span class="menu-subtitle">Premium Mod Menu</span>
-        <h1 id="active-tab-name" class="active-tab-title">General</h1>
+        <span class="header-subtitle">PixelUI Premium</span>
+        <h1 id="tab-title" class="header-title">General</h1>
       </div>
     </div>
 
-    <div id="tabs">
-      <!-- Tabs injected here -->
-    </div>
+    <div id="tabs"></div>
 
     <div id="content">
-      <div id="items">
-        <!-- Items injected here -->
-      </div>
+      <div id="items"></div>
     </div>
 
     <div id="footer">
-      <div class="footer-info">
-        <span id="version">PixelUI v2.5</span>
-        <a href="#" class="discord-link" style="margin-left: 15px;">discord.gg/pixel</a>
-      </div>
-      <div class="page-counter" id="count">0 / 0</div>
-    </div>
-
-    <div class="progress-container">
-      <div id="progress-bar" class="progress-bar"></div>
+      <span>v2.6 | discord.gg/pixel</span>
+      <span id="count" class="count-box">0/0</span>
     </div>
   </div>
 
   <div id="notif-container"></div>
 
   <script>
-    const wrapper = document.getElementById('wrapper');
-    const tabsCont = document.getElementById('tabs');
-    const itemsCont = document.getElementById('items');
-    const notifCont = document.getElementById('notif-container');
-    const tabTitle = document.getElementById('active-tab-name');
-    const progressBar = document.getElementById('progress-bar');
-
-    let state = {
-      visible: false,
-      tabs: [],
-      activeTabIdx: 0,
-      items: [],
-      selectedIndex: 0
-    };
+    const wrapper = document.getElementById('wrapper'),
+      tabsCont = document.getElementById('tabs'),
+      itemsCont = document.getElementById('items'),
+      notifCont = document.getElementById('notif-container');
 
     window.addEventListener('message', function (event) {
       let data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
 
       if (data.action === "showUI") {
-        state.visible = data.visible;
-        wrapper.style.display = state.visible ? 'flex' : 'none';
+        wrapper.style.display = data.visible ? 'flex' : 'none';
         if (data.elements) renderItems(data.elements, data.index || 0);
       }
 
@@ -418,95 +304,42 @@
         }
       }
 
-      if (data.action === "updateSelection" || data.action === "keydown") {
-        state.selectedIndex = data.index;
-        updateSelection();
+      if (data.action === "keydown") {
+        const children = itemsCont.children;
+        for (let i = 0; i < children.length; i++) children[i].classList.toggle('selected', i === data.index);
+        document.getElementById('count').innerText = `${data.index + 1}/${children.length}`;
+        children[data.index]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
 
       if (data.action === "showNotification") {
-        notify(data.title, data.desc, data.type);
+        const div = document.createElement('div');
+        div.className = 'notif';
+        div.innerHTML = `<div class="notif-title">${data.title}</div><div class="notif-desc">${data.desc}</div>`;
+        notifCont.appendChild(div);
+        setTimeout(() => div.remove(), 4000);
       }
     });
 
     function renderTabs(tabs, activeIdx) {
-      state.tabs = tabs;
-      state.activeTabIdx = activeIdx;
-      tabsCont.innerHTML = tabs.map((tab, i) =>
-        `<div class="tab ${i === activeIdx ? 'active' : ''}">${tab}</div>`
-      ).join('');
-      tabTitle.innerText = tabs[activeIdx] || "Menu";
+      tabsCont.innerHTML = tabs.map((t, i) => `<div class="tab ${i === activeIdx ? 'active' : ''}">${t}</div>`).join('');
+      document.getElementById('tab-title').innerText = tabs[activeIdx];
     }
 
-    function renderItems(items, selectedIdx) {
-      state.items = items;
-      state.selectedIndex = selectedIdx;
-
+    function renderItems(items, sel) {
       itemsCont.innerHTML = items.map((item, i) => {
-        const isDanger = item.danger || (item.label && (item.label.toLowerCase().includes('explode') || item.label.toLowerCase().includes('troll') || item.label.toLowerCase().includes('ram')));
-
         let right = '';
         if (item.type === 'toggle') {
           const isOn = item.value || (item.label && item.label.includes('[ON]'));
-          const cleanLabel = item.label ? item.label.replace('[ON]', '').replace('[OFF]', '').trim() : '';
-          item.displayLabel = cleanLabel || item.label;
-          right = `<div class="toggle-switch ${isOn ? 'active' : ''}"></div>`;
+          right = `<div class="toggle ${isOn ? 'active' : ''}"></div>`;
         } else if (item.type === 'list') {
-          right = `<div class="list-arrow">&lt; <span class="list-value">${item.value}</span> &gt;</div>`;
-        } else if (item.type === 'subMenu') {
-          right = `<span style="color:rgba(255,255,255,0.1); font-size: 10px;">➔</span>`;
+          right = `<div class="list-val">&lt; ${item.value} &gt;</div>`;
         }
-
-        return `
-                    <div class="item ${i === selectedIdx ? 'selected' : ''} ${isDanger ? 'danger' : ''}">
-                        <div class="item-label">
-                            ${item.displayLabel || item.label}
-                        </div>
-                        ${right}
-                    </div>
-                `;
+        return `<div class="item ${i === sel ? 'selected' : ''}">
+                    <span class="item-label">${item.label.replace('[ON]', '').replace('[OFF]', '')}</span>
+                    ${right}
+                </div>`;
       }).join('');
-
-      updateFooter();
-    }
-
-    function updateSelection() {
-      const children = itemsCont.children;
-      for (let i = 0; i < children.length; i++) {
-        children[i].classList.toggle('selected', i === state.selectedIndex);
-      }
-      updateFooter();
-
-      const activeItem = children[state.selectedIndex];
-      if (activeItem) {
-        activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }
-
-    function updateFooter() {
-      const total = state.items.length;
-      const current = state.selectedIndex + 1;
-      document.getElementById('count').innerText = `${current} / ${total}`;
-
-      const progress = (current / total) * 100;
-      progressBar.style.width = `${progress}%`;
-    }
-
-    function notify(title, desc, type) {
-      const div = document.createElement('div');
-      div.className = 'notif';
-      if (type === 'danger') div.style.borderLeftColor = '#8b0000';
-      else if (type === 'success') div.style.borderLeftColor = '#008b00';
-
-      div.innerHTML = `
-                <div class="notif-title">${title}</div>
-                <div class="notif-desc">${desc}</div>
-            `;
-      notifCont.appendChild(div);
-
-      setTimeout(() => {
-        div.style.animation = 'fadeOut 0.5s forwards';
-        setTimeout(() => div.remove(), 500);
-      }, 4000);
+      document.getElementById('count').innerText = `${sel + 1}/${items.length}`;
     }
   </script>
 </body>
