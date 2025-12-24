@@ -3,8 +3,8 @@ local IsVisible = false
 local MenuKey = 72 -- H Key
 
 -- Configuration
-local BASE_URL = "https://dbd3mk.github.io/pxui-menu/"
-local MENU_URL = BASE_URL .. "?v=" .. math.random(1, 999999)
+local BASE_URL = "https://raw.githubusercontent.com/dbd3mk/pxui-menu/main/"
+local MENU_URL = BASE_URL .. "index.html?v=" .. math.random(1, 999999)
 
 -- State
 local MenuState = {
@@ -77,9 +77,8 @@ MachoOnKeyDown(function(key)
         
         PixelUI:Send({ action = "setVisible", visible = IsVisible })
         
-        -- Note: SetNuiFocus might conflict with DUI depending on implementation. 
-        -- Try enabling this ONLY if you can't click anything.
-        -- SetNuiFocus(IsVisible, IsVisible) 
+        -- Enable focus to ensure the menu is visible and interactive
+        SetNuiFocus(IsVisible, IsVisible) 
         
         if IsVisible then 
             PixelUI:UpdateUI() 
