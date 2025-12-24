@@ -13,7 +13,6 @@
   <style>
     :root {
       --primary: #ff0033;
-      --primary-dark: #8b0000;
       --bg: rgba(10, 10, 10, 0.98);
       --border: rgba(255, 255, 255, 0.08);
       --text: #e0e0e0;
@@ -22,76 +21,80 @@
       --font-title: 'Outfit', sans-serif;
     }
 
-    /* القضاء على الحواف السوداء نهائياً */
+    /* Aggressive Transparency Fix */
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
+      background: transparent;
     }
 
     html,
     body {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background-color: rgba(0, 0, 0, 0) !important;
       background: transparent !important;
       overflow: hidden;
       font-family: var(--font-main);
     }
 
+    /* Main Menu Wrapper */
     #wrapper {
       position: absolute;
       left: 30px;
       top: 30px;
-      width: 440px;
-      background: var(--bg);
+      width: 400px;
+      /* Slightly smaller */
+      background: var(--bg) !important;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       display: none;
       flex-direction: column;
       overflow: hidden;
     }
 
     #header {
-      height: 150px;
+      height: 130px;
+      /* Thinner header */
       position: relative;
-      background: #000;
+      background: #000 !important;
     }
 
     #header-img {
       width: 100%;
       height: 100%;
-      background: url('banner.png') no-repeat center center;
-      background-size: cover;
+      background: url('banner.png') no-repeat center center !important;
+      background-size: cover !important;
       filter: brightness(0.7);
     }
 
     #tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.4) !important;
       border-bottom: 1px solid var(--border);
     }
 
     .tab {
       flex: 1;
-      padding: 12px 0;
+      padding: 10px 0;
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      color: var(--text-dim);
+      color: var(--text-dim) !important;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     #content {
-      max-height: 500px;
+      max-height: 450px;
       overflow-y: hidden;
       border-left: 3px solid var(--primary);
     }
 
     .item {
-      padding: 13px 20px;
+      padding: 11px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -99,30 +102,30 @@
     }
 
     .item.selected {
-      background: linear-gradient(90deg, rgba(255, 0, 51, 0.15) 0%, transparent 100%);
-      color: #fff;
+      background: linear-gradient(90deg, rgba(255, 0, 51, 0.12) 0%, transparent 100%) !important;
+      color: #fff !important;
     }
 
     .item-label {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      color: #bbb;
+      color: #bbb !important;
     }
 
     .item.selected .item-label {
-      color: #fff;
+      color: #fff !important;
     }
 
     .toggle {
-      width: 34px;
-      height: 18px;
-      background: #222;
+      width: 30px;
+      height: 16px;
+      background: #222 !important;
       border-radius: 10px;
       position: relative;
     }
 
     .toggle.active {
-      background: var(--primary);
+      background: var(--primary) !important;
     }
 
     .toggle::after {
@@ -130,162 +133,135 @@
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 14px;
-      height: 14px;
-      background: #eee;
+      width: 12px;
+      height: 12px;
+      background: #eee !important;
       border-radius: 50%;
       transition: 0.2s;
     }
 
     .toggle.active::after {
-      left: 18px;
-      background: #fff;
+      left: 16px;
+      background: #fff !important;
     }
 
     .list-val {
-      font-size: 12px;
-      color: var(--primary);
+      font-size: 11px;
+      color: var(--primary) !important;
       font-weight: 700;
     }
 
     #footer {
-      padding: 10px 20px;
-      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.6) !important;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
-      color: var(--text-dim);
+      font-size: 9px;
+      color: var(--text-dim) !important;
       text-transform: uppercase;
     }
 
     .count-box {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.05) !important;
+      padding: 2px 6px;
       border-radius: 3px;
-      color: #fff;
+      color: #fff !important;
       font-weight: 700;
     }
 
-    /* Keyboard Input UI - Smaller & Thinner Redesign */
+    /* Keyboard Input UI - Ultra Compact & No Black Edges */
     #keyboard-container {
       position: absolute;
       left: 50%;
       top: 45%;
       transform: translate(-50%, -50%);
-      width: 340px;
-      /* Smaller width */
-      background: rgba(12, 12, 12, 0.98);
-      backdrop-filter: blur(20px);
-      border-radius: 10px;
+      width: 300px;
+      /* Even smaller */
+      background: rgba(15, 15, 15, 0.98) !important;
+      backdrop-filter: blur(15px);
+      border-radius: 8px;
       display: none;
-      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.05);
       z-index: 9999;
       overflow: hidden;
-      animation: modalFade 0.2s ease-out;
-    }
-
-    @keyframes modalFade {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -48%);
-      }
-
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-      }
     }
 
     #key-header {
-      padding: 14px 20px;
-      font-size: 11px;
+      padding: 12px 18px;
+      font-size: 10px;
       font-weight: 800;
-      background: rgba(255, 255, 255, 0.02);
-      color: #fff;
+      background: rgba(255, 255, 255, 0.02) !important;
+      color: #fff !important;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     #key-header::before {
       content: '';
       width: 3px;
-      height: 12px;
-      background: var(--primary);
-      box-shadow: 0 0 8px var(--primary);
+      height: 10px;
+      background: var(--primary) !important;
       border-radius: 1px;
     }
 
     #key-display {
-      background: rgba(255, 255, 255, 0.01);
-      margin: 20px;
-      padding: 25px;
-      font-size: 22px;
+      background: rgba(255, 255, 255, 0.01) !important;
+      margin: 15px;
+      padding: 20px;
+      font-size: 18px;
       text-align: center;
       font-family: var(--font-title);
       font-weight: 800;
-      border: 1px solid rgba(255, 255, 255, 0.02);
-      border-radius: 6px;
-      color: #fff;
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.02) !important;
+      border-radius: 4px;
+      color: #fff !important;
     }
 
     #key-hint {
-      font-size: 9px;
-      color: var(--text-dim);
+      font-size: 8px;
+      color: var(--text-dim) !important;
       text-align: center;
-      padding-bottom: 15px;
+      padding-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-weight: 600;
     }
 
     #notif-container {
       position: fixed;
       right: 20px;
       bottom: 20px;
-      width: 300px;
+      width: 280px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .notif {
-      background: rgba(15, 15, 15, 0.98);
+      background: rgba(15, 15, 15, 0.98) !important;
       border: 1px solid var(--border);
-      border-left: 4px solid var(--primary);
+      border-left: 3px solid var(--primary);
       border-radius: 4px;
-      padding: 12px 15px;
-      animation: slideIn 0.3s ease-out;
+      padding: 10px 14px;
     }
 
     .notif-title {
       font-weight: 800;
-      font-size: 12px;
-      color: #fff;
+      font-size: 11px;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
     .notif-desc {
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 3px;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-      }
-
-      to {
-        transform: translateX(0);
-      }
+      font-size: 10px;
+      color: #aaa !important;
+      margin-top: 2px;
     }
   </style>
 </head>
