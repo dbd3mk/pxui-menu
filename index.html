@@ -33,7 +33,6 @@
       -webkit-user-select: none;
       user-select: none;
       box-shadow: none !important;
-      /* Force remove all shadows */
     }
 
     html,
@@ -52,7 +51,6 @@
       position: relative;
     }
 
-    /* Main Menu Wrapper */
     .menu-wrapper {
       position: absolute;
       width: 380px;
@@ -63,6 +61,7 @@
       transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
       opacity: 0;
       transform: scale(0.95) translateY(20px);
+      overflow: hidden;
     }
 
     .menu-wrapper.visible {
@@ -70,7 +69,6 @@
       transform: scale(1) translateY(0);
     }
 
-    /* Header Section */
     .header-container {
       padding: 0;
     }
@@ -101,18 +99,11 @@
       pointer-events: none;
     }
 
-    /* Navigation Path */
     .nav-section {
       padding: 15px 25px 5px 25px;
       display: flex;
       align-items: center;
       gap: 12px;
-    }
-
-    .nav-icon {
-      color: var(--primary);
-      font-size: 10px;
-      opacity: 0.6;
     }
 
     .nav-text {
@@ -124,7 +115,6 @@
       letter-spacing: 1.5px;
     }
 
-    /* Main Content Area */
     .content-area {
       display: flex;
       padding: 5px 20px 15px 20px;
@@ -132,9 +122,8 @@
       min-height: 100px;
     }
 
-    /* Left Scrollbar */
     .scrollbar-container {
-      width: 3px;
+      width: 2px;
       padding: 10px 0;
       display: flex;
       flex-direction: column;
@@ -142,18 +131,19 @@
 
     .scrollbar-track {
       flex: 1;
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 10px;
       position: relative;
     }
 
     .scrollbar-thumb {
       position: absolute;
       width: 100%;
-      background: var(--primary);
+      background: rgba(255, 255, 255, 0.25);
       border-radius: 10px;
       transition: top 0.2s ease, height 0.2s ease;
     }
 
-    /* Items List */
     .items-list {
       flex: 1;
       max-height: 400px;
@@ -175,6 +165,7 @@
       align-items: center;
       transition: 0.2s all;
       position: relative;
+      background: transparent !important;
     }
 
     .menu-item.selected {
@@ -185,7 +176,7 @@
     .item-label {
       font-size: 13px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.25);
       text-transform: uppercase;
       letter-spacing: 0.5px;
       transition: 0.2s;
@@ -195,7 +186,6 @@
       color: #fff;
     }
 
-    /* Item Components */
     .toggle-switch {
       width: 30px;
       height: 14px;
@@ -240,12 +230,13 @@
       color: rgba(255, 255, 255, 0.05);
     }
 
-    /* Footer Section */
     .footer-container {
       padding: 15px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 0 0 24px 24px;
     }
 
     .footer-brand {
@@ -265,7 +256,6 @@
       opacity: 0.8;
     }
 
-    /* Description Box */
     .description-box {
       position: absolute;
       left: 400px;
@@ -300,7 +290,6 @@
       line-height: 1.6;
     }
 
-    /* Notifications */
     .notification-stack {
       position: fixed;
       top: 40px;
@@ -355,7 +344,6 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Keyboard Input */
     .keyboard-overlay {
       position: fixed;
       top: 0;
@@ -418,14 +406,11 @@
 
 <body>
   <div id="root"></div>
-
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
   <script type="text/babel">
     const { useState, useEffect, useRef, memo } = React;
-
     const Header = memo(() => (
       <div className="header-container">
         <div className="header-banner">
@@ -434,7 +419,6 @@
         </div>
       </div>
     ));
-
     const App = () => {
       const [visible, setVisible] = useState(false);
       const [tabs, setTabs] = useState([]);
@@ -443,9 +427,7 @@
       const [pos, setPos] = useState({ x: 50, y: 50 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
-
       const listRef = useRef(null);
-
       useEffect(() => {
         const handleMessage = (e) => {
           const d = e.data;
@@ -473,7 +455,6 @@
         window.addEventListener("message", handleMessage);
         return () => window.removeEventListener("message", handleMessage);
       }, []);
-
       useEffect(() => {
         if (listRef.current) {
           const selectedEl = listRef.current.children[selectedIndex];
@@ -482,29 +463,21 @@
           }
         }
       }, [selectedIndex]);
-
       const scrollThumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
       const scrollThumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
-
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <Header />
-
             <div className="nav-section">
               <div className="nav-text">{path.join(" / ")}</div>
             </div>
-
             <div className="content-area">
               <div className="scrollbar-container">
                 <div className="scrollbar-track">
-                  <div className="scrollbar-thumb" style={{
-                    height: `${scrollThumbHeight}%`,
-                    top: `${scrollThumbTop}%`
-                  }}></div>
+                  <div className="scrollbar-thumb" style={{ height: `${scrollThumbHeight}%`, top: `${scrollThumbTop}%` }}></div>
                 </div>
               </div>
-
               <div className="items-list" ref={listRef}>
                 {tabs.map((tab, i) => (
                   <div key={i} className={`menu-item ${i === selectedIndex ? 'selected' : ''}`}>
@@ -512,7 +485,6 @@
                       {tab.label}
                       {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
                     </span>
-
                     {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right submenu-arrow"></i>}
                     {tab.type === "checkbox" && <div className={`toggle-switch ${tab.checked ? 'active' : ''}`}></div>}
                     {tab.type === "slider" && (
@@ -524,12 +496,10 @@
                 ))}
               </div>
             </div>
-
             <div className="footer-container">
               <div className="footer-brand">Pixel Team • 2025</div>
               <div className="footer-stats">{selectedIndex + 1} / {tabs.length}</div>
             </div>
-
             {tabs[selectedIndex]?.desc && (
               <div className={`description-box ${visible ? 'visible' : ''}`}>
                 <div className="desc-title">Description</div>
@@ -537,7 +507,6 @@
               </div>
             )}
           </div>
-
           <div className="notification-stack">
             {notifs.map(n => (
               <div key={n.id} className="notification">
@@ -549,7 +518,6 @@
               </div>
             ))}
           </div>
-
           <div className="keyboard-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
             <div className="keyboard-modal">
               <div className="keyboard-header">
@@ -565,7 +533,6 @@
         </div>
       );
     };
-
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
