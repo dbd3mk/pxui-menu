@@ -260,8 +260,26 @@ function PixelUI:Build()
                 local sid = GetPlayerServerId(player)
                 local name = GetPlayerName(player)
                 
-                local trollMenu = {
+                local playerItem = { 
+                    label = string.format("%s [%d]", name, sid), 
+                    type = "checkbox", 
+                    checked = false,
+                    desc = "Select player for actions",
+                    onSelect = function()
+                        local currentItem = CurrentMenu[HoveredIndex]
+                        if currentItem then
+                            currentItem.checked = not currentItem.checked
+                            PixelUI:UpdateUI()
+                        end
+                    end
+                }
+
+                playerItem.trollMenu = {
                     { label = "Open Inventory", type = "button", desc = "Stealthily open this player's inventory", onSelect = function()
+                        if not playerItem.checked then
+                            PixelUI:Notify("error", "DENIED", "You must select (check) the player first!")
+                            return
+                        end
                         MachoSetLoggerState(0)
                         MachoInjectResource2(3, "ElectronAC", string.format([[TriggerServerEvent('inventory:server:OpenInventory', 'otherplayer', %d)]], sid))
                         Citizen.Wait(1000)
@@ -270,20 +288,7 @@ function PixelUI:Build()
                     end }
                 }
 
-                table.insert(players, { 
-                    label = string.format("%s [%d]", name, sid), 
-                    type = "checkbox", 
-                    checked = false,
-                    desc = "Select player for actions",
-                    trollMenu = trollMenu, -- Store it here for easy access
-                    onSelect = function()
-                        local currentItem = CurrentMenu[HoveredIndex]
-                        if currentItem then
-                            currentItem.checked = not currentItem.checked
-                            PixelUI:UpdateUI()
-                        end
-                    end
-                })
+                table.insert(players, playerItem)
             end
             
             CachedPlayerList = players
