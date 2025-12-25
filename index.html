@@ -380,6 +380,13 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
+    const Header = React.memo(() => (
+      <div className="header">
+        <img className="header-gif" src="banner.gif" />
+        <div className="header-overlay"></div>
+      </div>
+    ));
+
     const App = () => {
       const [visible, setVisible] = useState(false);
       const [tabs, setTabs] = useState([]);
@@ -420,10 +427,7 @@
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
-            <div className="header">
-              <img className="header-gif" src="banner.gif" />
-              <div className="header-overlay"></div>
-            </div>
+            <Header />
 
             <div className="nav-path">
               <i className="fa-solid fa-compass"></i>
