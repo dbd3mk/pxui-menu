@@ -55,7 +55,7 @@
       width: 360px;
       background: var(--bg) !important;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
@@ -70,11 +70,14 @@
       transform: translateY(0);
     }
 
+    /* Header Section */
     .header {
       height: 150px;
       position: relative;
       background: #000 !important;
       overflow: hidden;
+      margin: 8px;
+      border-radius: 8px;
     }
 
     .header-gif {
@@ -94,10 +97,12 @@
       pointer-events: none;
     }
 
+    /* Navigation Path */
     .nav-path {
-      padding: 12px 20px;
+      padding: 10px 20px;
+      margin: 0 8px;
       background: rgba(255, 255, 255, 0.02) !important;
-      border-bottom: 1px solid var(--border);
+      border-radius: 6px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -112,11 +117,38 @@
       font-size: 10px;
     }
 
+    /* Main Content with Scrollbar */
+    .main-content {
+      display: flex;
+      position: relative;
+      margin: 8px;
+      gap: 8px;
+    }
+
+    .scrollbar-track {
+      width: 4px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scrollbar-thumb {
+      position: absolute;
+      width: 100%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary-glow);
+      border-radius: 10px;
+      transition: top 0.2s ease, height 0.2s ease;
+    }
+
     .items-container {
-      max-height: 400px;
+      flex: 1;
+      max-height: 380px;
       overflow-y: auto;
-      padding: 5px 0;
-      border-left: 2px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .items-container::-webkit-scrollbar {
@@ -124,16 +156,18 @@
     }
 
     .item {
-      padding: 12px 20px;
+      padding: 12px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 6px;
       transition: 0.15s;
     }
 
     .item.selected {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-left: 2px solid var(--primary);
     }
 
     .item-label {
@@ -144,17 +178,17 @@
 
     .item.selected .item-label {
       color: #fff !important;
-      transform: translateX(5px);
+      transform: translateX(3px);
       font-weight: 700;
     }
 
+    /* Components */
     .toggle {
-      width: 32px;
-      height: 16px;
+      width: 30px;
+      height: 15px;
       background: #222 !important;
       border-radius: 10px;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .toggle.active {
@@ -166,15 +200,15 @@
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 10px;
-      height: 10px;
+      width: 11px;
+      height: 11px;
       background: #fff !important;
       border-radius: 50%;
       transition: 0.2s;
     }
 
     .toggle.active::after {
-      left: 18px;
+      left: 17px;
       background: #000 !important;
     }
 
@@ -182,9 +216,9 @@
       font-size: 10px;
       font-weight: 800;
       color: var(--primary) !important;
-      border: 1px solid var(--primary);
-      padding: 1px 6px;
-      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 8px;
+      border-radius: 4px;
     }
 
     .submenu-icon {
@@ -192,10 +226,12 @@
       color: rgba(255, 255, 255, 0.1) !important;
     }
 
+    /* Footer */
     .footer {
       padding: 12px 20px;
+      margin: 0 8px 8px 8px;
       background: rgba(0, 0, 0, 0.4) !important;
-      border-top: 1px solid var(--border);
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -395,6 +431,7 @@
       const [pos, setPos] = useState({ x: 40, y: 40 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
+      const containerRef = useRef(null);
 
       useEffect(() => {
         const handleMessage = (e) => {
@@ -424,6 +461,18 @@
         return () => window.removeEventListener("message", handleMessage);
       }, []);
 
+      useEffect(() => {
+        if (containerRef.current) {
+          const selectedItem = containerRef.current.children[selectedIndex];
+          if (selectedItem) {
+            selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        }
+      }, [selectedIndex]);
+
+      const thumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
+      const thumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
+
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
@@ -434,23 +483,29 @@
               {path.join(" / ")}
             </div>
 
-            <div className="items-container">
-              {tabs.map((tab, i) => (
-                <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
-                  <span className="item-label">
-                    {tab.label}
-                    {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
-                  </span>
+            <div className="main-content">
+              <div className="scrollbar-track">
+                <div className="scrollbar-thumb" style={{ height: `${thumbHeight}%`, top: `${thumbTop}%` }}></div>
+              </div>
 
-                  {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
-                  {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
-                  {tab.type === "slider" && (
-                    <div className="list-value">
-                      {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
-                    </div>
-                  )}
-                </div>
-              ))}
+              <div className="items-container" ref={containerRef}>
+                {tabs.map((tab, i) => (
+                  <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
+                    <span className="item-label">
+                      {tab.label}
+                      {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
+                    </span>
+
+                    {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
+                    {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
+                    {tab.type === "slider" && (
+                      <div className="list-value">
+                        {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="footer">
