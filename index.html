@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI Premium</title>
+  <title>Pixel UI Silver Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -14,12 +14,14 @@
 
   <style>
     :root {
-      --primary: #ff0033;
-      --primary-glow: rgba(255, 0, 51, 0.4);
-      --bg: rgba(10, 10, 10, 0.98);
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #e0e0e0;
-      --text-dim: #888;
+      --primary: #d1d1d1;
+      /* Light Gray / Silver */
+      --primary-glow: rgba(209, 209, 209, 0.3);
+      --bg: rgba(15, 15, 15, 0.85);
+      /* Transparent Dark Background */
+      --border: rgba(255, 255, 255, 0.05);
+      --text: #ffffff;
+      --text-dim: #999;
       --font-main: 'Inter', sans-serif;
       --font-title: 'Outfit', sans-serif;
     }
@@ -50,51 +52,55 @@
     /* Main Menu Wrapper */
     .menu-wrapper {
       position: absolute;
-      width: 380px;
+      width: 360px;
+      /* Thinner */
       background: var(--bg);
+      backdrop-filter: blur(12px);
+      /* Glass effect */
       border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+      transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
       opacity: 0;
-      transform: scale(0.95) translateX(-20px);
+      transform: translateY(20px);
     }
 
     .menu-wrapper.visible {
       opacity: 1;
-      transform: scale(1) translateX(0);
+      transform: translateY(0);
     }
 
-    /* Header Section */
+    /* Header Section with GIF */
     .header {
-      height: 140px;
+      height: 150px;
       position: relative;
       background: #000;
+      overflow: hidden;
     }
 
-    .header-img {
+    .header-gif {
       width: 100%;
       height: 100%;
-      background: url('banner.png') no-repeat center center;
+      background: url('banner.gif') no-repeat center center;
       background-size: cover;
-      filter: brightness(0.7);
+      filter: brightness(0.8);
     }
 
     .header-overlay {
       position: absolute;
-      bottom: 0;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 60px;
-      background: linear-gradient(to top, var(--bg), transparent);
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
     }
 
     .header-content {
       position: absolute;
-      bottom: 15px;
+      bottom: 20px;
       left: 20px;
       display: flex;
       flex-direction: column;
@@ -102,46 +108,46 @@
 
     .header-title {
       font-family: var(--font-title);
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 800;
       color: #fff;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
     }
 
     .header-subtitle {
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 9px;
+      font-weight: 700;
       color: var(--primary);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      opacity: 0.8;
     }
 
     /* Navigation Path */
     .nav-path {
-      padding: 10px 20px;
-      background: rgba(0, 0, 0, 0.3);
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.02);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 9px;
       font-weight: 700;
       color: var(--text-dim);
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
     .nav-path i {
       color: var(--primary);
-      font-size: 8px;
+      font-size: 10px;
     }
 
     /* Items List */
     .items-container {
-      max-height: 420px;
+      max-height: 400px;
       overflow-y: auto;
-      position: relative;
+      padding: 5px 0;
     }
 
     .items-container::-webkit-scrollbar {
@@ -149,27 +155,27 @@
     }
 
     .item {
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
       transition: 0.2s;
       position: relative;
+      cursor: pointer;
     }
 
     .item.selected {
-      background: linear-gradient(90deg, rgba(255, 0, 51, 0.1) 0%, transparent 100%);
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .item-indicator {
       position: absolute;
       left: 0;
-      top: 0;
-      width: 3px;
-      height: 100%;
+      top: 15%;
+      width: 2px;
+      height: 70%;
       background: var(--primary);
-      box-shadow: 0 0 10px var(--primary);
+      box-shadow: 0 0 15px var(--primary-glow);
       opacity: 0;
       transition: 0.2s;
     }
@@ -181,20 +187,19 @@
     .item-label {
       font-size: 13px;
       font-weight: 500;
-      color: #bbb;
+      color: #aaa;
       transition: 0.2s;
     }
 
     .item.selected .item-label {
       color: #fff;
-      font-weight: 700;
       transform: translateX(5px);
     }
 
     /* Components */
     .toggle {
-      width: 34px;
-      height: 18px;
+      width: 32px;
+      height: 16px;
       background: #222;
       border-radius: 10px;
       position: relative;
@@ -204,7 +209,6 @@
 
     .toggle.active {
       background: var(--primary);
-      box-shadow: 0 0 10px var(--primary-glow);
     }
 
     .toggle::after {
@@ -221,26 +225,27 @@
 
     .toggle.active::after {
       left: 18px;
+      background: #000;
     }
 
     .list-value {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       color: var(--primary);
-      background: rgba(255, 0, 51, 0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
+      border: 1px solid var(--primary);
+      padding: 1px 6px;
+      border-radius: 3px;
     }
 
     .submenu-icon {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.1);
     }
 
     /* Footer */
     .footer {
       padding: 12px 20px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.4);
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -248,28 +253,28 @@
     }
 
     .footer-text {
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 700;
       color: var(--text-dim);
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .footer-count {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3px 10px;
-      border-radius: 4px;
-      color: #fff;
+      color: var(--primary);
       font-size: 10px;
       font-weight: 800;
+      font-family: var(--font-title);
     }
 
     /* Description Box */
     .desc-box {
       position: absolute;
-      left: 400px;
+      left: 380px;
       top: 0;
-      width: 250px;
+      width: 220px;
       background: var(--bg);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 15px;
@@ -285,50 +290,54 @@
     }
 
     .desc-title {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       color: var(--primary);
       text-transform: uppercase;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 4px;
     }
 
     .desc-text {
       font-size: 11px;
-      color: #aaa;
+      color: #ccc;
       line-height: 1.5;
+      font-weight: 400;
     }
 
     /* Notifications */
     .notif-container {
       position: fixed;
-      bottom: 30px;
+      top: 30px;
       right: 30px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       z-index: 10000;
     }
 
     .notif {
-      width: 320px;
-      background: rgba(15, 15, 15, 0.98);
+      width: 300px;
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(10px);
       border: 1px solid var(--border);
-      border-left: 4px solid var(--primary);
-      border-radius: 8px;
-      padding: 16px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-      animation: notifIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      border-top: 2px solid var(--primary);
+      border-radius: 6px;
+      padding: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      animation: notifIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
 
     @keyframes notifIn {
       from {
         opacity: 0;
-        transform: translateX(50px) scale(0.9);
+        transform: translateY(-20px);
       }
 
       to {
         opacity: 1;
-        transform: translateX(0) scale(1);
+        transform: translateY(0);
       }
     }
 
@@ -336,24 +345,25 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .notif-header i {
       color: var(--primary);
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .notif-title {
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       color: #fff;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .notif-desc {
       font-size: 11px;
-      color: #aaa;
+      color: #bbb;
       line-height: 1.4;
     }
 
@@ -364,7 +374,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.7);
       display: none;
       justify-content: center;
       align-items: center;
@@ -372,18 +382,18 @@
     }
 
     .kb-wrapper {
-      width: 350px;
-      background: #0a0a0a;
+      width: 300px;
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(15px);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
     }
 
     .kb-header {
-      padding: 15px 20px;
-      background: #000;
-      border-bottom: 2px solid var(--primary);
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--primary);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -391,13 +401,15 @@
 
     .kb-header i {
       color: var(--primary);
+      font-size: 12px;
     }
 
     .kb-header span {
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       color: #fff;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .kb-body {
@@ -407,19 +419,17 @@
 
     .kb-key {
       font-family: var(--font-title);
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 800;
       color: #fff;
-      text-shadow: 0 0 20px var(--primary-glow);
     }
 
     .kb-footer {
-      padding: 12px;
+      padding: 10px;
       text-align: center;
-      font-size: 9px;
-      color: #555;
+      font-size: 8px;
+      color: #666;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -476,16 +486,16 @@
           {/* Main Menu */}
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <div className="header">
-              <div className="header-img"></div>
+              <div className="header-gif"></div>
               <div className="header-overlay"></div>
               <div className="header-content">
-                <span className="header-subtitle">Pixel Team Presents</span>
-                <span className="header-title">Pixel UI Premium</span>
+                <span className="header-subtitle">Pixel UI Premium</span>
+                <span className="header-title">Silver Edition</span>
               </div>
             </div>
 
             <div className="nav-path">
-              <i className="fa-solid fa-house"></i>
+              <i className="fa-solid fa-compass"></i>
               {path.join(" / ")}
             </div>
 
@@ -498,7 +508,7 @@
                     {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
                   </span>
 
-                  {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right submenu-icon"></i>}
+                  {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
                   {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
                   {tab.type === "slider" && (
                     <div className="list-value">
@@ -511,14 +521,14 @@
             </div>
 
             <div className="footer">
-              <span className="footer-text">v2.8 | discord.gg/pixel</span>
+              <span className="footer-text">Pixel Team • 2025</span>
               <span className="footer-count">{selectedIndex + 1} / {tabs.length}</span>
             </div>
 
             {/* Description Box */}
             {tabs[selectedIndex]?.desc && (
               <div className={`desc-box ${visible ? 'visible' : ''}`}>
-                <div className="desc-title">Information</div>
+                <div className="desc-title">Description</div>
                 <div className="desc-text">{tabs[selectedIndex].desc}</div>
               </div>
             )}
@@ -529,7 +539,7 @@
             {notifs.map(n => (
               <div key={n.id} className="notif">
                 <div className="notif-header">
-                  <i className={n.type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation'}></i>
+                  <i className="fa-solid fa-bell"></i>
                   <span className="notif-title">{n.title}</span>
                 </div>
                 <div className="notif-desc">{n.desc}</div>
@@ -547,7 +557,7 @@
               <div className="kb-body">
                 <div className="kb-key">{kb.value}</div>
               </div>
-              <div className="kb-footer">Press Enter to confirm • Backspace to cancel</div>
+              <div className="kb-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
             </div>
           </div>
         </div>
