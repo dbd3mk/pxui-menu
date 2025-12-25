@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI Premium</title>
+  <title>Pixel UI</title>
   <!-- Fonts -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Readex+Pro:wght@160..700&display=swap">
@@ -18,12 +18,13 @@
 
   <style>
     :root {
-      --menu-color: 255, 0, 51;
-      /* Red Accent for Pixel UI */
+      --menu-color: 152, 45, 234;
+      /* يمكنك تغيير اللون من هنا */
     }
 
+    /* Global Styles */
     html {
-      color-scheme: dark !important;
+      color-scheme: normal !important;
     }
 
     body {
@@ -45,16 +46,17 @@
       height: 0;
     }
 
-    /* Wrapper & Positioning */
+    /* Pixel Menu Styles */
     .VWrapper {
       position: absolute;
       display: flex;
-      left: 30px;
-      top: 30px;
+      left: 4vw;
+      top: 50%;
+      transform: translateY(-50%);
       justify-content: center;
       align-items: flex-start;
       flex-direction: row;
-      gap: 10px;
+      gap: .4167vw;
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: none;
@@ -68,8 +70,10 @@
     .VLeftElements {
       position: relative;
       display: flex;
-      width: 350px;
+      width: 18.2292vw;
       height: auto;
+      justify-content: center;
+      align-items: center;
       flex-direction: column;
     }
 
@@ -77,62 +81,109 @@
       position: relative;
       display: flex;
       width: 100%;
-      height: 110px;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      height: 5.4688vw;
+      justify-content: center;
+      align-items: center;
+      border-left: .0521vw solid rgba(11, 11, 11, 0.95);
+      border-top: .0521vw solid rgba(11, 11, 11, 0.95);
+      border-right: .0521vw solid rgba(11, 11, 11, 0.95);
+      border-top-left-radius: .4167vw;
+      border-top-right-radius: .4167vw;
       overflow: hidden;
-      background: #000;
     }
 
     .VBanner img {
+      position: absolute;
+      display: flex;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(0.8);
     }
 
     .VLeftInnerElements {
       position: relative;
       display: flex;
       width: 100%;
-      background-color: rgba(10, 10, 10, 0.98);
+      height: auto;
+      justify-content: center;
+      align-items: center;
       flex-direction: column;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .VScroll {
+      position: absolute;
+      display: flex;
+      left: -0.8vw;
+      width: .5208vw;
+      height: 100%;
+      background-color: rgba(11, 11, 11, 0.95);
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+      gap: .1042vw;
+      border-radius: .1042vw;
+    }
+
+    .VSProgress {
+      position: relative;
+      display: flex;
+      width: .3125vw;
+      height: 100%;
+      margin-top: .1563vw;
+      background-color: rgba(var(--menu-color), 0.70);
+      transition: top 0.25s ease, height 0.25s ease;
+      border-radius: .1042vw;
     }
 
     .VHeader {
-      height: 35px;
+      position: relative;
       display: flex;
-      justify-content: space-between;
+      width: 100%;
+      height: 1.5625vw;
+      justify-content: center;
       align-items: center;
-      padding: 0 15px;
-      background-color: rgba(0, 0, 0, 0.4);
-      border-top: 1px solid rgb(var(--menu-color));
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background-color: rgba(11, 11, 11, 0.95);
+      border-top: .0521vw solid rgb(var(--menu-color));
+      border-bottom: .0521vw solid rgb(var(--menu-color));
     }
 
     .VHeader .Path {
+      position: absolute;
+      display: flex;
+      left: .7813vw;
+      height: .6771vw;
+      font-style: normal;
       font-weight: 700;
-      font-size: 11px;
-      color: #fff;
+      font-size: .5208vw;
+      line-height: .625vw;
+      align-items: center;
+      color: #FFFFFF;
       text-transform: uppercase;
     }
 
     .VHeader .Name {
+      position: absolute;
+      display: flex;
+      right: .7813vw;
+      height: .6771vw;
+      font-style: normal;
       font-weight: 700;
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.5);
+      font-size: .5208vw;
+      line-height: .625vw;
+      align-items: center;
+      color: #FFFFFF;
     }
 
     .VTabs {
       position: relative;
       display: flex;
       width: 100%;
-      max-height: 450px;
+      height: auto;
+      max-height: 15.625vw;
+      justify-content: flex-start;
+      align-items: center;
       flex-direction: column;
+      background-color: rgba(11, 11, 11, 0.95);
       overflow: hidden;
     }
 
@@ -140,198 +191,240 @@
       position: relative;
       display: flex;
       width: 100%;
-      height: 40px;
-      min-height: 40px;
+      height: 1.5625vw;
+      min-height: 1.5625vw;
+      max-height: 1.5625vw;
+      justify-content: center;
       align-items: center;
-      padding: 0 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
-      z-index: 1;
     }
 
     .VTab .VTLabel {
-      font-weight: 500;
-      font-size: 13px;
-      color: #bbb;
-      transition: 0.2s;
-    }
-
-    .VTab.Selected .VTLabel {
-      color: #fff;
+      position: absolute;
+      display: flex;
+      left: .7813vw;
+      height: .6771vw;
+      font-style: normal;
       font-weight: 700;
+      font-size: .5208vw;
+      line-height: .625vw;
+      align-items: center;
+      color: #FFFFFF;
     }
 
     .VTab .Icon {
       position: absolute;
-      right: 15px;
-      color: rgba(255, 255, 255, 0.2);
-      font-size: 14px;
+      display: flex;
+      right: .7813vw;
+      width: 1.0417vw;
+      height: 1.0417vw;
+      color: rgba(255, 255, 255, 0.60);
+      transition: color 0.25s ease-in-out, right 0.25s;
     }
 
     .VOptions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       position: absolute;
-      right: 15px;
+      display: flex;
+      right: 0.65vw;
+      width: 7.8125vw;
+      justify-content: flex-end;
+      align-items: center;
+      flex-direction: row;
+      gap: .5208vw;
     }
 
     .Checkbox {
-      width: 30px;
-      height: 16px;
-      background-color: #222;
-      border-radius: 10px;
       position: relative;
+      display: flex;
+      width: 1.5625vw;
+      height: .7813vw;
+      justify-content: center;
+      align-items: center;
+      background-color: #222224;
+      border-radius: 5vw;
     }
 
-    .Checkbox.Checked {
+    .Checkbox.Checked .Inside {
+      left: 0.95vw;
       background-color: rgb(var(--menu-color));
     }
 
     .Checkbox .Inside {
       position: absolute;
-      left: 2px;
-      top: 2px;
-      width: 12px;
-      height: 12px;
+      display: flex;
+      left: 0.15vw;
+      width: .4167vw;
+      height: .4167vw;
       background-color: white;
-      border-radius: 50%;
-      transition: 0.2s;
-    }
-
-    .Checkbox.Checked .Inside {
-      left: 16px;
+      border-radius: .2604vw;
+      transition: 0.25s all;
     }
 
     .Slider {
-      width: 60px;
-      height: 4px;
-      background-color: #333;
-      border-radius: 2px;
       position: relative;
+      display: flex;
+      width: 2.3438vw;
+      height: .2083vw;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: #3a3a3a;
+      border-radius: .2604vw;
     }
 
     .Slider .Progress {
+      position: absolute;
+      display: flex;
       height: 100%;
-      background: #fff;
-      border-radius: 2px;
+      background: rgb(225, 225, 225);
+      border-radius: .2604vw;
     }
 
     .Divider {
-      width: 100%;
-      height: 30px;
+      position: relative;
       display: flex;
+      width: 92%;
+      height: 1.5625vw;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      padding: 0 15px;
-      gap: 10px;
-      opacity: 0.5;
+      flex-direction: row;
+      gap: .2604vw;
     }
 
-    .Divider .Line {
+    .Divider .Left,
+    .Divider .Right {
+      position: relative;
+      display: flex;
       flex: 1;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.1);
+      height: .026vw;
+      background-color: rgba(225, 225, 225, 0.2);
+      border-radius: 5vw;
     }
 
     .Divider .Label {
-      font-size: 10px;
-      font-weight: 800;
-      color: #fff;
+      position: relative;
+      display: flex;
+      font-size: .5208vw;
+      font-weight: 700;
+      color: rgb(225, 225, 225);
+      white-space: nowrap;
+      padding: 0 .5vw;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
     .VFooter {
-      height: 35px;
-      background-color: rgba(0, 0, 0, 0.6);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
       display: flex;
-      justify-content: space-between;
+      width: 100%;
+      height: 1.5625vw;
+      background-color: rgba(11, 11, 11, 0.95);
+      border-top: .0521vw solid rgb(var(--menu-color));
+      border-bottom-left-radius: .4167vw;
+      border-bottom-right-radius: .4167vw;
+      justify-content: center;
       align-items: center;
-      padding: 0 15px;
     }
 
     .VFooter .Indicator {
+      position: absolute;
+      display: flex;
+      right: .7813vw;
+      height: .6771vw;
+      font-style: normal;
       font-weight: 700;
-      font-size: 11px;
-      color: #fff;
+      font-size: .5208vw;
+      line-height: .625vw;
+      align-items: center;
+      color: #FFFFFF;
     }
 
     .VDesc {
-      background-color: rgba(10, 10, 10, 0.98);
-      border-radius: 6px;
-      margin-top: 8px;
-      padding: 10px 15px;
-      border-left: 3px solid rgb(var(--menu-color));
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      display: inline-flex;
+      width: auto;
+      min-width: 100%;
+      height: auto;
+      border-radius: .2604vw;
+      background-color: rgba(11, 11, 11, 0.95);
+      margin-top: .2604vw;
+      padding: .5vw .6vw;
+      box-sizing: border-box;
+      flex-direction: column;
+      border-left: 2px solid rgb(var(--menu-color));
     }
 
     .VDesc span {
-      font-size: 11px;
-      color: #aaa;
-      line-height: 1.4;
+      font-weight: 700;
+      font-size: .5208vw;
+      line-height: .625vw;
+      color: #FFFFFF;
+      opacity: 0.7;
     }
 
     /* Notifications */
     .NotificationsWrapper {
-      position: fixed;
-      top: 20px;
-      right: 20px;
+      position: absolute;
       display: flex;
+      top: 1vw;
+      left: 50%;
+      transform: translateX(-50%);
       flex-direction: column;
-      gap: 10px;
+      gap: .2604vw;
       z-index: 9999;
+      pointer-events: none;
+      align-items: center;
     }
 
     .Notification {
-      width: 300px;
-      background: rgba(15, 15, 15, 0.98);
-      border-radius: 6px;
+      position: relative;
+      display: flex;
+      min-width: 13.0208vw;
+      background: rgb(10, 10, 10);
+      border-radius: .2604vw;
+      opacity: 0;
+      transform: translateY(-1.5vw);
+      transition: 0.5s all;
+      flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transform: translateX(100%);
-      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .Notification.enter {
-      transform: translateX(0);
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .Notification .Header {
-      height: 35px;
-      background: #000;
+      height: 1.5625vw;
+      background-color: black;
+      border-bottom: .0521vw solid rgb(var(--menu-color));
       display: flex;
       align-items: center;
-      padding: 0 15px;
-      border-bottom: 2px solid rgb(var(--menu-color));
-      gap: 10px;
+      padding: 0 .5vw;
+      gap: .5vw;
     }
 
     .Notification .Title {
-      font-weight: 800;
-      font-size: 11px;
-      color: #fff;
+      font-weight: 700;
+      font-size: .5469vw;
+      color: rgb(var(--menu-color));
       text-transform: uppercase;
     }
 
     .Notification .Body {
-      padding: 12px 15px;
-      font-size: 11px;
-      color: #aaa;
-      line-height: 1.4;
+      padding: .5vw;
     }
 
-    /* Input Overlay */
+    .Notification .NDesc {
+      font-size: .5469vw;
+      color: white;
+    }
+
+    /* Input */
     .Overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+      position: absolute;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.60);
       opacity: 0;
-      transition: 0.3s;
+      transition: 0.2s;
       pointer-events: none;
       z-index: 10000;
     }
@@ -342,18 +435,16 @@
     }
 
     .InputWrapper {
-      position: fixed;
+      position: absolute;
       left: 50%;
-      top: 45%;
-      transform: translate(-50%, -50%);
-      width: 320px;
-      background: #0f0f0f;
-      border-radius: 8px;
+      bottom: 8vw;
+      width: 20.8333vw;
+      transform: translateX(-50%);
+      background-color: rgb(10, 10, 10);
+      border-radius: .2604vw;
       overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.05);
       opacity: 0;
-      transition: 0.3s;
+      transition: 0.2s;
       z-index: 10001;
     }
 
@@ -362,23 +453,24 @@
     }
 
     .InputWrapper .Header {
-      height: 40px;
-      background: #000;
+      height: 1.6667vw;
+      background-color: black;
+      border-bottom: .0521vw solid rgb(var(--menu-color));
       display: flex;
       align-items: center;
-      padding: 0 15px;
-      border-bottom: 2px solid rgb(var(--menu-color));
-      color: #fff;
-      font-weight: 800;
-      font-size: 12px;
+      padding: 0 .7vw;
+      color: rgb(var(--menu-color));
+      font-weight: 700;
+      font-size: .625vw;
     }
 
     .InputWrapper .Body {
-      padding: 30px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: 800;
-      color: #fff;
+      height: 1.8229vw;
+      display: flex;
+      align-items: center;
+      padding: 0 .7vw;
+      color: white;
+      font-size: .625vw;
     }
   </style>
 </head>
@@ -391,7 +483,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect, useRef, useLayoutEffect } = React;
 
     const Notifications = () => {
       const [list, setList] = useState([]);
@@ -415,7 +507,7 @@
                 <i className="fa-solid fa-circle-info" style={{ color: `rgb(var(--menu-color))` }}></i>
                 <span className="Title">{n.title}</span>
               </div>
-              <div className="Body">{n.desc}</div>
+              <div className="Body"><span className="NDesc">{n.desc}</span></div>
             </div>
           ))}
         </div>
@@ -436,20 +528,23 @@
         <>
           <div className={`Overlay ${data.visible ? 'visible' : ''}`}></div>
           <div className={`InputWrapper ${data.visible ? 'visible' : ''}`}>
-            <div className="Header">{data.title}</div>
-            <div className="Body">{data.value}</div>
+            <div className="Header">
+              <i className="fa-solid fa-keyboard" style={{ marginRight: '8px' }}></i>
+              <span>{data.title}</span>
+            </div>
+            <div className="Body"><span>{data.value}</span></div>
           </div>
         </>
       );
     };
 
-    const MainMenu = () => {
+    const PixelMenu = () => {
       const [visible, setVisible] = useState(false);
       const [tabs, setTabs] = useState([]);
       const [selectedIndex, setSelectedIndex] = useState(0);
-      const [path, setPath] = useState(["Home"]);
-      const [banner, setBanner] = useState("banner.png");
-      const [pos, setPos] = useState({ x: 30, y: 30 });
+      const [path, setPath] = useState(["HOME"]);
+      const [pos, setPos] = useState({ x: 0, y: 0 });
+      const tabsRef = useRef([]);
 
       useEffect(() => {
         const onMessage = (e) => {
@@ -465,54 +560,62 @@
             if (d.menuData.selectedIndex !== undefined) setSelectedIndex(d.menuData.selectedIndex);
             if (d.menuData.path) setPath(d.menuData.path);
           }
-          if (d.action === "keydown") {
-            setSelectedIndex(d.index);
-          }
-          if (d.action === "updatePosition") {
-            setPos({ x: d.x, y: d.y });
-          }
+          if (d.action === "keydown") setSelectedIndex(d.index);
+          if (d.action === "updatePosition") setPos({ x: d.x, y: d.y });
         };
         window.addEventListener("message", onMessage);
         return () => window.removeEventListener("message", onMessage);
       }, []);
 
-      if (!visible) return null;
+      useLayoutEffect(() => {
+        if (tabsRef.current[selectedIndex]) {
+          tabsRef.current[selectedIndex].scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      }, [selectedIndex]);
 
       return (
-        <div className="VWrapper visible" style={{ left: pos.x, top: pos.y }}>
+        <div className={`VWrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x ? `${pos.x}px` : '4vw', top: pos.y ? `${pos.y}px` : '50%' }}>
           <div className="VLeftElements">
-            <div className="VBanner"><img src={banner} /></div>
+            <div className="VBanner"><img src="banner.png" draggable="false" /></div>
             <div className="VLeftInnerElements">
               <div className="VHeader">
                 <span className="Path">{path.join(" > ")}</span>
-                <span className="Name">Pixel UI | discord.gg/pixel</span>
+                <span className="Name">Pixel | discord.gg/pixel</span>
               </div>
               <div className="VTabs">
                 <div style={{
-                  position: "absolute", width: "100%", height: "40px",
-                  top: selectedIndex * 40, background: "rgba(255,255,255,0.03)",
-                  borderLeft: "3px solid rgb(var(--menu-color))", transition: "0.15s"
+                  position: "absolute", width: "100%", height: "1.5625vw",
+                  top: `${selectedIndex * 1.5625}vw`, background: "rgba(var(--menu-color), 0.4)",
+                  borderLeft: ".1vw solid rgb(var(--menu-color))", transition: "top 0.15s ease", zIndex: 0
                 }}></div>
                 {tabs.map((tab, i) => (
-                  <div key={i} className={`VTab ${i === selectedIndex ? "Selected" : ""}`}>
-                    <span className="VTLabel">
-                      {tab.label}
-                      {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
-                    </span>
-                    {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right Icon"></i>}
+                  <div key={i} className="VTab" ref={el => tabsRef.current[i] = el}>
+                    {tab.type !== "divider" && (
+                      <span className="VTLabel">
+                        {tab.label}
+                        {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
+                      </span>
+                    )}
+                    {tab.type === "subMenu" && <span className="iconify Icon" data-icon="uim:angle-double-right"></span>}
                     {tab.type === "checkbox" && <div className={`Checkbox ${tab.checked ? "Checked" : ""}`}><div className="Inside"></div></div>}
                     {tab.type === "slider" && (
                       <div className="Slider">
                         <div className="Progress" style={{ width: `${((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100}%` }}></div>
                       </div>
                     )}
-                    {tab.type === "divider" && <div className="Divider"><div className="Line"></div><div className="Label">{tab.label}</div><div className="Line"></div></div>}
+                    {tab.type === "divider" && (
+                      <div className="Divider">
+                        <div className="Left"></div>
+                        <span className="Label">{tab.label}</span>
+                        <div className="Right"></div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
               <div className="VFooter">
-                <div className="Indicator">{selectedIndex + 1} / {tabs.length}</div>
-                <div className="Name">Pixel Team</div>
+                <span className="iconify Icon" data-icon="heroicons:chevron-up-down" style={{ color: `rgb(var(--menu-color))` }}></span>
+                <span className="Indicator">({selectedIndex + 1}/{tabs.length})</span>
               </div>
             </div>
             {tabs[selectedIndex]?.desc && (
@@ -524,7 +627,7 @@
     };
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<><MainMenu /><Notifications /><Input /></>);
+    root.render(<><PixelMenu /><Notifications /><Input /></>);
   </script>
 </body>
 
