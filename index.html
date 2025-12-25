@@ -421,6 +421,8 @@
       const [pos, setPos] = useState({ x: 40, y: 40 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
+      const [subTabs, setSubTabs] = useState([]);
+      const [activeSubTab, setActiveSubTab] = useState(0);
 
       useEffect(() => {
         const handleMessage = (e) => {
@@ -430,10 +432,14 @@
             if (d.elements) setTabs(d.elements);
             if (d.index !== undefined) setSelectedIndex(d.index);
             if (d.path) setPath(d.path);
+            setSubTabs(d.subTabs || []);
+            setActiveSubTab(d.activeSubTab || 0);
           } else if (d.action === "updateMenu") {
             if (d.menuData.items) setTabs(d.menuData.items);
             if (d.menuData.selectedIndex !== undefined) setSelectedIndex(d.menuData.selectedIndex);
             if (d.menuData.path) setPath(d.menuData.path);
+            setSubTabs(d.menuData.subTabs || []);
+            setActiveSubTab(d.menuData.activeSubTab || 0);
           } else if (d.action === "keydown") {
             setSelectedIndex(d.index);
           } else if (d.action === "updatePosition") {
@@ -456,14 +462,25 @@
             <Header />
 
             <div className="nav-tabs">
-              <div className={`nav-tab ${path.length === 1 ? 'active' : ''}`}>
-                <div className="nav-tab-icon"><i className="fa-solid fa-compass"></i></div>
-                HOME
-              </div>
-              {path.length > 1 && (
-                <div className="nav-tab active">
-                  {path[path.length - 1]}
-                </div>
+              {subTabs.length > 0 ? (
+                subTabs.map((tab, i) => (
+                  <div key={i} className={`nav-tab ${i === activeSubTab ? 'active' : ''}`}>
+                    {i === 0 && activeSubTab === 0 && <div className="nav-tab-icon"><i className="fa-solid fa-compass"></i></div>}
+                    {tab}
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className={`nav-tab ${path.length === 1 ? 'active' : ''}`}>
+                    <div className="nav-tab-icon"><i className="fa-solid fa-compass"></i></div>
+                    HOME
+                  </div>
+                  {path.length > 1 && (
+                    <div className="nav-tab active">
+                      {path[path.length - 1]}
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
