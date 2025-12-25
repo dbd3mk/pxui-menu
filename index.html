@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI - Silver Glass Edition</title>
+  <title>Pixel UI Silver Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -16,24 +16,20 @@
     :root {
       --primary: #d1d1d1;
       --primary-glow: rgba(209, 209, 209, 0.2);
-      --bg-main: rgba(10, 10, 10, 0.96);
-      --bg-glass: rgba(255, 255, 255, 0.03);
-      --bg-item: rgba(255, 255, 255, 0.015);
-      --border-light: rgba(255, 255, 255, 0.05);
-      --text-main: #ffffff;
-      --text-dim: rgba(255, 255, 255, 0.4);
+      --bg: rgba(12, 12, 12, 0.98);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #ffffff;
+      --text-dim: #888;
       --font-main: 'Inter', sans-serif;
       --font-title: 'Outfit', sans-serif;
     }
 
     * {
       box-sizing: border-box;
+      outline: none;
       margin: 0;
       padding: 0;
-      outline: none;
-      border: none;
-      background: transparent;
-      -webkit-user-select: none;
+      background-color: transparent;
     }
 
     html,
@@ -41,49 +37,44 @@
       width: 100%;
       height: 100%;
       background: transparent !important;
+      background-color: rgba(0, 0, 0, 0) !important;
       overflow: hidden;
       font-family: var(--font-main);
-      color: var(--text-main);
+      color: var(--text);
     }
 
     #root {
       width: 100%;
       height: 100%;
       position: relative;
+      background: transparent !important;
     }
 
-    /* Main Menu Wrapper */
     .menu-wrapper {
       position: absolute;
-      width: 380px;
-      background: var(--bg-main) !important;
-      border-radius: 24px;
+      width: 360px;
+      background: var(--bg) !important;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
-      transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      overflow: hidden;
+      transition: 0.25s ease-out;
       opacity: 0;
-      transform: scale(0.95) translateY(20px);
-      /* We use a very subtle inner border to define the shape without black edge artifacts */
-      box-shadow: inset 0 0 0 1px var(--border-light);
+      transform: translateY(10px);
     }
 
     .menu-wrapper.visible {
       opacity: 1;
-      transform: scale(1) translateY(0);
+      transform: translateY(0);
     }
 
-    /* Header Section */
-    .header-container {
-      padding: 15px 15px 5px 15px;
-    }
-
-    .header-banner {
-      height: 160px;
-      width: 100%;
+    .header {
+      height: 150px;
       position: relative;
-      border-radius: 18px;
+      background: #000 !important;
       overflow: hidden;
-      background: #000;
     }
 
     .header-gif {
@@ -99,355 +90,308 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%) !important;
       pointer-events: none;
     }
 
-    /* Navigation Path */
-    .nav-section {
-      padding: 10px 25px;
+    .nav-tabs {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border-bottom: 1px solid var(--border);
     }
 
-    .nav-icon {
-      width: 24px;
-      height: 24px;
-      background: var(--bg-glass);
-      border-radius: 8px;
+    .nav-tab {
+      flex: 1;
+      padding: 12px 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--primary);
-      font-size: 10px;
-    }
-
-    .nav-text {
-      font-family: var(--font-title);
+      gap: 10px;
       font-size: 10px;
       font-weight: 800;
-      color: var(--text-dim);
+      color: rgba(255, 255, 255, 0.3);
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
+      transition: 0.3s;
+      border-right: 1px solid rgba(255, 255, 255, 0.03);
     }
 
-    /* Main Content Area */
-    .content-area {
+    .nav-tab.active {
+      background: linear-gradient(to bottom, #8e735b, #4a3a2f) !important;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-tab-icon {
+      width: 18px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
       display: flex;
-      padding: 0 15px 15px 15px;
-      gap: 15px;
-      min-height: 100px;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #fff;
     }
 
-    /* Left Scrollbar */
-    .scrollbar-container {
-      width: 4px;
-      padding: 10px 0;
-      display: flex;
-      flex-direction: column;
+    .nav-tab.active .nav-tab-icon {
+      background: rgba(255, 255, 255, 0.2);
     }
 
-    .scrollbar-track {
-      flex: 1;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 10px;
-      position: relative;
-    }
-
-    .scrollbar-thumb {
-      position: absolute;
-      width: 100%;
-      background: var(--primary);
-      border-radius: 10px;
-      box-shadow: 0 0 15px var(--primary-glow);
-      transition: top 0.2s ease, height 0.2s ease;
-    }
-
-    /* Items List */
-    .items-list {
-      flex: 1;
+    .items-container {
       max-height: 400px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-right: 5px;
+      padding: 5px 0;
+      border-left: 2px solid var(--primary);
     }
 
-    .items-list::-webkit-scrollbar {
+    .items-container::-webkit-scrollbar {
       width: 0;
     }
 
-    .menu-item {
-      padding: 14px 20px;
-      background: var(--bg-item);
-      border-radius: 14px;
+    .item {
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: 0.2s all;
-      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+      transition: 0.15s;
     }
 
-    .menu-item.selected {
-      background: rgba(255, 255, 255, 0.06) !important;
-      transform: translateX(5px);
-    }
-
-    .menu-item.selected::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 25%;
-      height: 50%;
-      width: 3px;
-      background: var(--primary);
-      border-radius: 0 4px 4px 0;
-      box-shadow: 0 0 10px var(--primary-glow);
+    .item.selected {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
     }
 
     .item-label {
       font-size: 13px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
+      color: #aaa !important;
+    }
+
+    .item.selected .item-label {
+      color: #fff !important;
+      transform: translateX(5px);
+      font-weight: 700;
+    }
+
+    .toggle {
+      width: 32px;
+      height: 16px;
+      background: #222 !important;
+      border-radius: 10px;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .toggle.active {
+      background: var(--primary) !important;
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 10px;
+      height: 10px;
+      background: #fff !important;
+      border-radius: 50%;
       transition: 0.2s;
     }
 
-    .menu-item.selected .item-label {
-      color: #fff;
-      transform: translateX(5px);
+    .toggle.active::after {
+      left: 18px;
+      background: #000 !important;
     }
 
-    /* Item Components */
-    .toggle-switch {
-      width: 32px;
-      height: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      position: relative;
-      transition: 0.3s;
-    }
-
-    .toggle-switch.active {
-      background: var(--primary);
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 10px;
-      height: 10px;
-      background: #fff;
-      border-radius: 50%;
-      transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .toggle-switch.active::after {
-      left: 19px;
-      background: #000;
-    }
-
-    .list-badge {
+    .list-value {
       font-size: 10px;
       font-weight: 800;
-      color: var(--primary);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3px 12px;
-      border-radius: 8px;
-      text-transform: uppercase;
+      color: var(--primary) !important;
+      border: 1px solid var(--primary);
+      padding: 1px 6px;
+      border-radius: 3px;
     }
 
-    .submenu-arrow {
+    .submenu-icon {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.1) !important;
     }
 
-    /* Footer Section */
-    .footer-container {
-      padding: 15px 25px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 0 0 24px 24px;
+    .footer {
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .footer-brand {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--text-dim);
+    .footer-text {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--text-dim) !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
-    .footer-stats {
-      font-family: var(--font-title);
-      font-size: 11px;
+    .footer-count {
+      color: var(--primary) !important;
+      font-size: 10px;
       font-weight: 800;
-      color: var(--primary);
     }
 
-    /* Description Box */
-    .description-box {
+    .desc-box {
       position: absolute;
-      left: 400px;
+      left: 375px;
       top: 0;
-      width: 240px;
-      background: var(--bg-main);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: inset 0 0 0 1px var(--border-light);
+      width: 220px;
+      background: var(--bg) !important;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       opacity: 0;
-      transform: translateX(-15px);
       transition: 0.3s;
+      transform: translateX(-10px);
     }
 
-    .description-box.visible {
+    .desc-box.visible {
       opacity: 1;
       transform: translateX(0);
     }
 
     .desc-title {
-      font-family: var(--font-title);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--primary) !important;
       text-transform: uppercase;
-      margin-bottom: 10px;
-      opacity: 0.6;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 4px;
     }
 
-    .desc-content {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
-      line-height: 1.6;
+    .desc-text {
+      font-size: 11px;
+      color: #ccc !important;
+      line-height: 1.5;
     }
 
-    /* Notifications */
-    .notification-stack {
+    .notif-container {
       position: fixed;
-      top: 40px;
-      right: 40px;
+      top: 30px;
+      right: 30px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
+      gap: 10px;
+      z-index: 10000;
     }
 
-    .notification {
-      width: 320px;
-      background: rgba(15, 15, 15, 0.98);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: inset 0 0 0 1px var(--border-light);
-      animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    .notif {
+      width: 300px;
+      background: rgba(15, 15, 15, 0.98) !important;
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--primary);
+      border-radius: 6px;
+      padding: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      animation: notifIn 0.4s ease-out forwards;
     }
 
-    @keyframes slideIn {
+    @keyframes notifIn {
       from {
         opacity: 0;
-        transform: translateX(50px);
+        transform: translateY(-20px);
       }
 
       to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
       }
     }
 
-    .notif-head {
+    .notif-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 4px;
     }
 
-    .notif-head i {
-      color: var(--primary);
-      font-size: 14px;
+    .notif-header i {
+      color: var(--primary) !important;
+      font-size: 12px;
     }
 
     .notif-title {
-      font-family: var(--font-title);
-      font-size: 12px;
       font-weight: 800;
-      color: #fff;
+      font-size: 11px;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
-    .notif-body {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.4;
+    .notif-desc {
+      font-size: 11px;
+      color: #bbb !important;
     }
 
-    /* Keyboard Input */
-    .keyboard-overlay {
+    .kb-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.8) !important;
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 10000;
+      z-index: 20000;
     }
 
-    .keyboard-modal {
-      width: 340px;
-      background: #0a0a0a;
-      border-radius: 24px;
+    .kb-wrapper {
+      width: 300px;
+      background: #0f0f0f !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: inset 0 0 0 1px var(--border-light);
     }
 
-    .keyboard-header {
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.02);
+    .kb-header {
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-bottom: 1px solid var(--primary);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .keyboard-header i {
-      color: var(--primary);
+    .kb-header i {
+      color: var(--primary) !important;
     }
 
-    .keyboard-header span {
-      font-family: var(--font-title);
-      font-size: 12px;
+    .kb-header span {
       font-weight: 800;
-      color: #fff;
+      font-size: 11px;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
-    .keyboard-body {
-      padding: 60px 20px;
+    .kb-body {
+      padding: 40px 20px;
       text-align: center;
     }
 
-    .keyboard-value {
+    .kb-key {
       font-family: var(--font-title);
-      font-size: 48px;
+      font-size: 36px;
       font-weight: 800;
-      color: #fff;
-      text-shadow: 0 0 30px var(--primary-glow);
+      color: #fff !important;
     }
 
-    .keyboard-footer {
-      padding: 15px;
+    .kb-footer {
+      padding: 10px;
       text-align: center;
-      font-size: 9px;
-      color: rgba(255, 255, 255, 0.2);
+      font-size: 8px;
+      color: #666 !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -460,15 +404,12 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef, memo } = React;
+    const { useState, useEffect, useRef } = React;
 
-    // Memoized Header to prevent GIF restart
-    const Header = memo(() => (
-      <div className="header-container">
-        <div className="header-banner">
-          <img className="header-gif" src="banner.gif" alt="banner" />
-          <div className="header-overlay"></div>
-        </div>
+    const Header = React.memo(() => (
+      <div className="header">
+        <img className="header-gif" src="banner.gif" />
+        <div className="header-overlay"></div>
       </div>
     ));
 
@@ -477,11 +418,9 @@
       const [tabs, setTabs] = useState([]);
       const [selectedIndex, setSelectedIndex] = useState(0);
       const [path, setPath] = useState(["HOME"]);
-      const [pos, setPos] = useState({ x: 50, y: 50 });
+      const [pos, setPos] = useState({ x: 40, y: 40 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
-
-      const listRef = useRef(null);
 
       useEffect(() => {
         const handleMessage = (e) => {
@@ -511,95 +450,77 @@
         return () => window.removeEventListener("message", handleMessage);
       }, []);
 
-      useEffect(() => {
-        if (listRef.current) {
-          const selectedEl = listRef.current.children[selectedIndex];
-          if (selectedEl) {
-            selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          }
-        }
-      }, [selectedIndex]);
-
-      const scrollThumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
-      const scrollThumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
-
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <Header />
 
-            <div className="nav-section">
-              <div className="nav-icon">
-                <i className="fa-solid fa-compass"></i>
+            <div className="nav-tabs">
+              <div className={`nav-tab ${path.length === 1 ? 'active' : ''}`}>
+                <div className="nav-tab-icon"><i className="fa-solid fa-compass"></i></div>
+                HOME
               </div>
-              <div className="nav-text">{path.join(" / ")}</div>
-            </div>
-
-            <div className="content-area">
-              <div className="scrollbar-container">
-                <div className="scrollbar-track">
-                  <div className="scrollbar-thumb" style={{
-                    height: `${scrollThumbHeight}%`,
-                    top: `${scrollThumbTop}%`
-                  }}></div>
+              {path.length > 1 && (
+                <div className="nav-tab active">
+                  {path[path.length - 1]}
                 </div>
-              </div>
-
-              <div className="items-list" ref={listRef}>
-                {tabs.map((tab, i) => (
-                  <div key={i} className={`menu-item ${i === selectedIndex ? 'selected' : ''}`}>
-                    <span className="item-label">
-                      {tab.label}
-                      {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
-                    </span>
-
-                    {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right submenu-arrow"></i>}
-                    {tab.type === "checkbox" && <div className={`toggle-switch ${tab.checked ? 'active' : ''}`}></div>}
-                    {tab.type === "slider" && (
-                      <div className="list-badge">
-                        {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              )}
             </div>
 
-            <div className="footer-container">
-              <div className="footer-brand">Pixel Team • 2025</div>
-              <div className="footer-stats">{selectedIndex + 1} / {tabs.length}</div>
+            <div className="items-container">
+              {tabs.map((tab, i) => (
+                <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
+                  <span className="item-label">
+                    {tab.label}
+                    {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
+                  </span>
+
+                  {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
+                  {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
+                  {tab.type === "slider" && (
+                    <div className="list-value">
+                      {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="footer">
+              <span className="footer-text">Pixel Team • 2025</span>
+              <span className="footer-count">{selectedIndex + 1} / {tabs.length}</span>
             </div>
 
             {tabs[selectedIndex]?.desc && (
-              <div className={`description-box ${visible ? 'visible' : ''}`}>
+              <div className={`desc-box ${visible ? 'visible' : ''}`}>
                 <div className="desc-title">Description</div>
-                <div className="desc-content">{tabs[selectedIndex].desc}</div>
+                <div className="desc-text">{tabs[selectedIndex].desc}</div>
               </div>
             )}
           </div>
 
-          <div className="notification-stack">
+          <div className="notif-container">
             {notifs.map(n => (
-              <div key={n.id} className="notification">
-                <div className="notif-head">
+              <div key={n.id} className="notif">
+                <div className="notif-header">
                   <i className="fa-solid fa-bell"></i>
                   <span className="notif-title">{n.title}</span>
                 </div>
-                <div className="notif-body">{n.desc}</div>
+                <div className="notif-desc">{n.desc}</div>
               </div>
             ))}
           </div>
 
-          <div className="keyboard-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
-            <div className="keyboard-modal">
-              <div className="keyboard-header">
+          <div className="kb-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
+            <div className="kb-wrapper">
+              <div className="kb-header">
                 <i className="fa-solid fa-keyboard"></i>
                 <span>{kb.title}</span>
               </div>
-              <div className="keyboard-body">
-                <div className="keyboard-value">{kb.value}</div>
+              <div className="kb-body">
+                <div className="kb-key">{kb.value}</div>
               </div>
-              <div className="keyboard-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
+              <div className="kb-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
             </div>
           </div>
         </div>
