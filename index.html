@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI Silver Edition</title>
+  <title>Pixel UI - Silver Glass Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -16,21 +16,23 @@
     :root {
       --primary: #d1d1d1;
       --primary-glow: rgba(209, 209, 209, 0.2);
-      --bg: rgba(12, 12, 12, 0.98);
-      --border: rgba(255, 255, 255, 0.05);
-      --text: #ffffff;
-      --text-dim: #888;
+      --bg-main: rgba(10, 10, 10, 0.96);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --bg-item: rgba(255, 255, 255, 0.015);
+      --border-light: rgba(255, 255, 255, 0.05);
+      --text-main: #ffffff;
+      --text-dim: rgba(255, 255, 255, 0.4);
       --font-main: 'Inter', sans-serif;
       --font-title: 'Outfit', sans-serif;
     }
 
     * {
       box-sizing: border-box;
-      outline: none;
       margin: 0;
       padding: 0;
-      background-color: transparent;
-      user-select: none;
+      outline: none;
+      border: none;
+      background: transparent;
       -webkit-user-select: none;
     }
 
@@ -41,7 +43,7 @@
       background: transparent !important;
       overflow: hidden;
       font-family: var(--font-main);
-      color: var(--text);
+      color: var(--text-main);
     }
 
     #root {
@@ -50,32 +52,38 @@
       position: relative;
     }
 
+    /* Main Menu Wrapper */
     .menu-wrapper {
       position: absolute;
-      width: 360px;
-      background: var(--bg) !important;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      width: 380px;
+      background: var(--bg-main) !important;
+      border-radius: 24px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
       opacity: 0;
-      transform: translateY(15px);
+      transform: scale(0.95) translateY(20px);
+      /* We use a very subtle inner border to define the shape without black edge artifacts */
+      box-shadow: inset 0 0 0 1px var(--border-light);
     }
 
     .menu-wrapper.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1) translateY(0);
     }
 
-    /* Header */
-    .header {
-      height: 150px;
+    /* Header Section */
+    .header-container {
+      padding: 15px 15px 5px 15px;
+    }
+
+    .header-banner {
+      height: 160px;
+      width: 100%;
       position: relative;
-      background: #000 !important;
+      border-radius: 18px;
       overflow: hidden;
+      background: #000;
     }
 
     .header-gif {
@@ -91,42 +99,51 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%) !important;
+      background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
       pointer-events: none;
     }
 
     /* Navigation Path */
-    .nav-path {
-      padding: 14px 20px;
-      background: rgba(255, 255, 255, 0.01) !important;
-      border-bottom: 1px solid var(--border);
+    .nav-section {
+      padding: 10px 25px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-dim) !important;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      gap: 12px;
     }
 
-    .nav-path i {
-      color: var(--primary) !important;
-      font-size: 11px;
-    }
-
-    /* Main Content Layout */
-    .main-content {
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--bg-glass);
+      border-radius: 8px;
       display: flex;
-      position: relative;
-      padding: 10px 0;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 10px;
     }
 
-    /* Custom Left Scrollbar */
+    .nav-text {
+      font-family: var(--font-title);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      display: flex;
+      padding: 0 15px 15px 15px;
+      gap: 15px;
+      min-height: 100px;
+    }
+
+    /* Left Scrollbar */
     .scrollbar-container {
       width: 4px;
-      margin-left: 10px;
-      margin-right: 5px;
+      padding: 10px 0;
       display: flex;
       flex-direction: column;
     }
@@ -143,271 +160,294 @@
       width: 100%;
       background: var(--primary);
       border-radius: 10px;
-      box-shadow: 0 0 10px var(--primary-glow);
+      box-shadow: 0 0 15px var(--primary-glow);
       transition: top 0.2s ease, height 0.2s ease;
     }
 
-    .items-container {
+    /* Items List */
+    .items-list {
       flex: 1;
-      max-height: 380px;
+      max-height: 400px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
+      gap: 6px;
+      padding-right: 5px;
     }
 
-    .items-container::-webkit-scrollbar {
+    .items-list::-webkit-scrollbar {
       width: 0;
     }
 
-    .item {
-      padding: 12px 20px;
+    .menu-item {
+      padding: 14px 20px;
+      background: var(--bg-item);
+      border-radius: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: 0.2s;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+      transition: 0.2s all;
+      position: relative;
     }
 
-    .item.selected {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
+    .menu-item.selected {
+      background: rgba(255, 255, 255, 0.06) !important;
+      transform: translateX(5px);
+    }
+
+    .menu-item.selected::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 25%;
+      height: 50%;
+      width: 3px;
+      background: var(--primary);
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 10px var(--primary-glow);
     }
 
     .item-label {
       font-size: 13px;
-      font-weight: 500;
-      color: #aaa !important;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       transition: 0.2s;
     }
 
-    .item.selected .item-label {
-      color: #fff !important;
+    .menu-item.selected .item-label {
+      color: #fff;
       transform: translateX(5px);
-      font-weight: 700;
     }
 
-    /* Components */
-    .toggle {
+    /* Item Components */
+    .toggle-switch {
       width: 32px;
       height: 16px;
-      background: #222 !important;
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: 0.3s;
     }
 
-    .toggle.active {
-      background: var(--primary) !important;
+    .toggle-switch.active {
+      background: var(--primary);
     }
 
-    .toggle::after {
+    .toggle-switch::after {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 3px;
+      left: 3px;
       width: 10px;
       height: 10px;
-      background: #fff !important;
+      background: #fff;
       border-radius: 50%;
-      transition: 0.2s;
+      transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
-    .toggle.active::after {
-      left: 18px;
-      background: #000 !important;
+    .toggle-switch.active::after {
+      left: 19px;
+      background: #000;
     }
 
-    .list-value {
+    .list-badge {
       font-size: 10px;
       font-weight: 800;
-      color: var(--primary) !important;
-      border: 1px solid var(--primary);
-      padding: 1px 6px;
-      border-radius: 3px;
+      color: var(--primary);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 12px;
+      border-radius: 8px;
+      text-transform: uppercase;
     }
 
-    .submenu-icon {
+    .submenu-arrow {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.1) !important;
+      color: rgba(255, 255, 255, 0.1);
     }
 
-    /* Footer */
-    .footer {
-      padding: 12px 20px;
-      background: rgba(0, 0, 0, 0.4) !important;
-      border-top: 1px solid var(--border);
+    /* Footer Section */
+    .footer-container {
+      padding: 15px 25px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0 0 24px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .footer-text {
-      font-size: 8px;
-      font-weight: 700;
-      color: var(--text-dim) !important;
+    .footer-brand {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--text-dim);
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    .footer-count {
-      color: var(--primary) !important;
-      font-size: 10px;
+    .footer-stats {
+      font-family: var(--font-title);
+      font-size: 11px;
       font-weight: 800;
+      color: var(--primary);
     }
 
     /* Description Box */
-    .desc-box {
+    .description-box {
       position: absolute;
-      left: 375px;
+      left: 400px;
       top: 0;
-      width: 220px;
-      background: var(--bg) !important;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 240px;
+      background: var(--bg-main);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: inset 0 0 0 1px var(--border-light);
       opacity: 0;
+      transform: translateX(-15px);
       transition: 0.3s;
-      transform: translateX(-10px);
     }
 
-    .desc-box.visible {
+    .description-box.visible {
       opacity: 1;
       transform: translateX(0);
     }
 
     .desc-title {
-      font-size: 9px;
+      font-family: var(--font-title);
+      font-size: 10px;
       font-weight: 800;
-      color: var(--primary) !important;
+      color: var(--primary);
       text-transform: uppercase;
-      margin-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding-bottom: 4px;
+      margin-bottom: 10px;
+      opacity: 0.6;
     }
 
-    .desc-text {
-      font-size: 11px;
-      color: #ccc !important;
-      line-height: 1.5;
+    .desc-content {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
     }
 
     /* Notifications */
-    .notif-container {
+    .notification-stack {
       position: fixed;
-      top: 30px;
-      right: 30px;
+      top: 40px;
+      right: 40px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      z-index: 10000;
+      gap: 12px;
+      z-index: 9999;
     }
 
-    .notif {
-      width: 300px;
-      background: rgba(15, 15, 15, 0.98) !important;
-      border: 1px solid var(--border);
-      border-top: 2px solid var(--primary);
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-      animation: notifIn 0.4s ease-out forwards;
+    .notification {
+      width: 320px;
+      background: rgba(15, 15, 15, 0.98);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: inset 0 0 0 1px var(--border-light);
+      animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    @keyframes notifIn {
+    @keyframes slideIn {
       from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateX(50px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
     }
 
-    .notif-header {
+    .notif-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 4px;
+      gap: 12px;
+      margin-bottom: 8px;
     }
 
-    .notif-header i {
-      color: var(--primary) !important;
-      font-size: 12px;
+    .notif-head i {
+      color: var(--primary);
+      font-size: 14px;
     }
 
     .notif-title {
+      font-family: var(--font-title);
+      font-size: 12px;
       font-weight: 800;
-      font-size: 11px;
-      color: #fff !important;
+      color: #fff;
       text-transform: uppercase;
     }
 
-    .notif-desc {
-      font-size: 11px;
-      color: #bbb !important;
+    .notif-body {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.4;
     }
 
-    /* Keyboard */
-    .kb-overlay {
+    /* Keyboard Input */
+    .keyboard-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8) !important;
+      background: rgba(0, 0, 0, 0.9);
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 20000;
+      z-index: 10000;
     }
 
-    .kb-wrapper {
-      width: 300px;
-      background: #0f0f0f !important;
-      border: 1px solid var(--border);
-      border-radius: 12px;
+    .keyboard-modal {
+      width: 340px;
+      background: #0a0a0a;
+      border-radius: 24px;
       overflow: hidden;
+      box-shadow: inset 0 0 0 1px var(--border-light);
     }
 
-    .kb-header {
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.02) !important;
-      border-bottom: 1px solid var(--primary);
+    .keyboard-header {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .kb-header i {
-      color: var(--primary) !important;
+    .keyboard-header i {
+      color: var(--primary);
     }
 
-    .kb-header span {
-      font-weight: 800;
-      font-size: 11px;
-      color: #fff !important;
-      text-transform: uppercase;
-    }
-
-    .kb-body {
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    .kb-key {
+    .keyboard-header span {
       font-family: var(--font-title);
-      font-size: 36px;
+      font-size: 12px;
       font-weight: 800;
-      color: #fff !important;
+      color: #fff;
+      text-transform: uppercase;
     }
 
-    .kb-footer {
-      padding: 10px;
+    .keyboard-body {
+      padding: 60px 20px;
       text-align: center;
-      font-size: 8px;
-      color: #666 !important;
+    }
+
+    .keyboard-value {
+      font-family: var(--font-title);
+      font-size: 48px;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 0 0 30px var(--primary-glow);
+    }
+
+    .keyboard-footer {
+      padding: 15px;
+      text-align: center;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.2);
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -420,12 +460,15 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+    const { useState, useEffect, useRef, memo } = React;
 
-    const Header = React.memo(() => (
-      <div className="header">
-        <img className="header-gif" src="banner.gif" />
-        <div className="header-overlay"></div>
+    // Memoized Header to prevent GIF restart
+    const Header = memo(() => (
+      <div className="header-container">
+        <div className="header-banner">
+          <img className="header-gif" src="banner.gif" alt="banner" />
+          <div className="header-overlay"></div>
+        </div>
       </div>
     ));
 
@@ -434,10 +477,11 @@
       const [tabs, setTabs] = useState([]);
       const [selectedIndex, setSelectedIndex] = useState(0);
       const [path, setPath] = useState(["HOME"]);
-      const [pos, setPos] = useState({ x: 40, y: 40 });
+      const [pos, setPos] = useState({ x: 50, y: 50 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
-      const containerRef = useRef(null);
+
+      const listRef = useRef(null);
 
       useEffect(() => {
         const handleMessage = (e) => {
@@ -468,46 +512,51 @@
       }, []);
 
       useEffect(() => {
-        if (containerRef.current) {
-          const selectedItem = containerRef.current.children[selectedIndex];
-          if (selectedItem) {
-            selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        if (listRef.current) {
+          const selectedEl = listRef.current.children[selectedIndex];
+          if (selectedEl) {
+            selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           }
         }
       }, [selectedIndex]);
 
-      const thumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
-      const thumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
+      const scrollThumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
+      const scrollThumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
 
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <Header />
 
-            <div className="nav-path">
-              <i className="fa-solid fa-compass"></i>
-              {path.join(" / ")}
+            <div className="nav-section">
+              <div className="nav-icon">
+                <i className="fa-solid fa-compass"></i>
+              </div>
+              <div className="nav-text">{path.join(" / ")}</div>
             </div>
 
-            <div className="main-content">
+            <div className="content-area">
               <div className="scrollbar-container">
                 <div className="scrollbar-track">
-                  <div className="scrollbar-thumb" style={{ height: `${thumbHeight}%`, top: `${thumbTop}%` }}></div>
+                  <div className="scrollbar-thumb" style={{
+                    height: `${scrollThumbHeight}%`,
+                    top: `${scrollThumbTop}%`
+                  }}></div>
                 </div>
               </div>
 
-              <div className="items-container" ref={containerRef}>
+              <div className="items-list" ref={listRef}>
                 {tabs.map((tab, i) => (
-                  <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
+                  <div key={i} className={`menu-item ${i === selectedIndex ? 'selected' : ''}`}>
                     <span className="item-label">
                       {tab.label}
                       {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
                     </span>
 
-                    {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
-                    {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
+                    {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right submenu-arrow"></i>}
+                    {tab.type === "checkbox" && <div className={`toggle-switch ${tab.checked ? 'active' : ''}`}></div>}
                     {tab.type === "slider" && (
-                      <div className="list-value">
+                      <div className="list-badge">
                         {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
                       </div>
                     )}
@@ -516,41 +565,41 @@
               </div>
             </div>
 
-            <div className="footer">
-              <span className="footer-text">Pixel Team • 2025</span>
-              <span className="footer-count">{selectedIndex + 1} / {tabs.length}</span>
+            <div className="footer-container">
+              <div className="footer-brand">Pixel Team • 2025</div>
+              <div className="footer-stats">{selectedIndex + 1} / {tabs.length}</div>
             </div>
 
             {tabs[selectedIndex]?.desc && (
-              <div className={`desc-box ${visible ? 'visible' : ''}`}>
+              <div className={`description-box ${visible ? 'visible' : ''}`}>
                 <div className="desc-title">Description</div>
-                <div className="desc-text">{tabs[selectedIndex].desc}</div>
+                <div className="desc-content">{tabs[selectedIndex].desc}</div>
               </div>
             )}
           </div>
 
-          <div className="notif-container">
+          <div className="notification-stack">
             {notifs.map(n => (
-              <div key={n.id} className="notif">
-                <div className="notif-header">
+              <div key={n.id} className="notification">
+                <div className="notif-head">
                   <i className="fa-solid fa-bell"></i>
                   <span className="notif-title">{n.title}</span>
                 </div>
-                <div className="notif-desc">{n.desc}</div>
+                <div className="notif-body">{n.desc}</div>
               </div>
             ))}
           </div>
 
-          <div className="kb-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
-            <div className="kb-wrapper">
-              <div className="kb-header">
+          <div className="keyboard-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
+            <div className="keyboard-modal">
+              <div className="keyboard-header">
                 <i className="fa-solid fa-keyboard"></i>
                 <span>{kb.title}</span>
               </div>
-              <div className="kb-body">
-                <div className="kb-key">{kb.value}</div>
+              <div className="keyboard-body">
+                <div className="keyboard-value">{kb.value}</div>
               </div>
-              <div className="kb-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
+              <div className="keyboard-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
             </div>
           </div>
         </div>
