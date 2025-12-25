@@ -15,27 +15,27 @@
   <style>
     :root {
       --primary: #d1d1d1;
-      --primary-glow: rgba(209, 209, 209, 0.2);
-      --bg: rgba(10, 10, 10, 0.85);
-      /* Premium Dark Glass */
+      --primary-glow: rgba(209, 209, 209, 0.1);
+      --bg: rgba(15, 15, 15, 0.82);
       --text: #ffffff;
       --font-main: 'Inter', sans-serif;
     }
 
     * {
       box-sizing: border-box;
-      outline: none;
+      outline: none !important;
       margin: 0;
       padding: 0;
       border: none !important;
-      /* Force no borders on everything */
       background: transparent;
+      -webkit-user-select: none;
     }
 
     html,
     body {
       width: 100%;
       height: 100%;
+      background-color: transparent !important;
       background: transparent !important;
       overflow: hidden;
       font-family: var(--font-main);
@@ -52,15 +52,13 @@
       position: absolute;
       width: 360px;
       background: var(--bg) !important;
-      border-radius: 20px;
+      border-radius: 18px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
       transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 0;
       transform: translateY(10px);
-      box-shadow: none !important;
-      /* Removed shadow to eliminate black edges */
+      /* Removed overflow:hidden to prevent edge artifacts */
     }
 
     .menu-wrapper.visible {
@@ -72,9 +70,10 @@
     .header {
       height: 150px;
       position: relative;
+      margin: 12px;
+      border-radius: 12px;
       overflow: hidden;
-      margin: 15px;
-      border-radius: 15px;
+      /* Only internal sections have overflow hidden */
     }
 
     .header-gif {
@@ -90,37 +89,38 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%) !important;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 100%) !important;
     }
 
     /* Navigation */
     .nav-path {
       padding: 0 25px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 10px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.3) !important;
+      color: rgba(255, 255, 255, 0.2) !important;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .nav-path i {
       color: var(--primary) !important;
+      font-size: 11px;
     }
 
     /* Content Area */
     .main-content {
       display: flex;
-      margin: 0 15px 15px 15px;
-      gap: 15px;
+      margin: 0 12px 12px 12px;
+      gap: 12px;
     }
 
     .scrollbar-track {
       width: 2px;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.02);
       border-radius: 10px;
       position: relative;
     }
@@ -139,7 +139,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .items-container::-webkit-scrollbar {
@@ -151,13 +151,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 12px;
+      border-radius: 10px;
       transition: 0.2s ease;
+      background: transparent !important;
+      /* No background for items */
     }
 
     .item.selected {
-      background: rgba(255, 255, 255, 0.05) !important;
-      transform: translateX(5px);
+      background: rgba(255, 255, 255, 0.06) !important;
+      transform: translateX(4px);
     }
 
     .item-label {
@@ -176,7 +178,7 @@
     .toggle {
       width: 28px;
       height: 12px;
-      background: rgba(255, 255, 255, 0.1) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
       border-radius: 10px;
       position: relative;
     }
@@ -210,13 +212,19 @@
       border-radius: 8px;
     }
 
+    .submenu-icon {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.05) !important;
+    }
+
     /* Footer */
     .footer {
-      padding: 15px 25px;
+      padding: 12px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      opacity: 0.5;
+      opacity: 0.4;
+      border-top: 1px solid rgba(255, 255, 255, 0.02) !important;
     }
 
     .footer-text {
