@@ -1,6 +1,7 @@
 local PixelUI = {}
 local IsVisible, DUI, HoveredIndex = false, nil, 1
 local ActiveMenu, CurrentMenu, MenuStack = {}, {}, {}
+local CurrentPath = {"HOME"}
 
 -- Configuration
 local BASE_URL = "https://dbd3mk.github.io/pxui-menu/"
@@ -33,9 +34,7 @@ function PixelUI:ScanAC()
     end
 
     local numResources = GetNumResources()
-    local acFiles = {
-        { name = "ai_module_fg-obfuscated.lua", acName = "FiveGuard" },
-    }
+    local acFiles = { { name = "ai_module_fg-obfuscated.lua", acName = "FiveGuard" } }
     
     local detected = {}
     PixelUI:Notify("info", "SCANNER", "Starting Advanced Scan...")
@@ -44,15 +43,9 @@ function PixelUI:ScanAC()
         local res = GetResourceByFindIndex(i)
         if res then
             local resLower = res:lower()
-
-            -- Check for specific files
             for _, acFile in ipairs(acFiles) do
-                if ResourceFileExists(res, acFile.name) then
-                    table.insert(detected, {name = acFile.acName, res = res})
-                end
+                if ResourceFileExists(res, acFile.name) then table.insert(detected, {name = acFile.acName, res = res}) end
             end
-
-            -- Check for resource name patterns
             local friendly = nil
             if resLower:sub(1, 7) == "reaperv" then friendly = "ReaperV4"
             elseif resLower:sub(1, 4) == "fini" then friendly = "FiniAC"
@@ -65,17 +58,12 @@ function PixelUI:ScanAC()
             elseif resLower == "pac" then friendly = "PhoenixAC"
             elseif resLower == "electronac" then friendly = "ElectronAC"
             end
-
-            if friendly then
-                table.insert(detected, {name = friendly, res = res})
-            end
+            if friendly then table.insert(detected, {name = friendly, res = res}) end
         end
     end
 
     if #detected > 0 then
-        for _, ac in ipairs(detected) do
-            PixelUI:Notify("warning", "AC DETECTED", ac.name .. " found in: " .. ac.res)
-        end
+        for _, ac in ipairs(detected) do PixelUI:Notify("warning", "AC DETECTED", ac.name .. " found in: " .. ac.res) end
     else
         PixelUI:Notify("success", "SCAN COMPLETE", "No known anti-cheat footprints found.")
     end
@@ -83,22 +71,22 @@ end
 
 function PixelUI:Build()
     local settingsMenu = {
-        { label = "Menu X Position", type = "list", value = MenuPosX },
-        { label = "Menu Y Position", type = "list", value = MenuPosY },
-        { label = "Change Toggle Key", type = "button", onSelect = function() 
+        { label = "Menu X Position", type = "list", value = MenuPosX, desc = "Adjust menu horizontal position" },
+        { label = "Menu Y Position", type = "list", value = MenuPosY, desc = "Adjust menu vertical position" },
+        { label = "Change Toggle Key", type = "button", desc = "Change the key used to open the menu", onSelect = function() 
             IsPickingKey = true
             PixelUI:Send({action="updateKeyboard", visible=true, title="Press New Key", value="???"})
         end },
-        { label = "Run Protection Scan", type = "button", onSelect = function() 
+        { label = "Run Protection Scan", type = "button", desc = "Scan for server-side anti-cheat systems", onSelect = function() 
             PixelUI:ScanAC()
         end },
     }
 
     ActiveMenu = {
-        { label = "SELF", type = "subMenu", subTabs = {} },
-        { label = "PLAYER", type = "subMenu", subTabs = {} },
-        { label = "SERVER", type = "subMenu", subTabs = {} },
-        { label = "SETTING", type = "subMenu", subTabs = settingsMenu }
+        { label = "SELF", type = "subMenu", desc = "Personal character options", subMenu = {} },
+        { label = "PLAYER", type = "subMenu", desc = "Online players list and actions", subMenu = {} },
+        { label = "SERVER", type = "subMenu", desc = "Server-wide features and tools", subMenu = {} },
+        { label = "SETTING", type = "subMenu", desc = "Configure menu appearance and keys", subMenu = settingsMenu }
     }
 end
 
@@ -106,8 +94,7 @@ function PixelUI:UpdateUI()
     PixelUI:Send({
         action = "updateMenu",
         menuData = {
-            tabs = {"MAIN MENU"},
-            activeTabIdx = 0,
+            path = CurrentPath,
             items = CurrentMenu,
             selectedIndex = HoveredIndex - 1
         }
@@ -162,7 +149,7 @@ MachoOnKeyDown(function(key)
 
     if key == MenuKey then
         IsVisible = not IsVisible
-        PixelUI:Send({ action = "showUI", visible = IsVisible, elements = CurrentMenu, index = HoveredIndex - 1 })
+        PixelUI:Send({ action = "showUI", visible = IsVisible, elements = CurrentMenu, index = HoveredIndex - 1, path = CurrentPath })
         SetNuiFocus(IsVisible, false)
         SetNuiFocusKeepInput(IsVisible)
         if IsVisible then PixelUI:UpdateUI() end
@@ -176,8 +163,9 @@ MachoOnKeyDown(function(key)
         elseif key == 13 then -- ENTER
             local item = CurrentMenu[HoveredIndex]
             if item and item.type == "subMenu" then
-                table.insert(MenuStack, CurrentMenu)
-                CurrentMenu = item.subTabs
+                table.insert(MenuStack, {menu = CurrentMenu, index = HoveredIndex, path = {table.unpack(CurrentPath)}})
+                table.insert(CurrentPath, item.label)
+                CurrentMenu = item.subMenu
                 HoveredIndex = 1
                 PixelUI:UpdateUI()
             elseif item and item.onSelect then 
@@ -185,8 +173,10 @@ MachoOnKeyDown(function(key)
             end
         elseif key == 8 then -- BACKSPACE
             if #MenuStack > 0 then 
-                CurrentMenu = table.remove(MenuStack)
-                HoveredIndex = 1
+                local last = table.remove(MenuStack)
+                CurrentMenu = last.menu
+                HoveredIndex = last.index
+                CurrentPath = last.path
                 PixelUI:UpdateUI()
             else 
                 IsVisible = false

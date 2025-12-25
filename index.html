@@ -4,422 +4,527 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PixelUI Premium</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
-    rel="stylesheet">
+  <title>Pixel UI Premium</title>
+  <!-- Fonts -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Readex+Pro:wght@160..700&display=swap">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
   <style>
     :root {
-      --primary: #ff0033;
-      --bg: rgba(12, 12, 12, 0.98);
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #e0e0e0;
-      --text-dim: #888;
-      --font-main: 'Inter', sans-serif;
-      --font-title: 'Outfit', sans-serif;
+      --menu-color: 255, 0, 51;
+      /* Red Accent for Pixel UI */
     }
 
-    html,
+    html {
+      color-scheme: dark !important;
+    }
+
     body {
+      background: none !important;
       margin: 0;
-      padding: 0;
+      font-family: "Readex Pro", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      height: 100vh;
+      user-select: none;
+      overflow: hidden !important;
+    }
+
+    #root {
+      height: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    /* Wrapper & Positioning */
+    .VWrapper {
+      position: absolute;
+      display: flex;
+      left: 30px;
+      top: 30px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .VWrapper.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .VLeftElements {
+      position: relative;
+      display: flex;
+      width: 350px;
+      height: auto;
+      flex-direction: column;
+    }
+
+    .VBanner {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 110px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .VBanner img {
       width: 100%;
       height: 100%;
-      background: transparent !important;
-      background-color: rgba(0, 0, 0, 0) !important;
+      object-fit: cover;
+      filter: brightness(0.8);
+    }
+
+    .VLeftInnerElements {
+      position: relative;
+      display: flex;
+      width: 100%;
+      background-color: rgba(10, 10, 10, 0.98);
+      flex-direction: column;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
       overflow: hidden;
-      font-family: var(--font-main);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
-    * {
-      box-sizing: border-box;
-      outline: none;
+    .VHeader {
+      height: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 15px;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgb(var(--menu-color));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    #wrapper {
-      position: absolute;
-      left: 40px;
-      top: 40px;
-      width: 380px;
-      background: var(--bg) !important;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-      display: none;
+    .VHeader .Path {
+      font-weight: 700;
+      font-size: 11px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .VHeader .Name {
+      font-weight: 700;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .VTabs {
+      position: relative;
+      display: flex;
+      width: 100%;
+      max-height: 450px;
       flex-direction: column;
       overflow: hidden;
     }
 
-    #header {
-      height: 120px;
+    .VTab {
       position: relative;
-      background: #000 !important;
-    }
-
-    #header-img {
+      display: flex;
       width: 100%;
-      height: 100%;
-      background: url('banner.png') no-repeat center center !important;
-      background-size: cover !important;
-      filter: brightness(0.8);
-    }
-
-    #tabs {
-      display: flex;
-      background: rgba(0, 0, 0, 0.5) !important;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab {
-      flex: 1;
-      padding: 10px 0;
-      text-align: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-dim) !important;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    #content {
-      max-height: 400px;
-      overflow-y: hidden;
-      border-left: 3px solid var(--primary);
-    }
-
-    .item {
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
+      height: 40px;
+      min-height: 40px;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      padding: 0 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+      z-index: 1;
     }
 
-    .item.selected {
-      background: linear-gradient(90deg, rgba(255, 0, 51, 0.15) 0%, transparent 100%) !important;
-    }
-
-    .item-label {
-      font-size: 13px;
+    .VTab .VTLabel {
       font-weight: 500;
-      color: #ccc !important;
+      font-size: 13px;
+      color: #bbb;
+      transition: 0.2s;
     }
 
-    .item.selected .item-label {
-      color: #fff !important;
+    .VTab.Selected .VTLabel {
+      color: #fff;
       font-weight: 700;
     }
 
-    .toggle {
+    .VTab .Icon {
+      position: absolute;
+      right: 15px;
+      color: rgba(255, 255, 255, 0.2);
+      font-size: 14px;
+    }
+
+    .VOptions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: absolute;
+      right: 15px;
+    }
+
+    .Checkbox {
       width: 30px;
       height: 16px;
-      background: #222 !important;
+      background-color: #222;
       border-radius: 10px;
       position: relative;
     }
 
-    .toggle.active {
-      background: var(--primary) !important;
+    .Checkbox.Checked {
+      background-color: rgb(var(--menu-color));
     }
 
-    .toggle::after {
-      content: '';
+    .Checkbox .Inside {
       position: absolute;
-      top: 2px;
       left: 2px;
+      top: 2px;
       width: 12px;
       height: 12px;
-      background: #eee !important;
+      background-color: white;
       border-radius: 50%;
       transition: 0.2s;
     }
 
-    .toggle.active::after {
+    .Checkbox.Checked .Inside {
       left: 16px;
-      background: #fff !important;
     }
 
-    .list-val {
-      font-size: 11px;
-      color: var(--primary) !important;
-      font-weight: 800;
+    .Slider {
+      width: 60px;
+      height: 4px;
+      background-color: #333;
+      border-radius: 2px;
+      position: relative;
     }
 
-    #footer {
-      padding: 8px 20px;
-      background: rgba(0, 0, 0, 0.8) !important;
-      border-top: 1px solid var(--border);
+    .Slider .Progress {
+      height: 100%;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    .Divider {
+      width: 100%;
+      height: 30px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 9px;
-      color: var(--text-dim) !important;
+      justify-content: center;
+      padding: 0 15px;
+      gap: 10px;
+      opacity: 0.5;
     }
 
-    .count-box {
-      background: rgba(255, 255, 255, 0.05) !important;
-      padding: 2px 8px;
-      border-radius: 3px;
-      color: #fff !important;
-      font-weight: 800;
+    .Divider .Line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    #keyboard-container {
-      position: absolute;
-      left: 50%;
-      top: 45%;
-      transform: translate(-50%, -50%);
-      width: 280px;
-      background: #0f0f0f !important;
-      border-radius: 8px;
-      display: none;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-      border: 1px solid var(--border);
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    #key-header {
-      padding: 12px 18px;
+    .Divider .Label {
       font-size: 10px;
       font-weight: 800;
-      background: rgba(255, 255, 255, 0.02) !important;
-      color: #fff !important;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #key-header::before {
-      content: '';
-      width: 3px;
-      height: 10px;
-      background: var(--primary) !important;
-      border-radius: 1px;
-    }
-
-    #key-display {
-      background: rgba(255, 255, 255, 0.01) !important;
-      margin: 15px;
-      padding: 20px;
-      font-size: 18px;
-      text-align: center;
-      font-family: var(--font-title);
-      font-weight: 800;
-      border: 1px solid rgba(255, 255, 255, 0.02) !important;
-      border-radius: 4px;
-      color: #fff !important;
-    }
-
-    #key-hint {
-      font-size: 8px;
-      color: var(--text-dim) !important;
-      text-align: center;
-      padding-bottom: 12px;
+      color: #fff;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    /* Premium Notifications Redesign */
-    #notif-container {
+    .VFooter {
+      height: 35px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 15px;
+    }
+
+    .VFooter .Indicator {
+      font-weight: 700;
+      font-size: 11px;
+      color: #fff;
+    }
+
+    .VDesc {
+      background-color: rgba(10, 10, 10, 0.98);
+      border-radius: 6px;
+      margin-top: 8px;
+      padding: 10px 15px;
+      border-left: 3px solid rgb(var(--menu-color));
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .VDesc span {
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+
+    /* Notifications */
+    .NotificationsWrapper {
       position: fixed;
-      right: 25px;
-      bottom: 25px;
-      width: 320px;
+      top: 20px;
+      right: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      z-index: 9999;
+    }
+
+    .Notification {
+      width: 300px;
+      background: rgba(15, 15, 15, 0.98);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transform: translateX(100%);
+      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .Notification.enter {
+      transform: translateX(0);
+    }
+
+    .Notification .Header {
+      height: 35px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      border-bottom: 2px solid rgb(var(--menu-color));
+      gap: 10px;
+    }
+
+    .Notification .Title {
+      font-weight: 800;
+      font-size: 11px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .Notification .Body {
+      padding: 12px 15px;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.4;
+    }
+
+    /* Input Overlay */
+    .Overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      transition: 0.3s;
+      pointer-events: none;
       z-index: 10000;
     }
 
-    .notif {
-      background: rgba(10, 10, 10, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      animation: notifSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      position: relative;
+    .Overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .InputWrapper {
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      background: #0f0f0f;
+      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transition: 0.3s;
+      z-index: 10001;
     }
 
-    .notif::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--primary);
-      box-shadow: 0 0 15px var(--primary);
+    .InputWrapper.visible {
+      opacity: 1;
     }
 
-    .notif.success::before {
-      background: #00ff88;
-      box-shadow: 0 0 15px #00ff88;
-    }
-
-    .notif.warning::before {
-      background: #ffcc00;
-      box-shadow: 0 0 15px #ffcc00;
-    }
-
-    .notif.info::before {
-      background: #00ccff;
-      box-shadow: 0 0 15px #00ccff;
-    }
-
-    .notif-title {
-      font-family: var(--font-title);
-      font-weight: 800;
-      font-size: 13px;
-      color: #fff !important;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
+    .InputWrapper .Header {
+      height: 40px;
+      background: #000;
       display: flex;
       align-items: center;
-      gap: 8px;
+      padding: 0 15px;
+      border-bottom: 2px solid rgb(var(--menu-color));
+      color: #fff;
+      font-weight: 800;
+      font-size: 12px;
     }
 
-    .notif-desc {
-      font-size: 11px;
-      color: #aaa !important;
-      line-height: 1.4;
-      font-weight: 500;
-    }
-
-    @keyframes notifSlideIn {
-      from {
-        opacity: 0;
-        transform: translateX(50px) scale(0.9);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-      }
-    }
-
-    .notif-fade-out {
-      animation: notifFadeOut 0.4s ease-in forwards !important;
-    }
-
-    @keyframes notifFadeOut {
-      to {
-        opacity: 0;
-        transform: translateX(100px);
-      }
+    .InputWrapper .Body {
+      padding: 30px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
     }
   </style>
 </head>
 
 <body>
-  <div id="wrapper">
-    <div id="header">
-      <div id="header-img"></div>
-    </div>
-    <div id="tabs"></div>
-    <div id="content">
-      <div id="items"></div>
-    </div>
-    <div id="footer">
-      <span>v2.6 | discord.gg/pixel</span>
-      <span id="count" class="count-box">0/0</span>
-    </div>
-  </div>
+  <div id="root"></div>
 
-  <div id="keyboard-container">
-    <div id="key-header">💠 | <span id="key-title">System Input</span></div>
-    <div id="key-display"></div>
-    <div id="key-hint">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
-  </div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <div id="notif-container"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
 
-  <script>
-    const wrapper = document.getElementById('wrapper'),
-      tabsCont = document.getElementById('tabs'),
-      itemsCont = document.getElementById('items'),
-      keyCont = document.getElementById('keyboard-container'),
-      notifCont = document.getElementById('notif-container');
+    const Notifications = () => {
+      const [list, setList] = useState([]);
+      useEffect(() => {
+        const onMessage = (e) => {
+          if (e.data.action === "showNotification") {
+            const id = Date.now();
+            setList(prev => [...prev, { ...e.data, id }]);
+            setTimeout(() => setList(prev => prev.filter(n => n.id !== id)), 4000);
+          }
+        };
+        window.addEventListener("message", onMessage);
+        return () => window.removeEventListener("message", onMessage);
+      }, []);
 
-    window.addEventListener('message', function (event) {
-      let data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+      return (
+        <div className="NotificationsWrapper">
+          {list.map(n => (
+            <div key={n.id} className="Notification enter">
+              <div className="Header">
+                <i className="fa-solid fa-circle-info" style={{ color: `rgb(var(--menu-color))` }}></i>
+                <span className="Title">{n.title}</span>
+              </div>
+              <div className="Body">{n.desc}</div>
+            </div>
+          ))}
+        </div>
+      );
+    };
 
-      if (data.action === "showUI") {
-        wrapper.style.display = data.visible ? 'flex' : 'none';
-        if (data.elements) renderItems(data.elements, data.index || 0);
-      }
-      if (data.action === "updateMenu" || data.action === "updateElements") {
-        if (data.menuData) {
-          if (data.menuData.tabs) renderTabs(data.menuData.tabs, data.menuData.activeTabIdx || 0);
-          if (data.menuData.items) renderItems(data.menuData.items, data.menuData.selectedIndex || 0);
-        } else if (data.elements) {
-          renderItems(data.elements, data.index || 0);
-        }
-      }
-      if (data.action === "keydown") {
-        const children = itemsCont.children;
-        for (let i = 0; i < children.length; i++) children[i].classList.toggle('selected', i === data.index);
-        document.getElementById('count').innerText = `${data.index + 1}/${children.length}`;
-        children[data.index]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-      if (data.action === "updatePosition") {
-        wrapper.style.left = data.x + 'px';
-        wrapper.style.top = data.y + 'px';
-      }
-      if (data.action === "updateKeyboard") {
-        if (data.visible) {
-          keyCont.style.display = "block";
-          if (data.title) document.getElementById('key-title').innerText = data.title;
-          if (data.value !== undefined) document.getElementById('key-display').innerText = data.value;
-        } else {
-          keyCont.style.display = "none";
-        }
-      }
-      if (data.action === "showNotification") {
-        const div = document.createElement('div');
-        div.className = `notif ${data.type || 'info'}`;
-        div.innerHTML = `<div class="notif-title">${data.title}</div><div class="notif-desc">${data.desc}</div>`;
-        notifCont.appendChild(div);
+    const Input = () => {
+      const [data, setData] = useState({ visible: false, title: "", value: "" });
+      useEffect(() => {
+        const onMessage = (e) => {
+          if (e.data.action === "updateKeyboard") setData(e.data);
+        };
+        window.addEventListener("message", onMessage);
+        return () => window.removeEventListener("message", onMessage);
+      }, []);
 
-        setTimeout(() => {
-          div.classList.add('notif-fade-out');
-          setTimeout(() => div.remove(), 400);
-        }, 4000);
-      }
-    });
+      return (
+        <>
+          <div className={`Overlay ${data.visible ? 'visible' : ''}`}></div>
+          <div className={`InputWrapper ${data.visible ? 'visible' : ''}`}>
+            <div className="Header">{data.title}</div>
+            <div className="Body">{data.value}</div>
+          </div>
+        </>
+      );
+    };
 
-    function renderTabs(tabs, activeIdx) {
-      tabsCont.innerHTML = tabs.map((t, i) => `<div class="tab ${i === activeIdx ? 'active' : ''}">${t}</div>`).join('');
-    }
+    const MainMenu = () => {
+      const [visible, setVisible] = useState(false);
+      const [tabs, setTabs] = useState([]);
+      const [selectedIndex, setSelectedIndex] = useState(0);
+      const [path, setPath] = useState(["Home"]);
+      const [banner, setBanner] = useState("banner.png");
+      const [pos, setPos] = useState({ x: 30, y: 30 });
 
-    function renderItems(items, sel) {
-      itemsCont.innerHTML = items.map((item, i) => {
-        let right = '';
-        if (item.type === 'toggle') {
-          const isOn = item.value || (item.label && item.label.includes('[ON]'));
-          right = `<div class="toggle ${isOn ? 'active' : ''}"></div>`;
-        } else if (item.type === 'list') {
-          right = `<div class="list-val">&lt; ${item.value} &gt;</div>`;
-        } else if (item.type === 'subMenu') {
-          right = `<span style="color:rgba(255,255,255,0.1); font-size: 10px;">➔</span>`;
-        }
-        return `<div class="item ${i === sel ? 'selected' : ''}">
-                    <span class="item-label">${item.label.replace('[ON]', '').replace('[OFF]', '')}</span>
-                    ${right}
-                </div>`;
-      }).join('');
-      document.getElementById('count').innerText = `${sel + 1}/${items.length}`;
-    }
+      useEffect(() => {
+        const onMessage = (e) => {
+          const d = e.data;
+          if (d.action === "showUI") {
+            setVisible(d.visible);
+            if (d.elements) setTabs(d.elements);
+            if (d.index !== undefined) setSelectedIndex(d.index);
+            if (d.path) setPath(d.path);
+          }
+          if (d.action === "updateMenu") {
+            if (d.menuData.items) setTabs(d.menuData.items);
+            if (d.menuData.selectedIndex !== undefined) setSelectedIndex(d.menuData.selectedIndex);
+            if (d.menuData.path) setPath(d.menuData.path);
+          }
+          if (d.action === "keydown") {
+            setSelectedIndex(d.index);
+          }
+          if (d.action === "updatePosition") {
+            setPos({ x: d.x, y: d.y });
+          }
+        };
+        window.addEventListener("message", onMessage);
+        return () => window.removeEventListener("message", onMessage);
+      }, []);
+
+      if (!visible) return null;
+
+      return (
+        <div className="VWrapper visible" style={{ left: pos.x, top: pos.y }}>
+          <div className="VLeftElements">
+            <div className="VBanner"><img src={banner} /></div>
+            <div className="VLeftInnerElements">
+              <div className="VHeader">
+                <span className="Path">{path.join(" > ")}</span>
+                <span className="Name">Pixel UI | discord.gg/pixel</span>
+              </div>
+              <div className="VTabs">
+                <div style={{
+                  position: "absolute", width: "100%", height: "40px",
+                  top: selectedIndex * 40, background: "rgba(255,255,255,0.03)",
+                  borderLeft: "3px solid rgb(var(--menu-color))", transition: "0.15s"
+                }}></div>
+                {tabs.map((tab, i) => (
+                  <div key={i} className={`VTab ${i === selectedIndex ? "Selected" : ""}`}>
+                    <span className="VTLabel">
+                      {tab.label}
+                      {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
+                    </span>
+                    {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right Icon"></i>}
+                    {tab.type === "checkbox" && <div className={`Checkbox ${tab.checked ? "Checked" : ""}`}><div className="Inside"></div></div>}
+                    {tab.type === "slider" && (
+                      <div className="Slider">
+                        <div className="Progress" style={{ width: `${((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100}%` }}></div>
+                      </div>
+                    )}
+                    {tab.type === "divider" && <div className="Divider"><div className="Line"></div><div className="Label">{tab.label}</div><div className="Line"></div></div>}
+                  </div>
+                ))}
+              </div>
+              <div className="VFooter">
+                <div className="Indicator">{selectedIndex + 1} / {tabs.length}</div>
+                <div className="Name">Pixel Team</div>
+              </div>
+            </div>
+            {tabs[selectedIndex]?.desc && (
+              <div className="VDesc"><span>{tabs[selectedIndex].desc}</span></div>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<><MainMenu /><Notifications /><Input /></>);
   </script>
 </body>
 
