@@ -70,6 +70,45 @@ function PixelUI:ScanAC()
 end
 
 function PixelUI:Build()
+    local selfMenu = {
+        { 
+            label = "Heal Mode", 
+            type = "list", 
+            value = "CFW", 
+            options = {"CFW", "ESX", "VRP", "SHIELD"}, 
+            desc = "Select heal method (CFW/ESX use raw triggers)",
+            onSelect = function(val)
+                local ped = PlayerPedId()
+                if val == "CFW" then
+                    -- Raw Trigger for CFW
+                    TriggerServerEvent("cfw:heal", GetPlayerServerId(PlayerId()))
+                    PixelUI:Notify("success", "HEAL", "CFW Raw Trigger Sent")
+                elseif val == "ESX" then
+                    -- Raw Trigger for ESX
+                    TriggerServerEvent("esx_ambulancejob:revive", GetPlayerServerId(PlayerId()))
+                    PixelUI:Notify("success", "HEAL", "ESX Raw Trigger Sent")
+                elseif val == "VRP" then
+                    -- Natural Heal
+                    SetEntityHealth(ped, 200)
+                    PixelUI:Notify("success", "HEAL", "Health Restored Naturally")
+                elseif val == "SHIELD" then
+                    -- Armor
+                    SetPedArmour(ped, 100)
+                    PixelUI:Notify("success", "HEAL", "Armor Restored")
+                end
+            end
+        },
+        { label = "Heal Player", type = "button", desc = "Quick heal using selected mode", onSelect = function()
+            -- Find the Heal Mode item to get its current value
+            for _, item in ipairs(CurrentMenu) do
+                if item.label == "Heal Mode" then
+                    item.onSelect(item.value)
+                    break
+                end
+            end
+        end },
+    }
+
     local settingsMenu = {
         { label = "Menu X Position", type = "list", value = MenuPosX, desc = "Adjust menu horizontal position" },
         { label = "Menu Y Position", type = "list", value = MenuPosY, desc = "Adjust menu vertical position" },
@@ -83,7 +122,7 @@ function PixelUI:Build()
     }
 
     ActiveMenu = {
-        { label = "SELF", type = "subMenu", desc = "Personal character options", subMenu = {} },
+        { label = "SELF", type = "subMenu", desc = "Personal character options", subMenu = selfMenu },
         { label = "PLAYER", type = "subMenu", desc = "Online players list and actions", subMenu = {} },
         { label = "SERVER", type = "subMenu", desc = "Server-wide features and tools", subMenu = {} },
         { label = "SETTING", type = "subMenu", desc = "Configure menu appearance and keys", subMenu = settingsMenu }
@@ -102,23 +141,39 @@ function PixelUI:UpdateUI()
     PixelUI:UpdatePos()
 end
 
--- Thread for Position Adjustment
+-- Thread for List/Position Adjustment
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
         if IsVisible then
             local item = CurrentMenu[HoveredIndex]
-            if item and item.label then
-                if item.label:find("Position") then
-                    if IsDisabledControlPressed(0, 175) then -- Right
+            if item and item.type == "list" then
+                if IsDisabledControlJustPressed(0, 175) then -- Right
+                    if item.options then
+                        -- Handle string options
+                        local curIdx = 1
+                        for i, v in ipairs(item.options) do if v == item.value then curIdx = i break end end
+                        curIdx = curIdx < #item.options and curIdx + 1 or 1
+                        item.value = item.options[curIdx]
+                    else
+                        -- Handle numeric values (like Position)
                         if item.label:find("X") then MenuPosX = MenuPosX + 2 else MenuPosY = MenuPosY + 2 end
                         item.value = item.label:find("X") and MenuPosX or MenuPosY
-                        PixelUI:UpdateUI()
-                    elseif IsDisabledControlPressed(0, 174) then -- Left
+                    end
+                    PixelUI:UpdateUI()
+                elseif IsDisabledControlJustPressed(0, 174) then -- Left
+                    if item.options then
+                        -- Handle string options
+                        local curIdx = 1
+                        for i, v in ipairs(item.options) do if v == item.value then curIdx = i break end end
+                        curIdx = curIdx > 1 and curIdx - 1 or #item.options
+                        item.value = item.options[curIdx]
+                    else
+                        -- Handle numeric values
                         if item.label:find("X") then MenuPosX = math.max(0, MenuPosX - 2) else MenuPosY = math.max(0, MenuPosY - 2) end
                         item.value = item.label:find("X") and MenuPosX or MenuPosY
-                        PixelUI:UpdateUI()
                     end
+                    PixelUI:UpdateUI()
                 end
             end
         end
