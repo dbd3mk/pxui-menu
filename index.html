@@ -80,8 +80,8 @@
     .header-gif {
       width: 100%;
       height: 100%;
-      background: url('banner.gif') no-repeat center center !important;
-      background-size: cover !important;
+      object-fit: cover;
+      display: block;
     }
 
     .header-overlay {
@@ -90,7 +90,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 100%) !important;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%) !important;
+      pointer-events: none;
     }
 
     .nav-path {
@@ -420,7 +421,7 @@
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <div className="header">
-              <div className="header-gif"></div>
+              <img className="header-gif" src={`banner.gif?v=${Math.random()}`} />
               <div className="header-overlay"></div>
             </div>
 
