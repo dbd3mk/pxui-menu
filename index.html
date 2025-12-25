@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI Silver Edition</title>
+  <title>Pixel UI Silver Glass</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -16,10 +16,10 @@
     :root {
       --primary: #d1d1d1;
       --primary-glow: rgba(209, 209, 209, 0.2);
-      --bg: rgba(15, 15, 15, 0.85);
+      --bg: rgba(10, 10, 10, 0.85);
+      /* Premium Dark Glass */
       --text: #ffffff;
       --font-main: 'Inter', sans-serif;
-      --font-title: 'Outfit', sans-serif;
     }
 
     * {
@@ -27,9 +27,9 @@
       outline: none;
       margin: 0;
       padding: 0;
-      background-color: transparent;
       border: none !important;
-      /* Aggressively remove all borders */
+      /* Force no borders on everything */
+      background: transparent;
     }
 
     html,
@@ -46,7 +46,6 @@
       width: 100%;
       height: 100%;
       position: relative;
-      background: transparent !important;
     }
 
     .menu-wrapper {
@@ -54,13 +53,14 @@
       width: 360px;
       background: var(--bg) !important;
       border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       opacity: 0;
       transform: translateY(10px);
+      box-shadow: none !important;
+      /* Removed shadow to eliminate black edges */
     }
 
     .menu-wrapper.visible {
@@ -68,7 +68,7 @@
       transform: translateY(0);
     }
 
-    /* Header Section */
+    /* Header */
     .header {
       height: 150px;
       position: relative;
@@ -91,10 +91,9 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%) !important;
-      pointer-events: none;
     }
 
-    /* Navigation Path */
+    /* Navigation */
     .nav-path {
       padding: 0 25px;
       margin-bottom: 10px;
@@ -110,13 +109,11 @@
 
     .nav-path i {
       color: var(--primary) !important;
-      font-size: 11px;
     }
 
-    /* Main Content */
+    /* Content Area */
     .main-content {
       display: flex;
-      position: relative;
       margin: 0 15px 15px 15px;
       gap: 15px;
     }
@@ -132,7 +129,6 @@
       position: absolute;
       width: 100%;
       background: var(--primary);
-      box-shadow: 0 0 15px var(--primary-glow);
       border-radius: 10px;
       transition: top 0.2s ease, height 0.2s ease;
     }
@@ -143,7 +139,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
     }
 
     .items-container::-webkit-scrollbar {
@@ -155,20 +151,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.02);
       border-radius: 12px;
       transition: 0.2s ease;
     }
 
     .item.selected {
-      background: rgba(255, 255, 255, 0.08) !important;
-      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.05) !important;
+      transform: translateX(5px);
     }
 
     .item-label {
       font-size: 13px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.5) !important;
+      color: rgba(255, 255, 255, 0.4) !important;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -179,8 +174,8 @@
 
     /* Components */
     .toggle {
-      width: 30px;
-      height: 14px;
+      width: 28px;
+      height: 12px;
       background: rgba(255, 255, 255, 0.1) !important;
       border-radius: 10px;
       position: relative;
@@ -193,8 +188,8 @@
     .toggle::after {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 1px;
+      left: 1px;
       width: 10px;
       height: 10px;
       background: #fff !important;
@@ -203,7 +198,7 @@
     }
 
     .toggle.active::after {
-      left: 18px;
+      left: 17px;
       background: #000 !important;
     }
 
@@ -211,29 +206,23 @@
       font-size: 10px;
       font-weight: 800;
       color: var(--primary) !important;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3px 12px;
+      padding: 2px 10px;
       border-radius: 8px;
-    }
-
-    .submenu-icon {
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.1) !important;
     }
 
     /* Footer */
     .footer {
       padding: 15px 25px;
-      background: rgba(0, 0, 0, 0.2) !important;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      opacity: 0.5;
     }
 
     .footer-text {
       font-size: 9px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.2) !important;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
@@ -243,56 +232,22 @@
       font-weight: 800;
     }
 
-    .desc-box {
-      position: absolute;
-      left: 375px;
-      top: 0;
-      width: 220px;
-      background: var(--bg) !important;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transition: 0.3s;
-      transform: translateX(-10px);
-    }
-
-    .desc-box.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .desc-title {
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--primary) !important;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      opacity: 0.5;
-    }
-
-    .desc-text {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7) !important;
-      line-height: 1.6;
-    }
-
+    /* Notifications */
     .notif-container {
       position: fixed;
       top: 30px;
       right: 30px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       z-index: 10000;
     }
 
     .notif {
-      width: 320px;
-      background: rgba(20, 20, 20, 0.95) !important;
+      width: 300px;
+      background: rgba(15, 15, 15, 0.95) !important;
       border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      padding: 15px;
       animation: notifIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
@@ -311,35 +266,34 @@
     .notif-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
+      gap: 10px;
+      margin-bottom: 4px;
     }
 
     .notif-header i {
       color: var(--primary) !important;
-      font-size: 14px;
     }
 
     .notif-title {
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       color: #fff !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
     .notif-desc {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5) !important;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4) !important;
     }
 
+    /* Keyboard */
     .kb-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85) !important;
+      background: rgba(0, 0, 0, 0.8) !important;
       display: none;
       justify-content: center;
       align-items: center;
@@ -347,19 +301,18 @@
     }
 
     .kb-wrapper {
-      width: 320px;
+      width: 300px;
       background: #111 !important;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     }
 
     .kb-header {
-      padding: 20px;
+      padding: 15px;
       background: rgba(255, 255, 255, 0.02) !important;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .kb-header i {
@@ -368,32 +321,29 @@
 
     .kb-header span {
       font-weight: 800;
-      font-size: 12px;
+      font-size: 11px;
       color: #fff !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
     .kb-body {
-      padding: 50px 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
     .kb-key {
-      font-family: var(--font-title);
-      font-size: 42px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 36px;
       font-weight: 800;
       color: #fff !important;
-      text-shadow: 0 0 20px var(--primary-glow);
     }
 
     .kb-footer {
-      padding: 15px;
+      padding: 10px;
       text-align: center;
-      font-size: 9px;
+      font-size: 8px;
       color: rgba(255, 255, 255, 0.2) !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
   </style>
 </head>
@@ -504,13 +454,6 @@
               <span className="footer-text">Pixel Team • 2025</span>
               <span className="footer-count">{selectedIndex + 1} / {tabs.length}</span>
             </div>
-
-            {tabs[selectedIndex]?.desc && (
-              <div className={`desc-box ${visible ? 'visible' : ''}`}>
-                <div className="desc-title">Description</div>
-                <div className="desc-text">{tabs[selectedIndex].desc}</div>
-              </div>
-            )}
           </div>
 
           <div className="notif-container">
