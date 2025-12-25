@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel UI - Silver Glass Edition</title>
+  <title>Pixel UI Silver Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -16,23 +16,22 @@
     :root {
       --primary: #d1d1d1;
       --primary-glow: rgba(209, 209, 209, 0.2);
-      --bg-main: rgba(10, 10, 10, 0.98);
-      --text-main: #ffffff;
-      --text-dim: rgba(255, 255, 255, 0.4);
+      --bg: rgba(12, 12, 12, 0.98);
+      --border: rgba(255, 255, 255, 0.05);
+      --text: #ffffff;
+      --text-dim: #888;
       --font-main: 'Inter', sans-serif;
       --font-title: 'Outfit', sans-serif;
     }
 
     * {
       box-sizing: border-box;
+      outline: none;
       margin: 0;
       padding: 0;
-      outline: none !important;
-      border: none !important;
-      background: transparent;
-      -webkit-user-select: none;
+      background-color: transparent;
       user-select: none;
-      box-shadow: none !important;
+      -webkit-user-select: none;
     }
 
     html,
@@ -42,7 +41,7 @@
       background: transparent !important;
       overflow: hidden;
       font-family: var(--font-main);
-      color: var(--text-main);
+      color: var(--text);
     }
 
     #root {
@@ -53,33 +52,30 @@
 
     .menu-wrapper {
       position: absolute;
-      width: 380px;
-      background: var(--bg-main) !important;
-      border-radius: 24px;
+      width: 360px;
+      background: var(--bg) !important;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
-      transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-      opacity: 0;
-      transform: scale(0.95) translateY(20px);
       overflow: hidden;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform: translateY(15px);
     }
 
     .menu-wrapper.visible {
       opacity: 1;
-      transform: scale(1) translateY(0);
+      transform: translateY(0);
     }
 
-    .header-container {
-      padding: 0;
-    }
-
-    .header-banner {
-      height: 160px;
-      width: 100%;
+    /* Header */
+    .header {
+      height: 150px;
       position: relative;
-      border-radius: 24px 24px 0 0;
+      background: #000 !important;
       overflow: hidden;
-      background: #000;
     }
 
     .header-gif {
@@ -95,43 +91,49 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%) !important;
       pointer-events: none;
     }
 
-    .nav-section {
-      padding: 15px 25px 5px 25px;
+    /* Navigation Path */
+    .nav-path {
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.01) !important;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 12px;
-    }
-
-    .nav-text {
-      font-family: var(--font-title);
+      gap: 10px;
       font-size: 10px;
-      font-weight: 800;
-      color: var(--text-dim);
+      font-weight: 700;
+      color: var(--text-dim) !important;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
     }
 
-    .content-area {
+    .nav-path i {
+      color: var(--primary) !important;
+      font-size: 11px;
+    }
+
+    /* Main Content Layout */
+    .main-content {
       display: flex;
-      padding: 5px 20px 15px 20px;
-      gap: 15px;
-      min-height: 100px;
+      position: relative;
+      padding: 10px 0;
     }
 
+    /* Custom Left Scrollbar */
     .scrollbar-container {
-      width: 2px;
-      padding: 10px 0;
+      width: 4px;
+      margin-left: 10px;
+      margin-right: 5px;
       display: flex;
       flex-direction: column;
     }
 
     .scrollbar-track {
       flex: 1;
-      background: rgba(255, 255, 255, 0.01);
+      background: rgba(255, 255, 255, 0.02);
       border-radius: 10px;
       position: relative;
     }
@@ -139,266 +141,272 @@
     .scrollbar-thumb {
       position: absolute;
       width: 100%;
-      background: rgba(255, 255, 255, 0.25);
+      background: var(--primary);
       border-radius: 10px;
+      box-shadow: 0 0 10px var(--primary-glow);
       transition: top 0.2s ease, height 0.2s ease;
     }
 
-    .items-list {
+    .items-container {
       flex: 1;
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 4px;
     }
 
-    .items-list::-webkit-scrollbar {
+    .items-container::-webkit-scrollbar {
       width: 0;
     }
 
-    .menu-item {
-      padding: 14px 20px;
-      border-radius: 14px;
+    .item {
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: 0.2s all;
-      position: relative;
-      background: transparent !important;
+      transition: 0.2s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.01);
     }
 
-    .menu-item.selected {
-      background: rgba(255, 255, 255, 0.04) !important;
-      transform: translateX(4px);
+    .item.selected {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%) !important;
     }
 
     .item-label {
       font-size: 13px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.25);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
+      color: #aaa !important;
       transition: 0.2s;
     }
 
-    .menu-item.selected .item-label {
-      color: #fff;
+    .item.selected .item-label {
+      color: #fff !important;
+      transform: translateX(5px);
+      font-weight: 700;
     }
 
-    .toggle-switch {
-      width: 30px;
-      height: 14px;
-      background: rgba(255, 255, 255, 0.05);
+    /* Components */
+    .toggle {
+      width: 32px;
+      height: 16px;
+      background: #222 !important;
       border-radius: 10px;
       position: relative;
-      transition: 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .toggle-switch.active {
-      background: var(--primary);
+    .toggle.active {
+      background: var(--primary) !important;
     }
 
-    .toggle-switch::after {
+    .toggle::after {
       content: '';
       position: absolute;
       top: 2px;
       left: 2px;
       width: 10px;
       height: 10px;
-      background: #fff;
+      background: #fff !important;
       border-radius: 50%;
-      transition: 0.3s;
+      transition: 0.2s;
     }
 
-    .toggle-switch.active::after {
+    .toggle.active::after {
       left: 18px;
-      background: #000;
+      background: #000 !important;
     }
 
-    .list-badge {
+    .list-value {
       font-size: 10px;
       font-weight: 800;
-      color: var(--primary);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 2px 10px;
-      border-radius: 6px;
+      color: var(--primary) !important;
+      border: 1px solid var(--primary);
+      padding: 1px 6px;
+      border-radius: 3px;
     }
 
-    .submenu-arrow {
+    .submenu-icon {
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.1) !important;
     }
 
-    .footer-container {
-      padding: 15px 25px;
+    /* Footer */
+    .footer {
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.4) !important;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 0 0 24px 24px;
     }
 
-    .footer-brand {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--text-dim);
+    .footer-text {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--text-dim) !important;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      opacity: 0.5;
     }
 
-    .footer-stats {
-      font-family: var(--font-title);
-      font-size: 11px;
+    .footer-count {
+      color: var(--primary) !important;
+      font-size: 10px;
       font-weight: 800;
-      color: var(--primary);
-      opacity: 0.8;
     }
 
-    .description-box {
+    /* Description Box */
+    .desc-box {
       position: absolute;
-      left: 400px;
+      left: 375px;
       top: 0;
-      width: 240px;
-      background: var(--bg-main);
-      border-radius: 20px;
-      padding: 20px;
+      width: 220px;
+      background: var(--bg) !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       opacity: 0;
-      transform: translateX(-15px);
       transition: 0.3s;
+      transform: translateX(-10px);
     }
 
-    .description-box.visible {
+    .desc-box.visible {
       opacity: 1;
       transform: translateX(0);
     }
 
     .desc-title {
-      font-family: var(--font-title);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--primary) !important;
       text-transform: uppercase;
-      margin-bottom: 10px;
-      opacity: 0.4;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 4px;
     }
 
-    .desc-content {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.5);
-      line-height: 1.6;
+    .desc-text {
+      font-size: 11px;
+      color: #ccc !important;
+      line-height: 1.5;
     }
 
-    .notification-stack {
+    /* Notifications */
+    .notif-container {
       position: fixed;
-      top: 40px;
-      right: 40px;
+      top: 30px;
+      right: 30px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
+      gap: 10px;
+      z-index: 10000;
     }
 
-    .notification {
+    .notif {
       width: 300px;
-      background: rgba(15, 15, 15, 0.98);
-      border-radius: 16px;
-      padding: 18px;
-      animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      background: rgba(15, 15, 15, 0.98) !important;
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--primary);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      animation: notifIn 0.4s ease-out forwards;
     }
 
-    @keyframes slideIn {
+    @keyframes notifIn {
       from {
         opacity: 0;
-        transform: translateX(50px);
+        transform: translateY(-20px);
       }
 
       to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
       }
     }
 
-    .notif-head {
+    .notif-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
+      gap: 10px;
+      margin-bottom: 4px;
     }
 
-    .notif-head i {
-      color: var(--primary);
+    .notif-header i {
+      color: var(--primary) !important;
+      font-size: 12px;
     }
 
     .notif-title {
-      font-family: var(--font-title);
-      font-size: 11px;
       font-weight: 800;
-      color: #fff;
+      font-size: 11px;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
-    .notif-body {
+    .notif-desc {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
+      color: #bbb !important;
     }
 
-    .keyboard-overlay {
+    /* Keyboard */
+    .kb-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.8) !important;
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 10000;
+      z-index: 20000;
     }
 
-    .keyboard-modal {
-      width: 320px;
-      background: #0a0a0a;
-      border-radius: 24px;
+    .kb-wrapper {
+      width: 300px;
+      background: #0f0f0f !important;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .keyboard-header {
-      padding: 20px;
+    .kb-header {
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-bottom: 1px solid var(--primary);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .keyboard-header i {
-      color: var(--primary);
+    .kb-header i {
+      color: var(--primary) !important;
     }
 
-    .keyboard-header span {
-      font-family: var(--font-title);
-      font-size: 11px;
+    .kb-header span {
       font-weight: 800;
-      color: #fff;
+      font-size: 11px;
+      color: #fff !important;
       text-transform: uppercase;
     }
 
-    .keyboard-body {
-      padding: 50px 20px;
+    .kb-body {
+      padding: 40px 20px;
       text-align: center;
     }
 
-    .keyboard-value {
+    .kb-key {
       font-family: var(--font-title);
-      font-size: 42px;
+      font-size: 36px;
       font-weight: 800;
-      color: #fff;
+      color: #fff !important;
     }
 
-    .keyboard-footer {
-      padding: 15px;
+    .kb-footer {
+      padding: 10px;
       text-align: center;
       font-size: 8px;
-      color: rgba(255, 255, 255, 0.1);
+      color: #666 !important;
       text-transform: uppercase;
     }
   </style>
@@ -406,28 +414,31 @@
 
 <body>
   <div id="root"></div>
+
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <script type="text/babel">
-    const { useState, useEffect, useRef, memo } = React;
-    const Header = memo(() => (
-      <div className="header-container">
-        <div className="header-banner">
-          <img className="header-gif" src="banner.gif" alt="banner" />
-          <div className="header-overlay"></div>
-        </div>
+    const { useState, useEffect, useRef } = React;
+
+    const Header = React.memo(() => (
+      <div className="header">
+        <img className="header-gif" src="banner.gif" />
+        <div className="header-overlay"></div>
       </div>
     ));
+
     const App = () => {
       const [visible, setVisible] = useState(false);
       const [tabs, setTabs] = useState([]);
       const [selectedIndex, setSelectedIndex] = useState(0);
       const [path, setPath] = useState(["HOME"]);
-      const [pos, setPos] = useState({ x: 50, y: 50 });
+      const [pos, setPos] = useState({ x: 40, y: 40 });
       const [notifs, setNotifs] = useState([]);
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
-      const listRef = useRef(null);
+      const containerRef = useRef(null);
+
       useEffect(() => {
         const handleMessage = (e) => {
           const d = e.data;
@@ -455,40 +466,48 @@
         window.addEventListener("message", handleMessage);
         return () => window.removeEventListener("message", handleMessage);
       }, []);
+
       useEffect(() => {
-        if (listRef.current) {
-          const selectedEl = listRef.current.children[selectedIndex];
-          if (selectedEl) {
-            selectedEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        if (containerRef.current) {
+          const selectedItem = containerRef.current.children[selectedIndex];
+          if (selectedItem) {
+            selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           }
         }
       }, [selectedIndex]);
-      const scrollThumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
-      const scrollThumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
+
+      const thumbHeight = tabs.length > 0 ? (1 / tabs.length) * 100 : 100;
+      const thumbTop = tabs.length > 0 ? (selectedIndex / tabs.length) * 100 : 0;
+
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
             <Header />
-            <div className="nav-section">
-              <div className="nav-text">{path.join(" / ")}</div>
+
+            <div className="nav-path">
+              <i className="fa-solid fa-compass"></i>
+              {path.join(" / ")}
             </div>
-            <div className="content-area">
+
+            <div className="main-content">
               <div className="scrollbar-container">
                 <div className="scrollbar-track">
-                  <div className="scrollbar-thumb" style={{ height: `${scrollThumbHeight}%`, top: `${scrollThumbTop}%` }}></div>
+                  <div className="scrollbar-thumb" style={{ height: `${thumbHeight}%`, top: `${thumbTop}%` }}></div>
                 </div>
               </div>
-              <div className="items-list" ref={listRef}>
+
+              <div className="items-container" ref={containerRef}>
                 {tabs.map((tab, i) => (
-                  <div key={i} className={`menu-item ${i === selectedIndex ? 'selected' : ''}`}>
+                  <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
                     <span className="item-label">
                       {tab.label}
                       {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
                     </span>
-                    {tab.type === "subMenu" && <i className="fa-solid fa-chevron-right submenu-arrow"></i>}
-                    {tab.type === "checkbox" && <div className={`toggle-switch ${tab.checked ? 'active' : ''}`}></div>}
+
+                    {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
+                    {tab.type === "checkbox" && <div className={`toggle ${tab.checked ? 'active' : ''}`}></div>}
                     {tab.type === "slider" && (
-                      <div className="list-badge">
+                      <div className="list-value">
                         {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
                       </div>
                     )}
@@ -496,43 +515,48 @@
                 ))}
               </div>
             </div>
-            <div className="footer-container">
-              <div className="footer-brand">Pixel Team • 2025</div>
-              <div className="footer-stats">{selectedIndex + 1} / {tabs.length}</div>
+
+            <div className="footer">
+              <span className="footer-text">Pixel Team • 2025</span>
+              <span className="footer-count">{selectedIndex + 1} / {tabs.length}</span>
             </div>
+
             {tabs[selectedIndex]?.desc && (
-              <div className={`description-box ${visible ? 'visible' : ''}`}>
+              <div className={`desc-box ${visible ? 'visible' : ''}`}>
                 <div className="desc-title">Description</div>
-                <div className="desc-content">{tabs[selectedIndex].desc}</div>
+                <div className="desc-text">{tabs[selectedIndex].desc}</div>
               </div>
             )}
           </div>
-          <div className="notification-stack">
+
+          <div className="notif-container">
             {notifs.map(n => (
-              <div key={n.id} className="notification">
-                <div className="notif-head">
+              <div key={n.id} className="notif">
+                <div className="notif-header">
                   <i className="fa-solid fa-bell"></i>
                   <span className="notif-title">{n.title}</span>
                 </div>
-                <div className="notif-body">{n.desc}</div>
+                <div className="notif-desc">{n.desc}</div>
               </div>
             ))}
           </div>
-          <div className="keyboard-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
-            <div className="keyboard-modal">
-              <div className="keyboard-header">
+
+          <div className="kb-overlay" style={{ display: kb.visible ? 'flex' : 'none' }}>
+            <div className="kb-wrapper">
+              <div className="kb-header">
                 <i className="fa-solid fa-keyboard"></i>
                 <span>{kb.title}</span>
               </div>
-              <div className="keyboard-body">
-                <div className="keyboard-value">{kb.value}</div>
+              <div className="kb-body">
+                <div className="kb-key">{kb.value}</div>
               </div>
-              <div className="keyboard-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
+              <div className="kb-footer">ENTER: CONFIRM • BACKSPACE: CANCEL</div>
             </div>
           </div>
         </div>
       );
     };
+
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
