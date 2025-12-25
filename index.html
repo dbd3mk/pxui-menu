@@ -17,7 +17,6 @@
       --primary: #d1d1d1;
       --primary-glow: rgba(209, 209, 209, 0.2);
       --bg: rgba(12, 12, 12, 0.98);
-      /* Solid dark for menu body */
       --border: rgba(255, 255, 255, 0.08);
       --text: #ffffff;
       --text-dim: #888;
@@ -25,14 +24,12 @@
       --font-title: 'Outfit', sans-serif;
     }
 
-    /* Absolute Transparency Fix */
     * {
       box-sizing: border-box;
       outline: none;
       margin: 0;
       padding: 0;
       background-color: transparent;
-      /* Force all to transparent by default */
     }
 
     html,
@@ -53,12 +50,10 @@
       background: transparent !important;
     }
 
-    /* Main Menu Wrapper */
     .menu-wrapper {
       position: absolute;
       width: 360px;
       background: var(--bg) !important;
-      /* Only menu has background */
       border: 1px solid var(--border);
       border-radius: 10px;
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
@@ -75,7 +70,6 @@
       transform: translateY(0);
     }
 
-    /* Header Section */
     .header {
       height: 150px;
       position: relative;
@@ -88,7 +82,6 @@
       height: 100%;
       background: url('banner.gif') no-repeat center center !important;
       background-size: cover !important;
-      filter: brightness(0.8);
     }
 
     .header-overlay {
@@ -97,35 +90,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.8) 100%) !important;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 100%) !important;
     }
 
-    .header-content {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header-title {
-      font-family: var(--font-title);
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff !important;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-    }
-
-    .header-subtitle {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--primary) !important;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    /* Navigation Path */
     .nav-path {
       padding: 12px 20px;
       background: rgba(255, 255, 255, 0.02) !important;
@@ -144,7 +111,6 @@
       font-size: 10px;
     }
 
-    /* Items List */
     .items-container {
       max-height: 400px;
       overflow-y: auto;
@@ -181,7 +147,6 @@
       font-weight: 700;
     }
 
-    /* Components */
     .toggle {
       width: 32px;
       height: 16px;
@@ -226,7 +191,6 @@
       color: rgba(255, 255, 255, 0.1) !important;
     }
 
-    /* Footer */
     .footer {
       padding: 12px 20px;
       background: rgba(0, 0, 0, 0.4) !important;
@@ -249,7 +213,6 @@
       font-weight: 800;
     }
 
-    /* Description Box */
     .desc-box {
       position: absolute;
       left: 375px;
@@ -286,7 +249,6 @@
       line-height: 1.5;
     }
 
-    /* Notifications */
     .notif-container {
       position: fixed;
       top: 30px;
@@ -344,7 +306,6 @@
       color: #bbb !important;
     }
 
-    /* Keyboard Input */
     .kb-overlay {
       position: fixed;
       top: 0;
@@ -461,10 +422,6 @@
             <div className="header">
               <div className="header-gif"></div>
               <div className="header-overlay"></div>
-              <div className="header-content">
-                <span className="header-subtitle">Pixel UI Premium</span>
-                <span className="header-title">Silver Edition</span>
-              </div>
             </div>
 
             <div className="nav-path">
