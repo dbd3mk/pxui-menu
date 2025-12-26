@@ -457,6 +457,7 @@
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
       const [subTabs, setSubTabs] = useState([]);
       const [activeSubTab, setActiveSubTab] = useState(0);
+      const containerRef = useRef(null);
 
       useEffect(() => {
         const handleMessage = (e) => {
@@ -490,6 +491,15 @@
         return () => window.removeEventListener("message", handleMessage);
       }, []);
 
+      useEffect(() => {
+        if (containerRef.current) {
+          const selectedItem = containerRef.current.children[selectedIndex];
+          if (selectedItem) {
+            selectedItem.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          }
+        }
+      }, [selectedIndex]);
+
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
@@ -518,7 +528,7 @@
               )}
             </div>
 
-            <div className="items-container">
+            <div className="items-container" ref={containerRef}>
               {tabs.map((tab, i) => (
                 <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
                   <span className="item-label">
