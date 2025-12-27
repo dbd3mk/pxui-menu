@@ -15,7 +15,7 @@ local IsPickingKey, IsInputting, InputTarget, CurrentInputVal = false, false, ""
 local TempData, TempKey, TempName = {}, nil, nil
 local isShiftPressed = false
 
-local Banners = { "banner.gif", "banner.png" }
+local Banners = { "banner.gif", "banner.png", "MOSA.gif", "banner1.gif", "standard (1).gif", "standard (2).gif" }
 local CurrentBannerIndex = 1
 
 local Keys = {
@@ -267,7 +267,7 @@ function PixelUI:Build()
     local settingsMenu = {
         { label = "Menu X Position", type = "slider", min = 0, max = 1920, value = MenuPosX, onSelect = function() end },
         { label = "Menu Y Position", type = "slider", min = 0, max = 1080, value = MenuPosY, onSelect = function() end },
-        { label = "Change Banner", type = "list", items = { "Banner GIF", "Banner PNG" }, value = CurrentBannerIndex, onSelect = function() 
+        { label = "Change Banner", type = "list", items = { "Default GIF", "Default PNG", "MOSA GIF", "Banner 1", "Standard 1", "Standard 2" }, value = CurrentBannerIndex, onSelect = function() 
             PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
             PixelUI:Notify("success", "SETTINGS", "Banner Updated!")
         end },
