@@ -440,9 +440,9 @@
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    const Header = React.memo(() => (
+    const Header = React.memo(({ src }) => (
       <div className="header">
-        <img className="header-gif" src="banner.gif" />
+        <img className="header-gif" src={src} />
         <div className="header-overlay"></div>
       </div>
     ));
@@ -457,6 +457,7 @@
       const [kb, setKb] = useState({ visible: false, title: "", value: "" });
       const [subTabs, setSubTabs] = useState([]);
       const [activeSubTab, setActiveSubTab] = useState(0);
+      const [banner, setBanner] = useState("banner.gif");
       const containerRef = useRef(null);
 
       useEffect(() => {
@@ -485,6 +486,8 @@
             setTimeout(() => setNotifs(prev => prev.filter(n => n.id !== id)), 4000);
           } else if (d.action === "updateKeyboard") {
             setKb(d);
+          } else if (d.action === "updateBanner") {
+            setBanner(d.url);
           }
         };
         window.addEventListener("message", handleMessage);
@@ -503,7 +506,7 @@
       return (
         <div id="pixel-ui">
           <div className={`menu-wrapper ${visible ? 'visible' : ''}`} style={{ left: pos.x, top: pos.y }}>
-            <Header />
+            <Header src={banner} />
 
             <div className="nav-tabs">
               {subTabs.length > 0 ? (

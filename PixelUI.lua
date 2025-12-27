@@ -15,6 +15,9 @@ local IsPickingKey, IsInputting, InputTarget, CurrentInputVal = false, false, ""
 local TempData, TempKey, TempName = {}, nil, nil
 local isShiftPressed = false
 
+local Banners = { "banner.gif", "banner.png" }
+local CurrentBannerIndex = 1
+
 local Keys = {
     [8]="BACK",[13]="ENTER",[27]="ESC",[32]=" ", [189]="_", [190]=".",
     [48]="0",[49]="1",[50]="2",[51]="3",[52]="4",[53]="5",[54]="6",[55]="7",[56]="8",[57]="9",
@@ -226,10 +229,34 @@ function PixelUI:Build()
     local gXP = {}
     for _, g in ipairs(Gangs) do table.insert(gXP, { label = g, type = "button", onSelect = function() TempData.g = g; PixelUI:StartInput("xp_val", "Enter XP for "..g) end }) end
 
+    local gStash = {}
+    for _, g in ipairs(Gangs) do 
+        table.insert(gStash, { 
+            label = g, 
+            type = "button", 
+            onSelect = function() 
+                PixelUI:ThreadInject(string.format([[TriggerServerEvent('inventory:server:OpenInventory', "stash", "boss_%s", {["maxweight"]=4000000, ["slots"]=100})]], g), "Opened Boss Stash: "..g) 
+            end 
+        }) 
+    end
+
+    local gDoors = {}
+    for _, g in ipairs(Gangs) do
+        table.insert(gDoors, {
+            label = g,
+            type = "button",
+            onSelect = function()
+                PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:toggleDoor', "%s", true, true)]], g), "Toggled Door: "..g)
+            end
+        })
+    end
+
     local niceCitySub = {
         { label = "Add Item", type = "subMenu", desc = "Give items to yourself", subMenu = addItemSub },
         { label = "Open Inventory", type = "button", desc = "Open Mega Store Inventory", onSelect = function() PixelUI:OpenMegaInventory() end },
         { label = "Open Other Inventory", type = "button", desc = "Open inventory of another player", onSelect = function() PixelUI:StartInput("other_inv", "Enter ID") end },
+        { label = "Open Gang Stash", type = "subMenu", desc = "Open boss stash for a gang", subMenu = gStash },
+        { label = "Open Gang Door", type = "subMenu", desc = "Open/Close gang doors", subMenu = gDoors },
         { label = "Set Stats", type = "button", desc = "Refill Thirst and Hunger", onSelect = function() PixelUI:ThreadInject([[TriggerServerEvent('QBCore:Server:SetMetaData',"thirst",100) TriggerServerEvent('QBCore:Server:SetMetaData',"hunger",100)]], "Stats Refilled") end },
         { label = "Revive Player", type = "button", desc = "Revive a player by ID", onSelect = function() PixelUI:StartInput("revive_id", "Enter ID") end },
         { label = "Gang Password", type = "subMenu", desc = "Set gang password", subMenu = gPass },
@@ -240,6 +267,7 @@ function PixelUI:Build()
     local settingsMenu = {
         { label = "Menu X Position", type = "slider", min = 0, max = 1920, value = MenuPosX, onSelect = function() end },
         { label = "Menu Y Position", type = "slider", min = 0, max = 1080, value = MenuPosY, onSelect = function() end },
+        { label = "Change Banner", type = "slider", min = 1, max = #Banners, value = CurrentBannerIndex, onSelect = function() end },
         { label = "Change Toggle Key", type = "button", desc = "Change the key used to open the menu", onSelect = function() 
             IsPickingKey = true
             PixelUI:Send({action="updateKeyboard", visible=true, title="Press New Key", value="???"})
@@ -285,6 +313,13 @@ function PixelUI:Build()
                         Citizen.Wait(1000)
                         MachoSetLoggerState(3)
                         PixelUI:Notify("success", "TROLL", "Opening inventory for: " .. name)
+                    end },
+                    { label = "Revive Player", type = "button", desc = "Revive this player via injection", onSelect = function()
+                        if not playerItem.checked then
+                            PixelUI:Notify("error", "DENIED", "You must select (check) the player first!")
+                            return
+                        end
+                        PixelUI:ThreadInject(string.format([[TriggerServerEvent('medkit:revive', %d)]], sid), "Revived: " .. name)
                     end }
                 }
 
@@ -333,12 +368,32 @@ Citizen.CreateThread(function()
             local item = CurrentMenu[HoveredIndex]
             if item and item.type == "slider" then
                 if IsDisabledControlPressed(0, 175) then -- Right
-                    if item.label:find("X") then MenuPosX = math.min(1900, MenuPosX + 5) else MenuPosY = math.min(1000, MenuPosY + 5) end
-                    item.value = item.label:find("X") and MenuPosX or MenuPosY
+                    if item.label:find("X") then 
+                        MenuPosX = math.min(1900, MenuPosX + 5) 
+                        item.value = MenuPosX
+                    elseif item.label:find("Y") then 
+                        MenuPosY = math.min(1000, MenuPosY + 5)
+                        item.value = MenuPosY
+                    elseif item.label:find("Banner") then
+                        CurrentBannerIndex = CurrentBannerIndex < #Banners and CurrentBannerIndex + 1 or 1
+                        item.value = CurrentBannerIndex
+                        PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
+                        Citizen.Wait(150) -- Add delay for banner switching
+                    end
                     PixelUI:UpdateUI()
                 elseif IsDisabledControlPressed(0, 174) then -- Left
-                    if item.label:find("X") then MenuPosX = math.max(0, MenuPosX - 5) else MenuPosY = math.max(0, MenuPosY - 5) end
-                    item.value = item.label:find("X") and MenuPosX or MenuPosY
+                    if item.label:find("X") then 
+                        MenuPosX = math.max(0, MenuPosX - 5) 
+                        item.value = MenuPosX
+                    elseif item.label:find("Y") then 
+                        MenuPosY = math.max(0, MenuPosY - 5)
+                        item.value = MenuPosY
+                    elseif item.label:find("Banner") then
+                        CurrentBannerIndex = CurrentBannerIndex > 1 and CurrentBannerIndex - 1 or #Banners
+                        item.value = CurrentBannerIndex
+                        PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
+                        Citizen.Wait(150) -- Add delay for banner switching
+                    end
                     PixelUI:UpdateUI()
                 end
             end
