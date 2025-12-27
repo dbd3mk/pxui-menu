@@ -536,7 +536,7 @@
                 <div key={i} className={`item ${i === selectedIndex ? 'selected' : ''}`}>
                   <span className="item-label">
                     {tab.label}
-                    {(tab.type === "slider" || tab.type === "list") && `: ${tab.value}`}
+                    {tab.type === "slider" && `: ${tab.value}`}
                   </span>
 
                   {tab.type === "subMenu" && <i className="fa-solid fa-angle-right submenu-icon"></i>}
@@ -544,6 +544,11 @@
                   {tab.type === "slider" && (
                     <div className="list-value">
                       {Math.round(((tab.value - (tab.min || 0)) / ((tab.max || 100) - (tab.min || 0))) * 100)}%
+                    </div>
+                  )}
+                  {tab.type === "list" && (
+                    <div className="list-value">
+                      &lt; {tab.items[tab.value - 1]} &gt;
                     </div>
                   )}
                 </div>

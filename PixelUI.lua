@@ -267,7 +267,10 @@ function PixelUI:Build()
     local settingsMenu = {
         { label = "Menu X Position", type = "slider", min = 0, max = 1920, value = MenuPosX, onSelect = function() end },
         { label = "Menu Y Position", type = "slider", min = 0, max = 1080, value = MenuPosY, onSelect = function() end },
-        { label = "Change Banner", type = "slider", min = 1, max = #Banners, value = CurrentBannerIndex, onSelect = function() end },
+        { label = "Change Banner", type = "list", items = { "Banner GIF", "Banner PNG" }, value = CurrentBannerIndex, onSelect = function() 
+            PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
+            PixelUI:Notify("success", "SETTINGS", "Banner Updated!")
+        end },
         { label = "Change Toggle Key", type = "button", desc = "Change the key used to open the menu", onSelect = function() 
             IsPickingKey = true
             PixelUI:Send({action="updateKeyboard", visible=true, title="Press New Key", value="???"})
@@ -366,35 +369,43 @@ Citizen.CreateThread(function()
         Citizen.Wait(5)
         if IsVisible then
             local item = CurrentMenu[HoveredIndex]
-            if item and item.type == "slider" then
+            if item then
                 if IsDisabledControlPressed(0, 175) then -- Right
-                    if item.label:find("X") then 
-                        MenuPosX = math.min(1900, MenuPosX + 5) 
-                        item.value = MenuPosX
-                    elseif item.label:find("Y") then 
-                        MenuPosY = math.min(1000, MenuPosY + 5)
-                        item.value = MenuPosY
-                    elseif item.label:find("Banner") then
-                        CurrentBannerIndex = CurrentBannerIndex < #Banners and CurrentBannerIndex + 1 or 1
-                        item.value = CurrentBannerIndex
-                        PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
-                        Citizen.Wait(150) -- Add delay for banner switching
+                    if item.type == "slider" then
+                        if item.label:find("X") then 
+                            MenuPosX = math.min(1900, MenuPosX + 5) 
+                            item.value = MenuPosX
+                        elseif item.label:find("Y") then 
+                            MenuPosY = math.min(1000, MenuPosY + 5)
+                            item.value = MenuPosY
+                        end
+                        PixelUI:UpdateUI()
+                    elseif item.type == "list" then
+                        if item.label:find("Banner") then
+                            CurrentBannerIndex = CurrentBannerIndex < #Banners and CurrentBannerIndex + 1 or 1
+                            item.value = CurrentBannerIndex
+                            PixelUI:UpdateUI()
+                            Citizen.Wait(150)
+                        end
                     end
-                    PixelUI:UpdateUI()
                 elseif IsDisabledControlPressed(0, 174) then -- Left
-                    if item.label:find("X") then 
-                        MenuPosX = math.max(0, MenuPosX - 5) 
-                        item.value = MenuPosX
-                    elseif item.label:find("Y") then 
-                        MenuPosY = math.max(0, MenuPosY - 5)
-                        item.value = MenuPosY
-                    elseif item.label:find("Banner") then
-                        CurrentBannerIndex = CurrentBannerIndex > 1 and CurrentBannerIndex - 1 or #Banners
-                        item.value = CurrentBannerIndex
-                        PixelUI:Send({ action = "updateBanner", url = Banners[CurrentBannerIndex] })
-                        Citizen.Wait(150) -- Add delay for banner switching
+                    if item.type == "slider" then
+                        if item.label:find("X") then 
+                            MenuPosX = math.max(0, MenuPosX - 5) 
+                            item.value = MenuPosX
+                        elseif item.label:find("Y") then 
+                            MenuPosY = math.max(0, MenuPosY - 5)
+                            item.value = MenuPosY
+                        end
+                        PixelUI:UpdateUI()
+                    elseif item.type == "list" then
+                        if item.label:find("Banner") then
+                            CurrentBannerIndex = CurrentBannerIndex > 1 and CurrentBannerIndex - 1 or #Banners
+                            item.value = CurrentBannerIndex
+                            PixelUI:UpdateUI()
+                            Citizen.Wait(150)
+                        end
                     end
-                    PixelUI:UpdateUI()
                 end
             end
         end
