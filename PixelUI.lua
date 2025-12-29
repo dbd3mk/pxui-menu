@@ -4,6 +4,7 @@ local ActiveMenu, CurrentMenu, MenuStack = {}, {}, {}
 local CurrentPath = {"HOME"}
 local ActiveSubTab = 0 -- 0: Player List, 1: Troll Menu
 local CachedPlayerList = {}
+local CachedVehicleMenu, CachedCustomizeMenu = {}, {}
 
 -- Configuration
 local BASE_URL = "https://dbd3mk.github.io/pxui-menu/"
@@ -65,10 +66,38 @@ function PixelUI:Send(d) if DUI then MachoSendDuiMessage(DUI, json.encode(d)) en
 function PixelUI:Notify(t, ti, d) PixelUI:Send({ action="showNotification", type=t, title=ti, desc=d }) end
 function PixelUI:UpdatePos() PixelUI:Send({ action = "updatePosition", x = MenuPosX, y = MenuPosY }) end
 
+function PixelUI:GetTargetRes()
+    local acs = {"ElectronAC", "WaveShield", "FiniAC", "ReaperV4", "Helen_Rp", "FiveGuard", "G-AC", "PhoenixAC"}
+    for _, ac in ipairs(acs) do
+        if GetResourceState(ac) == "started" then return ac end
+    end
+    return "any"
+end
+
+function PixelUI:ObfuscateCode(code)
+    local wrapper = [[
+        local function _N(h, ...) return Citizen.InvokeNative(h, ...) end
+        local _P = function() return _N(0xD809547A) end -- PlayerPedId
+        local _V = function(p, l) return _N(0x9A9112A0, p, l) end -- GetVehiclePedIsIn
+    ]]
+    return wrapper .. code
+end
+
 -- Injection Methods
 function PixelUI:ThreadInject(code, msg)
-    MachoInjectThread(0, 'ElectronAC', 'main.lua', code)
+    MachoSetLoggerState(0)
+    MachoInjectThread(0, PixelUI:GetTargetRes(), 'main.lua', code)
+    Citizen.Wait(100)
+    MachoSetLoggerState(3)
     if msg then PixelUI:Notify("success", "INJECTED", msg) end
+end
+
+function PixelUI:StealthInject(code, msg)
+    MachoSetLoggerState(0)
+    MachoInjectResource2(3, PixelUI:GetTargetRes(), PixelUI:ObfuscateCode(code))
+    Citizen.Wait(100)
+    MachoSetLoggerState(3)
+    if msg then PixelUI:Notify("success", "STEALTH", msg) end
 end
 
 function PixelUI:OpenMegaInventory()
@@ -180,31 +209,172 @@ end
 function PixelUI:Build()
     local selfMenu = {
         { label = "Heal Player", type = "button", desc = "Refill your health via Injection", onSelect = function() 
-            local code = [[ SetEntityHealth(PlayerPedId(), 200) ]]
-            MachoInjectResource2(3, "any", code)
-            PixelUI:Notify("success", "SELF", "Heal Injected!")
+            PixelUI:StealthInject([[ _N(0x6B76DC34, _P(), 200) ]], "Heal Injected!")
         end },
         { label = "Refill Armor", type = "button", desc = "Refill your armor via Injection", onSelect = function() 
-            local code = [[ SetPedArmour(PlayerPedId(), 100) ]]
-            MachoInjectResource2(3, "any", code)
-            PixelUI:Notify("success", "SELF", "Armor Injected!")
-        end },
-        { label = "Revive Player", type = "button", desc = "Revive via Macho Injection (Stealth)", onSelect = function() 
-            local ped = PlayerPedId()
-            local pos = GetEntityCoords(ped)
-            local heading = GetEntityHeading(ped)
-            local reviveCode = string.format([[
-                local ped = PlayerPedId()
-                NetworkResurrectLocalPlayer(%f, %f, %f, %f, true, false)
-                SetEntityHealth(ped, 200)
-                ClearPedBloodDamage(ped)
-                TriggerEvent('esx_ambulancejob:revive')
-                TriggerEvent('hospital:client:Revive')
-            ]], pos.x, pos.y, pos.z, heading)
-            MachoInjectResource2(3, "any", reviveCode)
-            PixelUI:Notify("success", "SELF", "Revive Injected via 'any'!")
+            PixelUI:StealthInject([[ _N(0xCEA397D1, _P(), 100) ]], "Armor Injected!")
         end },
     }
+
+    local teleportMenu = {
+        { label = "Teleport to Waypoint", type = "button", desc = "Teleport to your map marker stealthily", onSelect = function() 
+            local blip = GetFirstBlipInfoId(8)
+            if DoesBlipExist(blip) then
+                local coords = GetBlipInfoIdCoord(blip)
+                local code = string.format([[
+                    local function doNative(name, ...)
+                        local native = _G[name]
+                        if type(native) == "function" then return native(...) end
+                        return Citizen.InvokeNative(GetHashKey(name), ...)
+                    end
+                    local ent = (veh ~= 0) and veh or ped
+                    local x, y, z = %f, %f, %f
+                    _N(0x239A3354, ent, x, y, z + 2.0, false, false, false) -- SetEntityCoordsNoOffset
+                    
+                    if z <= 0.0 then
+                        Citizen.CreateThread(function()
+                            for i = 1, 1000, 10 do
+                                _N(0x239A3354, ent, x, y, i + 0.0, false, false, false)
+                                Citizen.Wait(0)
+                                local found, groundZ = _N(0xC906A7D1, x, y, i + 0.0) -- GetGroundZFor_3dCoord
+                                if found then
+                                    _N(0x239A3354, ent, x, y, groundZ + 2.0, false, false, false)
+                                    break
+                                end
+                            end
+                        end)
+                    end
+                ]], coords.x, coords.y, coords.z)
+
+                PixelUI:StealthInject(code, "Teleported Safely!")
+            else
+                PixelUI:Notify("error", "FAILED", "No Waypoint found on map!")
+            end
+        end },
+    }
+
+    local vehicleMenu = {
+        { label = "Stealth Fix", type = "button", desc = "Fix vehicle via Stealth Injection", onSelect = function() 
+            local code = [[
+                local veh = _V(_P(), false)
+                if veh ~= 0 then
+                    _N(0x1157D77F, veh) -- SetVehicleFixed
+                    _N(0x45A35035, veh, 1000.0) -- SetVehicleEngineHealth
+                    _N(0x01BBF73B, veh, 1000.0) -- SetVehicleBodyHealth
+                end
+            ]]
+            PixelUI:StealthInject(code, "Vehicle Repaired!")
+        end },
+        { label = "Clean Vehicle", type = "button", desc = "Clean the current vehicle", onSelect = function() 
+            PixelUI:StealthInject([[ local v = _V(_P(), false); if v ~= 0 then _N(0x796BAA11, v, 0.0) end ]], "Vehicle Cleaned!") -- SetVehicleDirtLevel
+        end },
+        { label = "Unlock Nearest", type = "button", desc = "Unlock the nearest vehicle", onSelect = function() 
+            local code = [[
+                local function getNearestVeh()
+                    local pos = _N(0x3FEF770D, _P()) -- GetEntityCoords
+                    local handle, veh = FindFirstVehicle()
+                    local success, nearest, minDist = false, 0, 10.0
+                    repeat
+                        local vPos = _N(0x3FEF770D, veh)
+                        local dist = #(pos - vPos)
+                        if dist < minDist then minDist = dist; nearest = veh end
+                        success, veh = FindNextVehicle(handle)
+                    until not success
+                    EndFindVehicle(handle)
+                    return nearest
+                end
+                local veh = getNearestVeh()
+                if veh ~= 0 then
+                    _N(0xBEEBBC4A, veh, 1) -- SetVehicleDoorsLocked
+                    _N(0x25E1353D, veh, false) -- SetVehicleDoorsLockedForAllPlayers
+                end
+            ]]
+            PixelUI:StealthInject(code, "Nearest Vehicle Unlocked!")
+        end },
+    }
+
+    local customizeMenu = {
+        { label = "Primary Color", type = "slider", min = 0, max = 159, value = 0, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x4F1D4440, v, %d, select(2, _N(0x4F1D4440, v))) end ]], item.value)) -- SetVehicleColours
+        end },
+        { label = "Secondary Color", type = "slider", min = 0, max = 159, value = 0, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then local p, s = _N(0x4F1D4440, v); _N(0x4F1D4440, v, p, %d) end ]], item.value))
+        end },
+        { label = "Turbo", type = "checkbox", checked = false, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]; item.checked = not item.checked
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x2A1A1511, v, 18, %s) end ]], tostring(item.checked))) -- SetVehicleModKit, ToggleVehicleMod
+            PixelUI:UpdateUI()
+        end },
+        { label = "Max Upgrade", type = "button", desc = "Fully upgrade the vehicle performance", onSelect = function() 
+            local code = [[
+                local v = _V(_P(), false)
+                if v ~= 0 then
+                    _N(0x1F2AA078, v, 0)
+                    _N(0x6AF060E0, v, 11, _N(0xE38E3390, v, 11) - 1, false) -- SetVehicleMod, GetNumVehicleMods
+                    _N(0x6AF060E0, v, 12, _N(0xE38E3390, v, 12) - 1, false)
+                    _N(0x6AF060E0, v, 13, _N(0xE38E3390, v, 13) - 1, false)
+                    _N(0x6AF060E0, v, 15, _N(0xE38E3390, v, 15) - 1, false)
+                    _N(0x2A1A1511, v, 18, true)
+                end
+            ]]
+            PixelUI:StealthInject(code, "Vehicle Maxed Out!")
+        end },
+        { label = "Engine Level", type = "slider", min = -1, max = 3, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 11, %d, false) end ]], item.value))
+        end },
+        { label = "Brakes Level", type = "slider", min = -1, max = 2, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 12, %d, false) end ]], item.value))
+        end },
+        { label = "Transmission", type = "slider", min = -1, max = 2, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 13, %d, false) end ]], item.value))
+        end },
+        { label = "Suspension", type = "slider", min = -1, max = 3, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 15, %d, false) end ]], item.value))
+        end },
+        { label = "Xenon Lights", type = "checkbox", checked = false, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]; item.checked = not item.checked
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x2A1A1511, v, 22, %s) end ]], tostring(item.checked)))
+            PixelUI:UpdateUI()
+        end },
+        { label = "Neon Lights", type = "checkbox", checked = false, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]; item.checked = not item.checked
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then for i = 0, 3 do _N(0x2AAED7E1, v, i, %s) end; _N(0x8E0A5822, v, 255, 255, 255) end ]], tostring(item.checked)))
+            PixelUI:UpdateUI()
+        end },
+        { label = "Window Tint", type = "slider", min = 0, max = 6, value = 0, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x7729216E, v, %d) end ]], item.value))
+        end },
+        { label = "Plate Text", type = "button", desc = "Change vehicle plate text", onSelect = function() 
+            PixelUI:StartInput("plate_text", "Enter New Plate")
+        end },
+        { label = "Wheel Type", type = "slider", min = 0, max = 7, value = 0, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x488F2413, v, %d) end ]], item.value))
+        end },
+        { label = "Wheel Index", type = "slider", min = -1, max = 50, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 23, %d, false) end ]], item.value))
+        end },
+        { label = "Livery", type = "slider", min = -1, max = 20, value = -1, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x6AF060E0, v, 48, %d, false); _N(0x1FD09E73, v, %d) end ]], item.value, item.value))
+        end },
+        { label = "Tire Smoke", type = "checkbox", checked = false, onSelect = function() 
+            local item = CurrentMenu[HoveredIndex]; item.checked = not item.checked
+            PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x1F2AA078, v, 0); _N(0x2A1A1511, v, 20, %s); if %s then _N(0xE95B0C7D, v, 255, 255, 255) end end ]], tostring(item.checked), tostring(item.checked)))
+            PixelUI:UpdateUI()
+        end },
+    }
+
+    CachedVehicleMenu = vehicleMenu
+    CachedCustomizeMenu = customizeMenu
 
     -- NICE City Features
     local addItemSub = {}
@@ -223,44 +393,32 @@ function PixelUI:Build()
         })
     end
 
-    local gPass = {}
-    for _, g in ipairs(Gangs) do table.insert(gPass, { label = g, type = "button", onSelect = function() PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:GangPassword', "%s")]], g), "Pass set: "..g) end }) end
-    
-    local gXP = {}
-    for _, g in ipairs(Gangs) do table.insert(gXP, { label = g, type = "button", onSelect = function() TempData.g = g; PixelUI:StartInput("xp_val", "Enter XP for "..g) end }) end
-
-    local gStash = {}
-    for _, g in ipairs(Gangs) do 
-        table.insert(gStash, { 
-            label = g, 
-            type = "button", 
-            onSelect = function() 
-                PixelUI:ThreadInject(string.format([[TriggerServerEvent('inventory:server:OpenInventory', "stash", "boss_%s", {["maxweight"]=4000000, ["slots"]=100})]], g), "Opened Boss Stash: "..g) 
-            end 
-        }) 
-    end
-
-    local gDoors = {}
+    local gangManagementSub = {}
     for _, g in ipairs(Gangs) do
-        table.insert(gDoors, {
-            label = g,
-            type = "button",
-            onSelect = function()
+        local gangActions = {
+            { label = "Open Boss Stash", type = "button", desc = "Open stash for " .. g, onSelect = function() 
+                PixelUI:ThreadInject(string.format([[TriggerServerEvent('inventory:server:OpenInventory', "stash", "boss_%s", {["maxweight"]=4000000, ["slots"]=100})]], g), "Opened Boss Stash: "..g) 
+            end },
+            { label = "Add Gang XP", type = "button", desc = "Add XP to " .. g, onSelect = function() 
+                TempData.g = g; PixelUI:StartInput("xp_val", "Enter XP for "..g) 
+            end },
+            { label = "Toggle Gang Door", type = "button", desc = "Open/Close door for " .. g, onSelect = function() 
                 PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:toggleDoor', "%s", true, true)]], g), "Toggled Door: "..g)
-            end
-        })
+            end },
+            { label = "Set Gang Password", type = "button", desc = "Set password for " .. g, onSelect = function() 
+                PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:GangPassword', "%s")]], g), "Pass set: "..g) 
+            end }
+        }
+        table.insert(gangManagementSub, { label = g:upper(), type = "subMenu", desc = "Manage " .. g, subMenu = gangActions })
     end
 
     local niceCitySub = {
         { label = "Add Item", type = "subMenu", desc = "Give items to yourself", subMenu = addItemSub },
+        { label = "Gang Management", type = "subMenu", desc = "Manage all gang features", subMenu = gangManagementSub },
         { label = "Open Inventory", type = "button", desc = "Open Mega Store Inventory", onSelect = function() PixelUI:OpenMegaInventory() end },
         { label = "Open Other Inventory", type = "button", desc = "Open inventory of another player", onSelect = function() PixelUI:StartInput("other_inv", "Enter ID") end },
-        { label = "Open Gang Stash", type = "subMenu", desc = "Open boss stash for a gang", subMenu = gStash },
-        { label = "Open Gang Door", type = "subMenu", desc = "Open/Close gang doors", subMenu = gDoors },
         { label = "Set Stats", type = "button", desc = "Refill Thirst and Hunger", onSelect = function() PixelUI:ThreadInject([[TriggerServerEvent('QBCore:Server:SetMetaData',"thirst",100) TriggerServerEvent('QBCore:Server:SetMetaData',"hunger",100)]], "Stats Refilled") end },
         { label = "Revive Player", type = "button", desc = "Revive a player by ID", onSelect = function() PixelUI:StartInput("revive_id", "Enter ID") end },
-        { label = "Gang Password", type = "subMenu", desc = "Set gang password", subMenu = gPass },
-        { label = "Add Gang XP", type = "subMenu", desc = "Add XP to a gang", subMenu = gXP },
         { label = "Clothing Menu", type = "button", desc = "Open QB Clothing menu", onSelect = function() PixelUI:ThreadInject([[TriggerEvent('qb-clothing:client:openOutfitMenu')]]) end },
     }
 
@@ -312,7 +470,7 @@ function PixelUI:Build()
                             return
                         end
                         MachoSetLoggerState(0)
-                        MachoInjectResource2(3, "ElectronAC", string.format([[TriggerServerEvent('inventory:server:OpenInventory', 'otherplayer', %d)]], sid))
+                        PixelUI:StealthInject(string.format([[ _N(0x8E0A5822, 'otherplayer', %d) ]], sid)) -- Triggering via Native if possible or just stealth event
                         Citizen.Wait(1000)
                         MachoSetLoggerState(3)
                         PixelUI:Notify("success", "TROLL", "Opening inventory for: " .. name)
@@ -322,7 +480,7 @@ function PixelUI:Build()
                             PixelUI:Notify("error", "DENIED", "You must select (check) the player first!")
                             return
                         end
-                        PixelUI:ThreadInject(string.format([[TriggerServerEvent('medkit:revive', %d)]], sid), "Revived: " .. name)
+                        PixelUI:ThreadInject(string.format([[TriggerServerEvent('deep:revivePlayer', %d)]], sid), "Revived: " .. name)
                     end }
                 }
 
@@ -340,7 +498,9 @@ function PixelUI:Build()
                 end
             end
         end },
-        { label = "SETTING", type = "subMenu", desc = "Configure menu appearance and keys", subMenu = settingsMenu }
+        { label = "VEHICLE", type = "subMenu", desc = "Vehicle related features", subMenu = vehicleMenu },
+        { label = "TELEPORT", type = "subMenu", desc = "Teleportation features", subMenu = teleportMenu },
+        { label = "SETTINGS", type = "subMenu", desc = "Configure menu appearance and keys", subMenu = settingsMenu }
     }
 end
 
@@ -348,6 +508,8 @@ function PixelUI:UpdateUI()
     local subTabs = {}
     if CurrentPath[#CurrentPath] == "PLAYER" then
         subTabs = {"PLAYER", "TROLL"}
+    elseif CurrentPath[#CurrentPath] == "VEHICLE" then
+        subTabs = {"VEHICLE", "CUSTOMIZE"}
     end
 
     PixelUI:Send({
@@ -372,39 +534,25 @@ Citizen.CreateThread(function()
             if item then
                 if IsDisabledControlPressed(0, 175) then -- Right
                     if item.type == "slider" then
-                        if item.label:find("X") then 
-                            MenuPosX = math.min(1900, MenuPosX + 5) 
-                            item.value = MenuPosX
-                        elseif item.label:find("Y") then 
-                            MenuPosY = math.min(1000, MenuPosY + 5)
-                            item.value = MenuPosY
-                        end
+                        item.value = math.min(item.max, item.value + 5)
+                        if item.label:find("X") then MenuPosX = item.value
+                        elseif item.label:find("Y") then MenuPosY = item.value end
                         PixelUI:UpdateUI()
                     elseif item.type == "list" then
-                        if item.label:find("Banner") then
-                            CurrentBannerIndex = CurrentBannerIndex < #Banners and CurrentBannerIndex + 1 or 1
-                            item.value = CurrentBannerIndex
-                            PixelUI:UpdateUI()
-                            Citizen.Wait(150)
-                        end
+                        item.value = item.value < #item.items and item.value + 1 or 1
+                        if item.label:find("Banner") then CurrentBannerIndex = item.value end
+                        PixelUI:UpdateUI()
                     end
                 elseif IsDisabledControlPressed(0, 174) then -- Left
                     if item.type == "slider" then
-                        if item.label:find("X") then 
-                            MenuPosX = math.max(0, MenuPosX - 5) 
-                            item.value = MenuPosX
-                        elseif item.label:find("Y") then 
-                            MenuPosY = math.max(0, MenuPosY - 5)
-                            item.value = MenuPosY
-                        end
+                        item.value = math.max(item.min, item.value - 5)
+                        if item.label:find("X") then MenuPosX = item.value
+                        elseif item.label:find("Y") then MenuPosY = item.value end
                         PixelUI:UpdateUI()
                     elseif item.type == "list" then
-                        if item.label:find("Banner") then
-                            CurrentBannerIndex = CurrentBannerIndex > 1 and CurrentBannerIndex - 1 or #Banners
-                            item.value = CurrentBannerIndex
-                            PixelUI:UpdateUI()
-                            Citizen.Wait(150)
-                        end
+                        item.value = item.value > 1 and item.value - 1 or #item.items
+                        if item.label:find("Banner") then CurrentBannerIndex = item.value end
+                        PixelUI:UpdateUI()
                     end
                 end
             end
@@ -422,8 +570,11 @@ MachoOnKeyDown(function(key)
             IsInputting = false; PixelUI:Send({action="updateKeyboard", visible=false})
             if InputTarget == "item_qty" then PixelUI:ThreadInject(string.format([[TriggerServerEvent('QBCore:Server:AddItem', '%s', %d)]], TempData.itemName, tonumber(CurrentInputVal) or 1), "Added Items")
             elseif InputTarget == "other_inv" then MachoSetLoggerState(0); MachoInjectResource2(3, "ElectronAC", string.format([[TriggerServerEvent('inventory:server:OpenInventory','otherplayer',%d)]], tonumber(CurrentInputVal) or 0)); Citizen.Wait(1000); MachoSetLoggerState(3)
-            elseif InputTarget == "revive_id" then PixelUI:ThreadInject(string.format([[TriggerServerEvent('medkit:revive',%d)]], tonumber(CurrentInputVal) or 0))
-            elseif InputTarget == "xp_val" then PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:addGangXP', "%s", %d)]], TempData.g, tonumber(CurrentInputVal) or 0)) end
+            elseif InputTarget == "revive_id" then PixelUI:ThreadInject(string.format([[TriggerServerEvent('deep:revivePlayer',%d)]], tonumber(CurrentInputVal) or 0))
+            elseif InputTarget == "xp_val" then PixelUI:ThreadInject(string.format([[TriggerServerEvent('PRO-weed:server:addGangXP', "%s", %d)]], TempData.g, tonumber(CurrentInputVal) or 0))
+            elseif InputTarget == "plate_text" then
+                PixelUI:StealthInject(string.format([[ local v = _V(_P(), false); if v ~= 0 then _N(0x95A0BD27, v, "%s") end ]], CurrentInputVal)) -- SetVehicleNumberPlateText
+            end
         elseif char == "BACK" then CurrentInputVal = CurrentInputVal:sub(1,-2); PixelUI:Send({action="updateKeyboard", visible=true, value=CurrentInputVal.."_"})
         elseif char == "ESC" then IsInputting = false; PixelUI:Send({action="updateKeyboard", visible=false})
         elseif char and #char == 1 then
@@ -464,7 +615,7 @@ MachoOnKeyDown(function(key)
         elseif key == 40 then -- DOWN
             HoveredIndex = HoveredIndex < #CurrentMenu and HoveredIndex + 1 or 1
             PixelUI:Send({action="keydown", index=HoveredIndex-1})
-        elseif key == 69 then -- E (Switch to TROLL)
+        elseif key == 69 then -- E (Switch Tab)
             if CurrentPath[#CurrentPath] == "PLAYER" and ActiveSubTab == 0 then
                 local player = CurrentMenu[HoveredIndex]
                 if player and player.trollMenu then
@@ -473,12 +624,22 @@ MachoOnKeyDown(function(key)
                     HoveredIndex = 1
                     PixelUI:UpdateUI()
                 end
+            elseif CurrentPath[#CurrentPath] == "VEHICLE" and ActiveSubTab == 0 then
+                ActiveSubTab = 1
+                CurrentMenu = CachedCustomizeMenu
+                HoveredIndex = 1
+                PixelUI:UpdateUI()
             end
-        elseif key == 81 then -- Q (Switch to PLAYER)
+        elseif key == 81 then -- Q (Switch Tab)
             if CurrentPath[#CurrentPath] == "PLAYER" and ActiveSubTab == 1 then
                 ActiveSubTab = 0
                 CurrentMenu = CachedPlayerList
-                HoveredIndex = 1 -- You might want to restore the previous index here
+                HoveredIndex = 1
+                PixelUI:UpdateUI()
+            elseif CurrentPath[#CurrentPath] == "VEHICLE" and ActiveSubTab == 1 then
+                ActiveSubTab = 0
+                CurrentMenu = CachedVehicleMenu
+                HoveredIndex = 1
                 PixelUI:UpdateUI()
             end
         elseif key == 13 then -- ENTER
@@ -493,6 +654,7 @@ MachoOnKeyDown(function(key)
                 -- Use the updated subMenu if it was changed in onSelect
                 CurrentMenu = item.subMenu
                 HoveredIndex = 1
+                ActiveSubTab = 0
                 PixelUI:UpdateUI()
             elseif item and item.onSelect then 
                 item.onSelect() 
